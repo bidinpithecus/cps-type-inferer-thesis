@@ -1,0 +1,203 @@
+\documentclass[12pt]{article}
+\setlength{\headheight}{30pt}
+\usepackage[brazil]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{setspace}
+\usepackage{epsfig}
+\usepackage[pdftex, hidelinks]{hyperref}
+\usepackage{multirow,multicol}
+\usepackage{fancyhdr,url}
+\usepackage{float}
+\usepackage{authblk}
+\usepackage[table]{xcolor}
+\usepackage[normalem]{ulem}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{amssymb,amsmath, amsthm}
+\usepackage[alf,abnt-emphasize=bf]{abntex2cite}
+
+\setlist[enumerate,1]{start=1}
+
+\topmargin -2.0cm
+\headsep 1.5cm
+\oddsidemargin 0.4cm
+\evensidemargin 0.4cm
+\textheight = 235mm \textwidth 165mm
+
+\pagestyle{plain}
+\addtolength\columnsep{2pt}
+
+\begin{document}
+\pagestyle{fancy}
+
+\lhead{
+	\includegraphics[scale=0.75]{images/logo_dcc.pdf}
+}
+
+\chead{
+	\scriptsize{
+		UNIVERSIDADE DO ESTADO DE SANTA CATARINA -- UDESC\\
+		CENTRO DE CIÊNCIAS TECNOLÓGICAS -- CCT\\
+		DEPARTAMENTO DE CIÊNCIA DA COMPUTAÇÃO -- DCC
+	}
+}
+
+\rhead{
+	\includegraphics[scale=0.75]{images/logo_udescjlle.pdf}
+}
+\title{Plano de Trabalho de Conclusão de Curso\\
+	Inferência de tipos para CPS}
+
+\onehalfspacing
+
+\author{UDESC -- Centro de Ciências Tecnológicas\\
+	Departamento de Ciência da Computação\\
+	Bacharelado em Ciência da Computação\\
+	Turma 2024/2 -- Joinville/SC
+}
+
+\affil{
+	\textbf{Vinícios Bidin Santos} -- \texttt{vinibidin@gmail.com}\\
+	\textbf{Cristiano Damiani Vasconcellos} -- \texttt{cristiano.vasconcellos@udesc.br} \textit{(orientador)}\\
+	\textbf{Paulo Henrique Torrens} -- \texttt{paulotorrens@gnu.org} \textit{(coorientador)}
+}
+
+\date{Agosto de 2024}
+\maketitle
+
+\onehalfspacing
+
+\begin{abstract}
+	\vskip 0.5cm
+	Este trabalho propõe uma investigação sobre a inferência de tipos para o Estilo de Passagem de Continuação (CPS) - representação intermediária amplamente utilizada em compiladores de linguagens funcionais.
+	A pesquisa se concentra na extensão do algoritmo W, tradicionalmente usado para inferência de tipos no sistema Damas-Milner, para abranger o cálculo de continuações.
+	A proposta inclui a implementação dessa extensão na linguagem Haskell e a validação do algoritmo por meio de programas de teste, assegurando que os tipos inferidos estejam corretos.
+
+	\noindent\textbf{Palavras-chave: \textit{Inferência de Tipos, Estilo de Passagem de Continuação (CPS), Algoritmo W, Damas-Milner, Haskell, Sistema de Tipos}}
+\end{abstract}
+
+\section{Introdução e Justificativa} \label{sec:IntroducaoJustificativa}
+
+A compilação de programas envolve diversas fases, cada uma com funções específicas, como análise léxica, análise sintática, análise semântica, otimizações, e, finalmente, a geração de código.
+Uma etapa crítica nesse processo é a otimização, que frequentemente se baseia em representações intermediárias (IRs).
+Essas representações atuam como ponte entre o código fonte e o código de máquina, permitindo que transformações e otimizações sejam aplicadas de maneira mais eficaz \cite{PLOTKIN1975125}.
+
+As representações intermediárias variam conforme o paradigma da linguagem de programação.
+Para linguagens imperativas, a Representação em Atribuição Única Estática (\textit{SSA}) é amplamente adotada.
+Já em linguagens funcionais, a Forma Normal Administrativa (\textit{ANF}) e o Estilo de Passagem de Continuação (\textit{CPS}) se destacam.
+Este trabalho foca especificamente no CPS, uma IR que oferece vantagens particulares em termos de otimização e simplicidade na geração de código.
+
+Em linguagens de alto nível, a pilha de chamadas é uma abstração fundamental, fornecendo controle sobre onde a execução de uma função deve retornar após sua conclusão.
+Entretanto, em linguagens de baixo nível, como \textit{assembly}, tal abstração não existe, exigindo que o controle do fluxo de execução seja realizado manualmente por meio de endereços de retorno.
+
+O CPS resolve essa questão ao tornar as continuações explícitas no código.
+Em vez de confiar na pilha de chamadas para gerenciar retornos, o CPS introduz um parâmetro adicional \cite{KENNEDY2007} em cada função, representando a continuação — o que deve ser feito com o resultado da função.
+Ao invés de simplesmente retornar um valor, a função invoca essa continuação, passando o controle explicitamente à próxima etapa da computação.
+Isso elimina a necessidade de uma pilha de chamadas, simplificando o modelo de execução e tornando-o mais alinhado com a execução em baixo nível.
+
+A escolha do CPS como representação intermediária não é apenas uma questão de conveniência para a tradução de linguagens de alto nível para código de máquina.
+Ele também facilita a aplicação de otimizações complexas, como a eliminação de chamadas de cauda e a fusão de funções, além de permitir uma correspondência mais direta com o código gerado em linguagens de montagem \cite{FLANAGAN1993}.
+
+Entretanto, muitas implementações optam por representar CPS sem tipos \cite{MORRISSET1999}, o que, embora simplifique a implementação inicial, pode sacrificar a segurança do código.
+Um sistema de tipos robusto pode não apenas garantir a correção de certas transformações e otimizações, mas também identificar uma classe inteira de erros antes da execução, proporcionando uma camada adicional de segurança e confiabilidade ao processo de compilação.
+
+\section{Objetivos} \label{sec:Objetivos}
+
+\textbf{Objetivo Geral}:
+
+Este trabalho visa explorar a inferência de tipos para CPS, propondo uma extensão do algoritmo W - um algoritmo de inferência de tipos para o sistema Damas-Milner - para o cálculo de continuações, definido em \cite{TORRENS2024} na linguagem de programação Haskell.
+
+\vskip 0.5cm
+
+\noindent\textbf{Objetivos Específicos}:
+
+\begin{itemize}
+	\item Formular uma extensão do algoritmo W para CPS;
+	\item Implementar essa extensão em Haskell;
+	\item Validar a implementação do algoritmo por meio da geração de programas e verificação de que o algoritmo infere corretamente os tipos para eles.
+\end{itemize}
+
+\section{Metodologia} \label{sec:Metodologia}
+
+A metodologia deste trabalho consistirá em duas principais etapas: pesquisa bibliográfica e implementação.
+A primeira etapa envolve uma extensa revisão de literatura sobre continuações e seu cálculo, bem como um aprofundamento do sistema Damas-Milner, com o objetivo de proporcionar uma compreensão completa ao autor.
+A segunda etapa trata da formulação do algoritmo W estendido para o cálculo de continuações, junto com sua implementação.
+
+Para validar a implementação, serão gerados programas de teste, nos quais a inferência de tipos será verificada.
+A validação consistirá em comparar os tipos inferidos pelo algoritmo com os tipos esperados para esses programas.
+
+\section{Cronograma proposto} \label{sec:Cronograma}
+
+\begin{enumerate}
+	\item Fundamentação teórica sobre continuações, cálculo de continuações e CPS;
+	\item Fundamentação teórica sobre o sistema Damas-Milner;
+	\item Formulação da extensão do algoritmo de inferência de tipos; \label{enum-formulacao-w-estendido}
+	\item Implementação do algoritmo em Haskell definido na etapa \ref{enum-formulacao-w-estendido};
+	\item Validação do resultado.
+\end{enumerate}
+
+\vspace{0.5cm}
+{
+	\noindent \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+		\hline
+		\multirow{2}{*}{\textbf{\small{Etapas}}} & \multicolumn{5}{|c|}{\textbf{\small{2024/2}}} &
+		\multicolumn{6}{|c|}{\textbf{\small{2025/1}}}                                                                                                                                                                                                                         \\
+		\cline{2-12}
+		                                         & \textbf{Ago}                                  & \textbf{Set}     & \textbf{Out}     & \textbf{Nov}     & \textbf{Dez}     & \textbf{Jan}     &
+		\textbf{Fev}                             & \textbf{Mar}                                  & \textbf{Abr}     & \textbf{Maio}    & \textbf{Jun}                                                                                                                         \\
+		\hline
+		\textbf{\small{1}}                       & \cellcolor{gray}                              & \cellcolor{gray} & \cellcolor{gray} &                  &                  &                  &                  &                  &                  &                  & \\
+		\hline
+		\textbf{\small{2}}                       &                                               & \cellcolor{gray} & \cellcolor{gray} &                  &                  &                  &                  &                  &                  &                  & \\
+		\hline
+		\textbf{\small{3}}                       &                                               &                  & \cellcolor{gray} & \cellcolor{gray} & \cellcolor{gray} & \cellcolor{gray} &                  &                  &                  &                  & \\
+		\hline
+		\textbf{\small{4}}                       &                                               &                  &                  & \cellcolor{gray} & \cellcolor{gray} & \cellcolor{gray} & \cellcolor{gray} & \cellcolor{gray} &                  &                  & \\
+		\hline
+		\textbf{\small{5}}                       &                                               &                  &                  &                  &                  &                  & \cellcolor{gray} & \cellcolor{gray} & \cellcolor{gray} & \cellcolor{gray} & \\
+		\hline
+	\end{tabular}
+}
+
+\section{Linha e Grupo de Pesquisa}
+\label{sec:LinhaGrupoPesquisa}
+O tema proposto para o trabalho se enquadra nos temas pesquisados pelo Grupo de Pesquisa em Fundamentos da Computação (FUNÇÃO).
+O tema é pertinente à linha de pesquisa em linguagens funcionais e sistema de tipos.
+
+\section{Forma de Acompanhamento/Orientação}
+\label{sec:Acompanhamento}
+O acompanhamento das atividades desenvolvidas será  realizada em reuniões semanais entre orientador, coorientador e aluno, presenciais e/ou via chat, com até uma hora de duração e possibilidade de agendar encontros extras, caso necessário.
+Também serão utilizados recursos como correio eletrônico para, caso necessário, orientação ao longo da semana.
+Para acompanhamento do progresso, serão entregues aos orientadores artefatos com os resultados obtidos em cada etapa (quando aplicável), para que assim exista uma avaliação contínua com mais ciclos de retorno.
+
+\bibliography{bibliography}
+
+\vskip 2cm
+
+\begin{minipage}{0.47\linewidth}
+	\centering
+	\rule{7.2cm}{0.1mm}
+
+	\textbf{\textit{Cristiano Damiani Vasconcellos}}
+	\newline
+	\textit{Orientador}
+\end{minipage}
+\begin{minipage}{0.47\linewidth}
+	\centering
+	\rule{7.2cm}{0.1mm}
+
+	\textbf{\textit{Vinícios Bidin Santos}}
+	\newline
+\end{minipage}
+
+\vskip 3cm
+
+\begin{center}
+	\rule{7.2cm}{0.1mm}
+
+	\textbf{\textit{Karina Girardi Roggia}}\\
+	\textit{(Líder do Grupo de Pesquisa Fundamentos da Computação)}
+\end{center}
+
+\end{document}
