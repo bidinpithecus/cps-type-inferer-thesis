@@ -1,0 +1,3 @@
+Este repositório guardará a escrita das etapas do TCC.
+
+Este trabalho propõe uma investigação sobre a inferência de tipos para o Estilo de Passagem de Continuação (CPS) - representação intermediária amplamente utilizada em compiladores de linguagens funcionais. A pesquisa se concentra na extensão do algoritmo W, tradicionalmente usado para inferência de tipos no sistema Damas-Milner, para abranger o cálculo de continuações. A proposta inclui a implementação dessa extensão na linguagem Haskell e a validação do algoritmo por meio de programas de teste, assegurando que os tipos inferidos estejam corretos.
