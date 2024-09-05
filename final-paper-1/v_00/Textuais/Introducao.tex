@@ -1,0 +1,32 @@
+\chapter{Introdução}\label{sec:introducao}
+
+\section{Objetivo Geral}\label{sec:objetivo-geral}
+
+\section{Objetivos específicos}\label{sec:objetivos-especificos}
+
+\section{Estrutura do Trabalho}\label{sec:estrutura-trabalho}
+
+
+% KARLA STUFF
+
+% Os compiladores são parte fundamental no âmbito da ciência da computação, desempenhando um papel essencial na tradução de código em linguagem de programação (e.g., Java e Haskell) para código de baixo nível (e.g., bytecode).
+% Para além da simples tradução de código, os compiladores são capazes de otimizar o programa fonte com o objetivo de melhorá-lo de acordo com algum critério de desempenho. Dessa forma, muitos compiladores são desenvolvidos para gerar uma representação intermediária que será utilizada para aplicar diversas otimizações a partir dela.
+
+% Para criar um compilador, uma série de análises deve ser feita. Durante esse processo de criação, uma de suas etapas visa a otimização do programa compilado. Nessa etapa a escolha adequada de uma estrutura de dados para representação intermediária terá influência direta no poder e eficiência do compilador.
+% Um exemplo de representação intermediária é o grafo de fluxo de controle, que utiliza a notação de grafos para gerar todos os caminhos possíveis que podem ocorrer durante a execução de um programa \cite{allen1970control}.
+% A forma de atribuição estática única é um caso particular de grafo de fluxo de controle onde cada uso de variável está ligado a uma única atribuição. Tal representação é utilizada predominantemente nos compiladores de linguagens imperativas (e.g., GCC e Clang) para aplicação de otimizações baseadas em análise de fluxo de dados \cite{cytron1989efficient}.
+
+% Em 1998, Appel demonstra, a partir da análise da imutabilidade de variáveis em linguagens funcionais, que a forma de atribuição estática única é equivalente a um programa em linguagem funcional \cite{appel1998ssa}. Tais linguagens utilizam as definições de cálculo lambda apresentadas por \citeonline{church1932set} como base, programando por meio de funções aninhadas.
+% Ademais, programas em linguagens funcionais apresentam uma série de vantagens que podem ser aproveitadas na etapa de otimização, como, por exemplo, códigos funcionais puros separados de códigos com efeitos (Haskell e Miranda), modularidade (e.g., utilização de funções de ordem superior para "colar" funções e método de avaliação preguiçosa que permite "colar" programas), garantias comuns a linguagens funcionais (principalmente linguagens funcionais puras), entre outros \cite{hughes1989functional}.
+
+% Em linguagens funcionais puras, como Haskell e Miranda, os programas escritos não produzem efeitos colaterais, ou seja, não possuem alterações em estados de memória durante a computação. Para poder lidar com efeitos dentro de linguagens puras, \citeonline{wadler1995monads} propõe o uso de mônadas, uma abstração matemática proveniente do estudo de Teoria das Categorias. Outra forma de lidar com efeitos foi apresentada por \citeonline{leijen2014koka}, introduzindo o conceito de inferência e tratamento de efeitos por meio de um Sistema de Tipos e Efeitos.
+
+% Diversos trabalhos basearam-se na descoberta de Appel sobre a equivalência entre a forma de atribuição estática única e linguagens funcionais. Dentre estas contribuições, vale mencionar o trabalho de \citeonline{torrens2017hybrid}, que sugerem uma linguagem intermediária capaz de ser interpretada tanto como um grafo de fluxo de controle na forma de atribuição estática única quanto como uma representação funcional pura.
+% E, além do trabalho supracitado, \citeonline{rigon2020inferring} também criam uma representação funcional a partir de uma representação na forma de stribuição estática única utilizando um sistema de efeitos colaterais.
+% O sistema de tipos e efeitos apresentado por \citeonline{rigon2020inferring}, baseado no trabalho de \citeonline{leijen2014koka}, possui as vantagens de uma linguagem impura, porém ainda permite uma menor incidência de erros devido a identificação de trechos de código que causam efeitos colaterais. O sistema de efeitos impõe que as generalizações sejam aplicadas somente a computações puras e ainda garante que expressões com efeitos colaterais estejam encapsuladas de forma a não afetar o restante do programa.
+% Além do sistema de efeitos, foi aplicada a transformação da forma de atribuição estática única para uma representação na forma-normal-A capaz de deixar um programa mais natural e intuitivo e permitir a compilação de efeitos, oposto a técnica mais comumente utilizada, a passagem para \textit{continuation-passing-style}, onde os efeitos serão removidos após a transformação \cite{flanagan1993essence}.
+
+
+% O objetivo geral deste trabalho é apresentar uma versão de representação funcional intermediária equivalente a apresentada por Rigon, Torrens e Vasconcellos, porém com tratamento de efeitos por meio do uso de mônadas. A tradução de código funcional com sistema de efeitos para um código funcional que utiliza mônadas será baseado nos conceitos demonstrados por \citeonline{vazou2016monads}, que apresentam a formalização da tradução do sistema de efeitos da linguagem de programação koka para mônadas.
+
+% O presente trabalho irá abordar o assunto partindo da fundamentação teórica, apresentada pelo capítulo \ref{ch:fundamentos}, e finalizará com a proposta do trabalho, presente no capítulo \ref{ch:proposta}, utilizando X exemplos de tradução de código de sistema de efeitos para código monádico.
