@@ -1,5 +1,9 @@
 \chapter{Representação Intermediária de Código}\label{ch:IR}
 
+Na computação, um compilador é um programa responsável por traduzir um código escrito em uma linguagem de programação para outra, geralmente do código-fonte para código de máquina, permitindo assim a execução do programa.
+Durante esse processo, o mínimo de informações deve ser perdido, uma vez que a semântica original deve ser preservada no processo de tradução.
+Uma comum escolha de estrutura utilizada para manter a integridade semântica e possibilitar otimizações, são as representações intermediárias (IR, do inglês \textit{intermediate representation}) \cite{cooper2014}.
+
 \section{CPS}\label{sec:cps}
 
 
@@ -9,10 +13,7 @@
 
 % KARLA STUFF
 
-% Este capitulo concentra-se nos aspectos teóricos relacionados ao trabalho, definindo alguns conceitos-chave para a compreensão do tema abordado. Será fornecida, na seção \ref{sec:RI}, uma visão geral sobre representação intermediária de código, estendendo a noção de grafos de fluxo de controle, sua versão na forma de atribuição estática única e representações em $\lambda$-cálculo. A conversão da forma de atribuição estática única para código funcional, abordando o trabalho de \citeonline{appel1998ssa}, será descrita pela seção \ref{sec:conversaoSSA}, seguindo para a definição de efeitos colaterais e seus tratamentos em linguagens funcionais, apresentando os conceitos de mônadas e sistemas de efeitos, na seção \ref{sec:efeitos}, e finalizando com a conversão de um sistema de efeitos para código monádico, fundamentado no trabalho de \citeonline{vazou2016monads} abordados na seção \ref{sec:conversaoSE}. Para melhor compreensão, será definido que: \textbf{(1)} um código base irá se referir ao código imediatamente anterior a representação intermediária, podendo ser o próprio código-fonte ou outra representação; \textbf{(2)} um código-fonte será o primeiro código recebido pelo compilador; e \textbf{(3)} código alvo é o código mais próximo em linguagem de máquina, ou o último código que o compilador retorna.
-
-% \section{Representação Intermediária de Código}\label{sec:RI}
-% Um compilador funciona como uma série de etapas que levam do código-fonte até o código de máquina, também conhecido como código-alvo, por meio da troca de informações e traduções entre uma etapa e outra. Para haver coerência entre as informações é necessário que essa passagem seja feita utilizando representações equivalentes. Uma estrutura de dados gerada pelo compilador, que representa o programa fonte, é chamada de Representação Intermediária (do inglês, \textit{intermediate representation}, ou IR) \cite{cooper2014}. Um compilador pode utilizar uma ou mais IRs, podendo variar desde uma estrutura em árvore ou grafo até alguma outra linguagem de programação, como C e algumas representações de código funcionais \cite{aho2008compilers}.
+% Um compilador pode utilizar uma ou mais IRs, podendo variar desde uma estrutura em árvore ou grafo até alguma outra linguagem de programação, como C e algumas representações de código funcionais \cite{aho2008compilers}.
 
 % As IRs permitem diferentes distribuições entre as etapas de um compilador. Classicamente, um compilador é decomposto em duas fases principais, front-end e back-end, ligadas por meio de uma IR, como apresentada pela figura \ref{fig:comp}. Neste modelo o front-end irá codificar suas informações a partir do código-fonte para uma IR e repassar ou diretamente para o back-end ou para outra IR que repassará para o back-end posteriormente, onde ocorrerá o mapeamento dessa codificação para o código alvo. Para além do modelo em duas fases, a introdução de múltiplas IRs possibilita acrescentar fases ao projeto de um compilador, entre o front-end e o back-end. Denominada \textit{otimizador}, a fase intermediária recebe como entrada uma IR e retorna também uma IR semanticamente equivalente à entrada. Esta fase se caracteriza pela aplicação de otimizações e transformações IR-para-IR. O modelo estruturado utilizando a fase de otimizador é conhecido como compilador de três fases (figura \ref{fig:comp1}).
 
