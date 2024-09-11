@@ -5,8 +5,8 @@ Uma etapa crítica nesse processo é a otimização, que frequentemente se basei
 Essas representações atuam como ponte entre o código fonte e o código de máquina, permitindo que transformações e otimizações sejam aplicadas de maneira mais eficaz \cite{PLOTKIN1975125}.
 
 As representações intermediárias variam conforme o paradigma da linguagem de programação.
-Para linguagens imperativas, a Representação em Atribuição Única Estática (\textit{SSA}) é amplamente adotada.
-Já em linguagens funcionais, a Forma Normal Administrativa (\textit{ANF}) e o Estilo de Passagem de Continuação (\textit{CPS}) se destacam.
+Para linguagens imperativas, a Representação em Atribuição Única Estática (SSA) é amplamente adotada.
+Já em linguagens funcionais, a Forma Normal Administrativa (ANF) e o Estilo de Passagem de Continuação (CPS) se destacam.
 Este trabalho foca especificamente no CPS, uma IR que oferece vantagens particulares em termos de otimização e simplicidade na geração de código.
 
 Essas características do CPS se tornam ainda mais evidentes quando comparamos como diferentes linguagens de lidam com o fluxo de execução. Em linguagens de alto nível, por exemplo, a pilha de chamadas atua como uma abstração fundamental para gerenciar o controle de retorno das funções. No entanto, em linguagens de baixo nível, como \textit{assembly}, não há tal abstração, exigindo que o controle do fluxo seja manualmente tratado por meio de endereços de retorno.
