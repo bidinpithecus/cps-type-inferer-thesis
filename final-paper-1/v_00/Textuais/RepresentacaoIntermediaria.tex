@@ -2,9 +2,9 @@
 
 Na computação, um compilador é um programa responsável por traduzir um código escrito em uma linguagem de programação para outra, geralmente do código-fonte para código de máquina, permitindo assim a execução do programa.
 Durante esse processo, é fundamental que o mínimo de informações seja perdido, uma vez que a semântica original deve ser preservada no processo de tradução.
-Uma comum escolha de estrutura utilizada para manter a integridade semântica e possibilitar otimizações, são as representações intermediárias (IR, do inglês \textit{intermediate representation}) \cite{cooper2014}.
+Uma abordagem comum utilizada para manter a integridade semântica e possibilitar otimizações, são as representações intermediárias (IR, do inglês \textit{intermediate representation}) \cite{cooper2014}.
 
-Compiladores modernos, amplamente utilizados na indústria, empregam mais de uma IR para tirar proveito das vantagens de cada uma, uma vez que essas representações possuem diferentes especialidades.
+Compiladores modernos, amplamente utilizados na indústria, empregam mais de uma IR para tirar proveito das vantagens de cada uma, uma vez que essas representações são projetadas para diferentes objetivos, como otimizações específicas.
 As IRs podem ser classificadas de acordo com o nível de abstração e são comumente aplicados em sequência.
 Representações com um nível maior de abstração são usadas próximas ao código-fonte, enquanto aquelas de nível mais baixo estão mais próximas do código de máquina \cite{aho2008compilers}, como ilustrado na figura \ref{fig:abstraction-level-irs}.
 
@@ -21,6 +21,15 @@ Para garantir que o compilador mantenha a semântica correta do programa, o flux
 Uma das maneiras disso ser feito explicitamente, é com o uso de continuações, que são funções que descrevem o próximo passo de uma computação em um ponto particular da execução do programa.
 
 \section{CPS}\label{sec:cps}
+
+O estilo de passagem de continuações (CPS, do inglês \textit{continuation passing style}) é uma técnica de transformação de código que torna o fluxo de controle de um programa explícito ao converter o estilo convencional de chamadas de função em chamadas que passam explicitamente o controle para a próxima etapa, conhecida como continuação (do inglês, \textit{continuation}) \cite{appel1992compiling}.
+Em vez de retornar diretamente o resultado de uma função, o CPS transforma cada função para que, ao finalizar sua computação, ela invoque uma \textit{continuation}, que representa o próximo passo a ser executado no programa.
+
+Essa técnica é especialmente poderosa no contexto de compiladores, uma vez que facilita várias formas de otimizações e análises, como eliminação de chamadas de função (TCO, do inglês \textit{tail-call optimization}), expansão \textit{inline}, representação de \textit{closures}, alocação de registradores, entre outras \cite{appel1992compiling}.
+Ao transformar o código para CPS, todo o fluxo de execução do programa é capturado como uma série de chamadas encadeadas de funções, sem depender de uma pilha de execução implícita.
+
+
+
 
 
 
@@ -184,7 +193,7 @@ Uma das maneiras disso ser feito explicitamente, é com o uso de continuações,
 
 % \qquad| $\lambda$\verb|x. E|\\
 
-% Além disso, \citeonline{flanagan1993essence} demonstram a equivalência entre as máquinas abstratas para compiladores que utilizam \textit{continuation-passing-style} (CPS) e ANF, sendo que a máquina abstrata para ANF utiliza um número menor de passos para alcançar o objetivo. A utilização de continuações para compilar de forma eficiente uma linguagem funcional foi apresentada, inicialmente, por \citeonline{steele1978rabbit} ao criar um compilador para Scheme (dialeto de Lisp). Entretanto, a ideia se popularizou com Appel, em seu livro "Compiling with Continuantions" \cite{appel2007compiling}. Alguns artigos na área de continuações apresentam noções de isomorfismo entre as representações já discutidas no presente trabalho. No artigo de \citeonline{kelsey1995correspondence} uma proposta de conversão de CPS para SSA é apresentada a partir de funções de tradução CPS$\longrightarrow$SSA e SSA$\longrightarrow$CPS; \citeonline{chakravarty2004functional} criam uma formalização do mapeamento de programas na forma SSA para ANF; e \citeonline{sabyr1992} comprovam a correspondência entre ANF e o $\lambda$-cálculo de Moggi, $\lambda_{c}$ \cite{moggi1988computational}.
+% Além disso, \citeonline{flanagan1993essence} demonstram a equivalência entre as máquinas abstratas para compiladores que utilizam \textit{continuation-passing-style} (CPS) e ANF, sendo que a máquina abstrata para ANF utiliza um número menor de passos para alcançar o objetivo. A utilização de continuações para compilar de forma eficiente uma linguagem funcional foi apresentada, inicialmente, por \citeonline{steele1978rabbit} ao criar um compilador para Scheme (dialeto de Lisp). Entretanto, a ideia se popularizou com Appel, em seu livro "Compiling with Continuantions" \cite{appel1992compiling}. Alguns artigos na área de continuações apresentam noções de isomorfismo entre as representações já discutidas no presente trabalho. No artigo de \citeonline{kelsey1995correspondence} uma proposta de conversão de CPS para SSA é apresentada a partir de funções de tradução CPS$\longrightarrow$SSA e SSA$\longrightarrow$CPS; \citeonline{chakravarty2004functional} criam uma formalização do mapeamento de programas na forma SSA para ANF; e \citeonline{sabyr1992} comprovam a correspondência entre ANF e o $\lambda$-cálculo de Moggi, $\lambda_{c}$ \cite{moggi1988computational}.
 
 
 
