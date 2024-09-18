@@ -22,9 +22,50 @@ Uma das maneiras disso ser feito explicitamente, é com o uso de continuações,
 
 \section{CPS}\label{sec:cps}
 
-O estilo de passagem de continuações (CPS, do inglês \textit{continuation passing style}) é uma técnica de transformação de código que torna o fluxo de controle de um programa explícito ao converter o estilo convencional de chamadas de função em chamadas que passam explicitamente o controle para a próxima etapa, conhecida como continuação (do inglês, \textit{continuation}) \cite{appel1992compiling}.
+O estilo de passagem de continuações (CPS, do inglês \textit{continuation passing style}) é uma técnica de transformação de código que torna o fluxo de controle de um programa explícito, ao converter o estilo convencional de chamadas de função em chamadas que passam explicitamente o controle para a próxima etapa, conhecida como continuação (do inglês, \textit{continuation}) \cite{appel1992compiling}.
 Em vez de retornar diretamente o resultado de uma função, o CPS transforma cada função para que, ao finalizar sua computação, ela invoque uma \textit{continuation}, que representa o próximo passo a ser executado no programa.
 
+O cálculo lambda, definido por \citeonline{church1932set}, é um sistema formal que serve como base para a maioria das linguagens funcionais.
+Ele é capaz de representar qualquer computação utilizando abstrações e aplicações através de reduções.
+Sua sintaxe consiste em três regras simples que definem os elementos principais do sistema: variável, abstração e aplicação, conforme apresentados a seguir:
+
+\begin{equation} \label{eq:lambda-calculus}
+  e ::= x \mid \lambda x. e \mid e e
+\end{equation}
+
+A partir dessa sintaxe, um termo $e$ pode possuir apenas uma das três formas.
+A primeira forma refere-se às variáveis, que representam identificadores no sistema.
+A segunda forma, chamada de abstração, define uma função lambda: uma função que associa o identificador $x$ a um termo $e$, seu corpo, com $x$ vinculado ao termo $e$.
+Finalmente, a aplicação ocorre quando um termo $e$ é aplicado a outro $e$, representando a chamada de uma função.
+
+Para avaliar expressões no cálculo lambda, usamos três tipos de redução: $\alpha$, $\beta$ e $\eta$, que seguem as seguintes definições:
+
+\begin{description}
+  \item[$\alpha$-redução:] Renomeação de variáveis ligadas.
+        \begin{align}
+          \lambda x . e[x] & \rightarrow \lambda y . e[y] \label{eq:alpha-reduction}
+        \end{align}
+
+  \item[$\beta$-redução:] Aplicação de função.
+        \begin{align}
+          (\lambda x . e_1) e_2 & \rightarrow e_1 [e_2 / x] \label{eq:beta-reduction}
+        \end{align}
+
+  \item[$\eta$-redução:] Expansão de função.
+        \begin{align}
+          \lambda x . (e \, x) & \rightarrow e \quad \text{se } x \text{ não ocorre livre em } e \label{eq:eta-reduction}
+        \end{align}
+\end{description}
+
+As reduções são responsáveis pela semântica operacional do cálculo lambda.
+A $\alpha$-redução permite a renomeação de variáveis ligadas, enquanto a $\beta$-redução descreve a aplicação de funções, substituindo o parâmetro da função por um valor passado como argumento.
+Por fim, a $\eta$-redução lida com a simplificação de funções quando elas aplicam diretamente seu argumento.
+
+A transformação para CPS se baseia nessa estrutura formal. No cálculo lambda tradicional, o fluxo de execução é implícito: as funções são aplicadas e seus resultados são retornados automaticamente. No entanto, no CPS, o fluxo de controle é explicitamente representado como uma série de chamadas a funções. Cada função, em vez de retornar diretamente um valor, recebe um argumento extra, a continuação, que indica o próximo passo da computação.
+
+Por exemplo, a expressão $\lambda x. x + 1$ no cálculo lambda tradicional retornaria o valor $x + 1$. Ao transformar essa expressão para CPS, ela se torna $\lambda x. \lambda k. k (x + 1)$.
+
+Aqui, $k$ é a continuação que processa o resultado $x + 1$.
 Essa técnica é especialmente poderosa no contexto de compiladores, uma vez que facilita várias formas de otimizações e análises, como eliminação de chamadas de função (TCO, do inglês \textit{tail-call optimization}), expansão \textit{inline}, representação de \textit{closures}, alocação de registradores, entre outras \cite{appel1992compiling}.
 Ao transformar o código para CPS, todo o fluxo de execução do programa é capturado como uma série de chamadas encadeadas de funções, sem depender de uma pilha de execução implícita.
 
