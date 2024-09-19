@@ -61,7 +61,10 @@ As reduções são responsáveis pela semântica operacional do cálculo lambda.
 A $\alpha$-redução permite a renomeação de variáveis ligadas, enquanto a $\beta$-redução descreve a aplicação de funções, substituindo o parâmetro da função por um valor passado como argumento.
 Por fim, a $\eta$-redução lida com a simplificação de funções quando elas aplicam diretamente seu argumento.
 
-A transformação para CPS se baseia nessa estrutura formal. No cálculo lambda tradicional, o fluxo de execução é implícito: as funções são aplicadas e seus resultados são retornados automaticamente. No entanto, no CPS, o fluxo de controle é explicitamente representado como uma série de chamadas a funções. Cada função, em vez de retornar diretamente um valor, recebe um argumento extra, a continuação, que indica o próximo passo da computação.
+A transformação para CPS se baseia nessa estrutura formal.
+No cálculo lambda tradicional, o fluxo de execução é implícito: as funções são aplicadas e seus resultados são retornados automaticamente.
+No entanto, no CPS, o fluxo de controle é explicitamente representado como uma série de chamadas a funções.
+Cada função, em vez de retornar diretamente um valor, recebe um argumento extra, a continuação, que indica o próximo passo da computação.
 
 Por exemplo, a expressão $\lambda x. x + 1$ no cálculo lambda tradicional retornaria o valor $x + 1$. Ao transformar essa expressão para CPS, ela se torna $\lambda x. \lambda k. k (x + 1)$.
 
@@ -69,9 +72,18 @@ Aqui, $k$ é a continuação que processa o resultado $x + 1$.
 Essa técnica é especialmente poderosa no contexto de compiladores, uma vez que facilita várias formas de otimizações e análises, como eliminação de chamadas de função (TCO, do inglês \textit{tail-call optimization}), expansão \textit{inline}, representação de \textit{closures}, alocação de registradores, entre outras \cite{appel1992compiling}.
 Ao transformar o código para CPS, todo o fluxo de execução do programa é capturado como uma série de chamadas encadeadas de funções, sem depender de uma pilha de execução implícita.
 
+% Parágrafo explicando CPS-calculus, seu uso e introduzindo sua sintaxe
 
+O cálculo de continuações (do inglês, \textit{CPS-calculus}), conforme definido por \citeonline{thielecke1997}, é um sistema formal que leva o CPS além de seu uso tradicional como uma técnica de transformação de código, tratando-o como um modelo computacional por si só.
+Enquanto o CPS é utilizado como uma IR em compiladores, o cálculo de continuações oferece uma estrutura para raciocinar formalmente sobre computações onde o fluxo de controle é explicitamente representado.
+Os termos do cálculo de continuações, chamados de comandos, são descritos pelas seguintes regras:
 
+% Sintaxe do cálculo de continuações (o ideal seria a que o cristiano pediu, mas enquanto não achar vai a do Thielecke msm)
+\begin{equation}
+  M ::= x\langle \vec{x} \rangle \mid M\{x\langle \vec{x} \rangle = M\}
+\end{equation}
 
+% Explicar a sintaxe e a transformação para CPS, contendo exemplos em Haskell.
 
 
 % KARLA STUFF
