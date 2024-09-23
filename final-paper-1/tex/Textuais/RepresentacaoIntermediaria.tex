@@ -81,8 +81,29 @@ Os termos do cálculo de continuações, chamados de comandos, são descritos pe
   M ::= x\langle \vec{x} \rangle \mid M\{x\langle \vec{x} \rangle = M\}
 \end{equation}
 
+% Explicar a sintaxe do cálculo de continuações
 Aqui, $x\langle \vec{x} \rangle$ representa um salto (\textit{jump}), isto é, uma chamada para a continuação $x$ com os parâmetros $\vec{x}$, sendo essencialmente uma chamada direta para a continuação, enquanto $M\{x\langle \vec{x} \rangle = M\}$ representa um vínculo (\textit{binding}), onde o corpo $M$ está vinculado à continuação $x$ com os parâmetros $\vec{x}$, isto é, uma chamada intermediária que, ao ser chamada, executará o próximo passo da computação.
-% Explicar a sintaxe e a transformação para CPS, contendo exemplos em Haskell.
+
+% Explicar a transformação para CPS, contendo exemplos em Haskell.
+A tradução para CPS converte um código escrito em estilo direto (programas com o controle de fluxo da aplicação implícito) no estilo de passagem de continuações \cite{FLANAGAN1993}.
+A ideia principal por trás da transformação para CPS é converter toda função para que ela não retorne um valor diretamente, e sim que passe o resultado para uma continuação.
+
+\begin{figure}
+  \caption{Função soma em Haskell em Estilo Direto}
+  \small{Fonte: o autor}
+  \lstinputlisting[style=haskell, label=code:add]{Code/add.hs}
+\end{figure}
+
+Por exemplo, a Figura \ref{code:add} contém um programa na linguagem Haskell para somar dois números em estilo direto, retornando o valor após o calcular.
+De maneira similar, na Figura \ref{code:add_cps} contém um programa similar em CPS.
+Nesta versão, entretanto, o controle de fluxo do programa é explícito, uma vez que é chamada a função $k$ contendo o resultado da soma entre os argumentos.
+
+\begin{figure}
+  \caption{Função soma em Haskell em CPS}
+  \small{Fonte: o autor}
+  \lstinputlisting[style=haskell, label=code:add_cps]{Code/add_cps.hs}
+\end{figure}
+
 
 
 % KARLA STUFF
@@ -193,31 +214,6 @@ Aqui, $x\langle \vec{x} \rangle$ representa um salto (\textit{jump}), isto é, u
 % Obtidas as fronteiras de dominância, o posicionamento de funções $\phi$ no grafo torna-se trivial. Se existe uma definição de \verb|x| no nó $n$, então deverá existir uma função $\phi$ em cada bloco pertencente a $DF(n)$. O procedimento de cálculo de fronteiras de dominância é uma forma básica de melhorar a representação na forma SSA, podendo ser utilizado por outros algoritmos para tornar a inserção de funções $\phi$ ainda mais eficiente.
 
 % \subsection{Forma-Normal-A}\label{sub:anf}
-
-% A utilização de IRs baseadas em $\lambda$-cálculo ocorre em diversos compiladores para linguagens funcionais. No trabalho de \citeonline{appel1987standard}, um tipo de $\lambda$-cálculo modificado é utilizado como IR em um compilador padrão para a linguagem funcional ML. Definido por \citeonline{church1932set}, o $\lambda$-cálculo puro é a representação de aplicações de funções, variáveis e abstrações.
-
-% \begin{flushleft}
-%     \qquad\qquad M := (M M) \hspace{20ex} (Aplicação)\\
-%     \qquad\qquad\qquad | ($\lambda$x.M) \hspace{19ex} (Abstração)\\
-%     \qquad\qquad\qquad | x  \hspace{25ex} (Variável)\\
-% \end{flushleft}
-
-
-% Um termo em $\lambda$-cálculo pode ser, portanto, a aplicação de um termo sobre outro, uma abstração ou uma variável. Em uma abstração do tipo ($\lambda x.M$), é dito que a variável $x$ está ligada ao termo $M$ e toda ocorrência de uma variável dentro de $M$ que não está ligada é uma variável livre. O conjunto de variáveis livres de um termo $M$ é definido como $FV(M)$.
-
-% Em um termo em $\lambda$-cálculo é possível aplicar substituições. Uma substituição é representada como $M[x:=N]$, de forma que toda ocorrência de $x$ em $M$ será substituída por $N$. Outro conceito, para além da substituição, é a noção de termos $\alpha$-equivalentes. É possível demonstrar a equivalência entre dois termos a partir da mudança de variáveis que estão ligadas em uma abstração, e.g., os termos ($\lambda x.x$) e ($\lambda y.y$) são $\alpha$-equivalentes, pois, apenas trocando o nome de suas variáveis ligadas, podemos chegar de um termo a outro. Esta mudança de variáveis ligadas é chamada de $\alpha$-conversão ou $\alpha$-redução. Uma aplicação bastante comum de substituição e $\alpha$-conversão é o uso em $\beta$-reduções. Uma $\beta$-redução ocorre sempre que uma abstração recebe argumentos, ou seja, a função é aplicada a seus argumentos.
-
-% \begin{center}
-%     ($\lambda$x.M) N := M[x:=N] \qquad \qquad ($\beta$-redução)
-% \end{center}
-
-% Caso uma variável que ocorre livre em N apareça em alguma $\lambda$-abstração de M, então uma $\alpha$-conversão deve ser feita no termo antes de aplicar a substituição, para que assim não ocorra a ligação desta variável. Por exemplo, a $\beta$-redução do termo (($\lambda x\lambda y. x$)$y$) será ($\lambda z. y$), com a mudança da variável ligada de $y$ para $z$.
-
-% Outra redução bastante utilizada em $\lambda$-termos é a $\eta$-redução, que ocorre como uma noção de extensionalidade. Nesta redução uma abstração do tipo ($\lambda x. f x$) é convertida apenas para $f$, desde que $x \not\in FV(f)$. Isso ocorre pela consideração de equivalência entre termos que ao serem aplicados geram o mesmo resultado. Adicionalmente, existe a possibilidade de incrementar o $\lambda$-cálculo com a definição de contextos. Um contexto é um termo com um "buraco", representado por "[]", que pode ser preenchido por uma sub-expressão. O ato de fazer este preenchimento é chamado de \textit{filling}, e.g., o \textit{filling} do contexto ($\lambda x. y []$) com o termo ($\lambda z.x$) é o termo ($\lambda x. y (\lambda z.x)$). O preenchimento acontece entre um contexto e um termo e resulta também em um termo, podendo ligar variáveis que antes eram livres. A classe sintática que define a gramática para contextos é apresentada a seguir.
-
-% \begin{center}
-%     E = [] | E ([] M)
-% \end{center}
 
 % A forma-normal-A (do inglês, \textit{Administrative normal form}, ou ANF) é uma versão de cálculo lambda utilizada como IR. Um $\lambda$-termo estará em ANF se não puderem ser aplicadas mais reduções do tipo A. \citeonline{sabyr1992} definem o conjunto de reduções A pelas regras:
 

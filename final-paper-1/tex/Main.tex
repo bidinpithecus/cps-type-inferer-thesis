@@ -12,6 +12,22 @@
 
 \input{Pacotes}																% Inclui pacotes básicos
 
+\lstdefinestyle{haskell}{
+    language=Haskell,
+    backgroundcolor=\color{white},   				  % background color
+    basicstyle=\ttfamily\small,      					% font style
+    keywordstyle=\color{blue},       				  % keyword color
+    commentstyle=\color{green!50!black}, 			% comment color
+    stringstyle=\color{red},          				% string color
+    numberstyle=\tiny\color{gray},    				% line number style
+    stepnumber=1,                     				% number every line
+    numbers=left,                     				% line numbers on the left
+    numbersep=5pt,                    				% distance of line numbers
+    frame=single,                     				% adds a frame around the code
+    tabsize=2,                        				% sets default tabsize
+    captionpos=b,                     				% sets the caption position
+}
+
 \graphicspath{{Imagens}}
 \renewcommand{\orientadorname}{Orientador:}
 \DeclareMathAlphabet{\mathcal}{OMS}{cmsy}{m}{n}
