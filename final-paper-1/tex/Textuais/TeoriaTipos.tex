@@ -1,8 +1,29 @@
-\chapter{Teoria de Tipos}\label{ch:type-theory}
+\chapter{Teoria de Tipos} \label{ch:type-theory}
 
+% Introdução Teoria de Tipos (Paradoxo de Russel)
+A Teoria de Tipos, conforme apresentada por \cite{COQUAND2022}, foi introduzida por Russell em 1908 ao encontrar um paradoxo na Teoria de Conjuntos, conhecido atualmente como o Paradoxo de Russell:
 
+% Definição do paradoxo
+\begin{equation} \label{eq:russell-paradox}
+  \text{Seja } R = \{ x \mid x \notin x \}, \text{ então } R \in R \iff R \notin R
+\end{equation}
 
+% Explicação da definição
+Ou seja, considere $R$ como o conjunto dos conjuntos que não contêm a si mesmos.
+A contradição surge ao observar que, se o conjunto $R$ contém a si mesmo, isso implica que $R$ não contém a si mesmo, e vice-versa.
 
+% Paradoxo do barbeiro
+Outra maneira de descrever esse paradoxo é através do Paradoxo do Barbeiro: imagine uma cidade com apenas um barbeiro, onde ele somente barbeia aqueles que não se barbeiam.
+O paradoxo surge quando perguntamos: "Quem barbeia o barbeiro?".
+Ele não pode fazer sua própria barba, pois barbeia apenas aqueles que não fazem a própria barba.
+No entanto, se ele não faz sua própria barba, então pertence ao grupo daqueles que devem ser barbeados pelo barbeiro, logo, ele deveria barbear-se.
+Essa situação gera uma contradição semelhante ao Paradoxo de Russell.
+
+% Utilidade Teoria de Tipos
+Atualmente, a principal aplicação da Teoria de Tipos está na formalização de sistemas de tipos para linguagens de programação.
+Ela tem diversas utilidades, como em assistentes de prova que utilizam sistemas de tipos para codificar provas.
+Por exemplo, o Coq \cite{COQUAND1998} utiliza o Cálculo de Construções.
+Além disso, a Teoria de Tipos é fundamental em algoritmos de checagem de tipos, que fazem parte da análise semântica em compiladores, bem como na inferência de tipos em linguagens de programação, como o Cálculo Lambda Simplesmente Tipado.
 
 
 
