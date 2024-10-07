@@ -26,18 +26,33 @@ Por exemplo, o Coq \cite{COQUAND1998} utiliza o Cálculo de Construções.
 Além disso, a Teoria de Tipos é fundamental em algoritmos de checagem de tipos, que fazem parte da análise semântica em compiladores, bem como na inferência de tipos em linguagens de programação, como o Cálculo Lambda Simplesmente Tipado.
 
 % Explicar evolução da teoria de tipos
-%% A Teoria de Tipos evoluiu ao longo do tempo para abranger uma vasta gama de aplicações no campo da computação. Desde sua origem na lógica matemática, ela foi adaptada para resolver problemas fundamentais em linguagens de programação, oferecendo ferramentas para garantir a consistência e a correção de programas. Sistemas de tipos modernos, como o de Haskell e OCaml, se beneficiam diretamente dessas teorias.
-%% A teoria de tipos evoluiu desde sua criação para resolver problemas encontrados em diferentes contextos, como o uso em linguagens funcionais e sistemas de tipos polimórficos. 
+% Talvez seja too much isso
 
 % Introduzir conceitos de tipos simples, tipos dependentes e tipos polimórficos:
-%% No contexto das linguagens de programação, podemos distinguir três categorias principais de tipos: tipos simples, tipos dependentes e tipos polimórficos. Tipos simples atribuem um tipo fixo a cada termo, enquanto tipos dependentes permitem que tipos dependam de valores. Já os tipos polimórficos introduzem a noção de generalidade, permitindo que funções possam ser aplicadas a argumentos de diferentes tipos sem a necessidade de serem redefinidas para cada um.
-%% Podemos distinguir três categorias de tipos: tipos simples, que atribuem um tipo fixo a cada termo; tipos dependentes, que permitem que tipos dependam de valores; e tipos polimórficos, que introduzem generalidade ao permitir que funções operem sobre diferentes tipos sem serem redefinidas.
+No contexto das linguagens de programação, podemos distinguir três categorias principais de tipos: tipos simples, tipos polimórficos e tipos dependentes \cite{PIERCE2002}.
+Tipos simples atribuem um tipo fixo a cada termo, enquanto tipos polimórficos introduzem a noção de generalidade, permitindo que funções possam ser aplicadas a argumentos de diferentes tipos sem a necessidade de serem redefinidas para cada um.
+Já os tipos dependentes permitem que tipos dependam de valores.
 
-% Adicionar uma explicação sobre polimorfismo e como ele se relaciona com a inferência de tipos:
-%% O polimorfismo, em particular, desempenha um papel crucial na inferência de tipos, permitindo que um termo possua múltiplos tipos dependendo de como ele é utilizado no programa. Um exemplo clássico é a função identidade, $\lambda x.x$, que pode ser tipada como $\forall \alpha. \alpha \to \alpha$, indicando que a função aceita um valor de qualquer tipo $\alpha$ e retorna um valor do mesmo tipo.
-%% O polimorfismo é especialmente relevante para a inferência de tipos, permitindo que termos tenham múltiplos tipos dependendo do contexto. Um exemplo é a função identidade, que pode ser tipada como $\forall \alpha. \alpha \to \alpha$.
+% Exemplo 1: Tipos Simples
+Um exemplo de tipo simples é uma função em Haskell que opera sobre números inteiros.
+Esta função recebe um número inteiro e retorna outro número inteiro.
+Seu tipo, portanto, é representado como $Int \rightarrow Int$, indicando que tanto a entrada quanto a saída são do tipo inteiro.
 
-% Introduzir seções sobre diferentes abordagens para checagem de tipos (estática vs dinâmica):
+% Exemplo 2: Tipos Polimórficos
+Um exemplo de polimorfismo é a função identidade, que recebe um elemento de qualquer tipo e retorna o mesmo elemento.
+Seu tipo é expresso como $a \rightarrow a$, onde $a$ pode ser qualquer tipo.
+Este tipo polimórfico indica que a função identidade pode ser usada com diferentes tipos de dados sem precisar ser modificada.
+
+% Exemplo 3: Tipos Dependentes
+Em linguagens com suporte a tipos dependentes, um exemplo comum seria o de um vetor cujo comprimento faz parte de seu tipo.
+Nesse caso, uma função de concatenação de vetores deve garantir que somente vetores com tipos compatíveis em relação ao comprimento possam ser concatenados.
+O tipo da função de concatenação seria algo como\footnote{A notação exata pode variar entre diferentes linguagens de programação que suportam tipos dependentes. A estrutura apresentada serve apenas como uma ilustração conceitual do comportamento esperado.} $Vector(n) \rightarrow Vector(m) \rightarrow Vector(n+m)$, onde $n$ e $m$ são valores que representam os comprimentos dos vetores e fazem parte da definição de tipo.
+
+% Especificar e como ele se relaciona com a inferência de tipos:
+O polimorfismo, em particular, desempenha um papel crucial na inferência de tipos, permitindo que um termo possua múltiplos tipos dependendo de como ele é utilizado no programa.
+Um exemplo clássico é a função identidade, $\lambda x.x$, que pode ser tipada como $\forall \alpha. \alpha \to \alpha$, indicando que a função aceita um valor de qualquer tipo $\alpha$ e retorna um valor do mesmo tipo.
+
+% Seções sobre diferentes abordagens para checagem de tipos (estática vs dinâmica):
 %% Uma distinção fundamental entre os sistemas de tipos está na maneira como os tipos são verificados: a checagem estática e a checagem dinâmica. A checagem estática ocorre durante a compilação, assegurando que os erros de tipo sejam detectados antes da execução do programa. Por outro lado, a checagem dinâmica ocorre durante a execução, proporcionando maior flexibilidade, mas com a desvantagem de que erros de tipo podem surgir tardiamente.
 %% A checagem de tipos pode ser feita de forma estática (durante a compilação) ou dinâmica (durante a execução). A checagem estática, como ocorre em linguagens como Haskell, oferece maior segurança ao detectar erros de tipos antes da execução do programa.
 
