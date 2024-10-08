@@ -25,16 +25,13 @@ Ela tem diversas utilidades, como em assistentes de prova que utilizam sistemas 
 Por exemplo, o Coq \cite{COQUAND1998} utiliza o Cálculo de Construções.
 Além disso, a Teoria de Tipos é fundamental em algoritmos de checagem de tipos, que fazem parte da análise semântica em compiladores, bem como na inferência de tipos em linguagens de programação, como o Cálculo Lambda Simplesmente Tipado.
 
-% Explicar evolução da teoria de tipos
-% Talvez seja too much isso
-
 % Introduzir conceitos de tipos simples, tipos dependentes e tipos polimórficos:
 No contexto das linguagens de programação, podemos distinguir três categorias principais de tipos: tipos simples, tipos polimórficos e tipos dependentes \cite{PIERCE2002}.
 Tipos simples atribuem um tipo fixo a cada termo, enquanto tipos polimórficos introduzem a noção de generalidade, permitindo que funções possam ser aplicadas a argumentos de diferentes tipos sem a necessidade de serem redefinidas para cada um.
 Já os tipos dependentes permitem que tipos dependam de valores.
 
 % Exemplo 1: Tipos Simples
-Um exemplo de tipo simples é uma função em Haskell que opera sobre números inteiros.
+Um exemplo de tipo simples é uma função que opera sobre números inteiros.
 Esta função recebe um número inteiro e retorna outro número inteiro.
 Seu tipo, portanto, é representado como $Int \rightarrow Int$, indicando que tanto a entrada quanto a saída são do tipo inteiro.
 
@@ -44,13 +41,30 @@ Seu tipo é expresso como $a \rightarrow a$, onde $a$ pode ser qualquer tipo.
 Este tipo polimórfico indica que a função identidade pode ser usada com diferentes tipos de dados sem precisar ser modificada.
 
 % Exemplo 3: Tipos Dependentes
-Em linguagens com suporte a tipos dependentes, um exemplo comum seria o de um vetor cujo comprimento faz parte de seu tipo.
+Em linguagens com suporte a tipos dependentes, um exemplo seria o de um vetor cujo comprimento (número de elementos) faz parte de seu tipo.
 Nesse caso, uma função de concatenação de vetores deve garantir que somente vetores com tipos compatíveis em relação ao comprimento possam ser concatenados.
 O tipo da função de concatenação seria algo como\footnote{A notação exata pode variar entre diferentes linguagens de programação que suportam tipos dependentes. A estrutura apresentada serve apenas como uma ilustração conceitual do comportamento esperado.} $Vector(n) \rightarrow Vector(m) \rightarrow Vector(n+m)$, onde $n$ e $m$ são valores que representam os comprimentos dos vetores e fazem parte da definição de tipo.
 
-% Especificar e como ele se relaciona com a inferência de tipos:
-O polimorfismo, em particular, desempenha um papel crucial na inferência de tipos, permitindo que um termo possua múltiplos tipos dependendo de como ele é utilizado no programa.
+% Especificar como polimorfismo se relaciona com a inferência de tipos:
+O polimorfismo desempenha um papel crucial na inferência de tipos.
+Em linguagens com suporte a inferência de tipos, como Haskell, o sistema de tipos é capaz de deduzir tanto tipos específicos quanto tipos genéricos, sempre que possível, para permitir polimorfismo \cite{PIERCE2002}.
+O polimorfismo refere-se à capacidade de uma função ou expressão operar sobre diferentes tipos de dados de forma genérica.
 Um exemplo clássico é a função identidade, $\lambda x.x$, que pode ser tipada como $\forall \alpha. \alpha \to \alpha$, indicando que a função aceita um valor de qualquer tipo $\alpha$ e retorna um valor do mesmo tipo.
+Esse tipo é conhecido como polimorfismo universal \cite{PIERCE2002}.
+
+Já a função de soma apresentada na Figura \ref{code:add} demonstra outro tipo de polimorfismo.
+Como possui tipagem explícita $Int \rightarrow Int \rightarrow Int$, apenas valores do tipo inteiro podem ser somados.
+No entanto, essa mesma função pode ser generalizada para permitir a soma de quaisquer números, contanto que sejam do mesmo tipo.
+Aqui entra o conceito de restrição de classe de tipos.
+
+Em Haskell, uma classe de tipos é um conjunto de tipos que compartilham um conjunto comum de operações.
+A classe \texttt{Num}, por exemplo, é a classe de tipos que suportam operações numéricas, como adição e multiplicação.
+Quando o tipo de uma função não é especificado em sua definição, o sistema de inferência de tipos deduz o tipo mais geral possível.
+Para a função de soma, o tipo inferido seria $Num\ a \Rightarrow a \rightarrow a \rightarrow a$.
+Esse tipo indica que a função pode ser aplicada a qualquer tipo \texttt{a}, desde que a pertença à classe \texttt{Num}, ou seja, a função é polimórfica, mas com a restrição de que os tipos envolvidos devem ser numéricos.
+
+Dessa forma, a função pode ser usada tanto para somar inteiros quanto para somar valores de outros tipos numéricos, como \texttt{Float} ou \texttt{Double}.
+O polimorfismo restrito (ou polimorfismo ad-hoc) é o que permite essa generalização \cite{PIERCE2002}, pois a função é capaz de operar sobre múltiplos tipos, mas dentro de uma classe específica de tipos, garantindo flexibilidade e segurança no sistema de tipos.
 
 % Seções sobre diferentes abordagens para checagem de tipos (estática vs dinâmica):
 %% Uma distinção fundamental entre os sistemas de tipos está na maneira como os tipos são verificados: a checagem estática e a checagem dinâmica. A checagem estática ocorre durante a compilação, assegurando que os erros de tipo sejam detectados antes da execução do programa. Por outro lado, a checagem dinâmica ocorre durante a execução, proporcionando maior flexibilidade, mas com a desvantagem de que erros de tipo podem surgir tardiamente.
