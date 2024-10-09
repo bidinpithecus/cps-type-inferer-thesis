@@ -61,58 +61,45 @@ Em Haskell, uma classe de tipos é um conjunto de tipos que compartilham um conj
 A classe \texttt{Num}, por exemplo, é a classe de tipos que suportam operações numéricas, como adição e multiplicação.
 Quando o tipo de uma função não é especificado em sua definição, o sistema de inferência de tipos deduz o tipo mais geral possível.
 Para a função de soma, o tipo inferido seria $Num\ a \Rightarrow a \rightarrow a \rightarrow a$.
-Esse tipo indica que a função pode ser aplicada a qualquer tipo \texttt{a}, desde que \texttt{a} pertença à classe \texttt{Num}, ou seja, a função é polimórfica, mas com a restrição de que os tipos envolvidos devem ser numéricos.
+Esse tipo indica que a função pode ser aplicada a qualquer tipo \texttt{a}, desde que a pertença à classe \texttt{Num}, ou seja, a função é polimórfica, mas com a restrição de que os tipos envolvidos devem ser numéricos.
 
 Dessa forma, a função pode ser usada tanto para somar inteiros quanto para somar valores de outros tipos numéricos, como \texttt{Float} ou \texttt{Double}.
 O polimorfismo restrito (ou polimorfismo ad-hoc) é o que permite essa generalização \cite{PIERCE2002}, pois a função é capaz de operar sobre múltiplos tipos, mas dentro de uma classe específica de tipos, garantindo flexibilidade e segurança no sistema de tipos.
 
 % Falar sobre Cálculo Lambda Simplesmente Tipado
-O Cálculo Lambda Simplesmente Tipado é uma das primeiras e mais simples variantes do Cálculo Lambda que incorpora tipos em sua estrutura \cite{CHURCH1940}.
-Enquanto o cálculo lambda original não faz distinção entre diferentes tipos de dados, no Cálculo Lambda Simplesmente Tipado, os termos são anotados com tipos.
-Cada função recebe e retorna valores de tipos específicos, o que permite prevenir uma série de erros comuns em programas, como a aplicação de funções a argumentos incorretos.
+O Cálculo Lambda Simplesmente Tipado (STLC, do inglês \textit{Simply Typed Lambda Calculus}) é uma extensão do cálculo lambda que incoropora tipos.
+Enquanto o cálculo lambda não tipado permite qualquer aplicação de funções sem retrições, o STLC assegura que as funções sejam aplicadas apenas a argumentos do tipo correto.
+Isso é feito ao associar um tipo a cada variável e garantir que as operações respeitem essas associações.
 
-Além disso, o sistema de tipos serve como uma ferramenta de verificação durante a compilação de programas, assegurando que erros de tipo sejam detectados antes da execução.
-Dessa forma, ele não apenas facilita a criação de software mais robusto, mas também oferece uma base formal para o estudo de linguagens de programação \cite{PIERCE2002}.
+No STLC, o único construtor de tipos disponível é o tipo de função, denotado por $\tau_1 \to \tau_2$, que representa funções que recebem um argumento de tipo $\tau_1$ e retornam um resultado de tipo $\tau_2$.
+Essa simplicidade é uma característica fundamental do sistema que torna o exemplo mais básico de um sistema de tipos.
+
+Tipos simples podem ser definidos de forma recursiva a partir de um conjunto de tipos base. Um exemplo clássico desse sistema seria $Int$ para inteiros e $Bool$ para booleanos.
+A partir desses tipo base, podemos formar tipos compostos.
+Por exemplo, o tipo de uma função que recebe um inteiro e retorna outro inteiro seria $Int \to Int$.
+Para funções mais complexas, o STLC permite a construção de tuipos com várias entradas e saídas.
+Por exemplo uma função que recebe um inteiro e um booleano e retorna um inteiro seria tipada como $Int \to Bool \to Int$.
 
 % Apresentar a sintaxe dele
-A sintaxe básica do Cálculo Lambda Simplesmente Tipado inclui:
+A sintaxe do STLC pode ser definida com a seguinte gramática:
 
-\begin{itemize}
-  \item Variáveis: $x, y, z, ...$
-  \item Tipos: $T ::= \mathbf{Int} \mid \mathbf{Bool} \mid T \to T$
-  \item Termos: $\lambda x:T. \tau \mid \tau_1 \tau_2 \mid x$
-\end{itemize}
-
-No Cálculo Lambda Simplesmente Tipado, cada variável possui um tipo atribuído e os termos são construídos com base nesses tipos.
-Por exemplo, a abstração de função $\lambda x:T. \tau$ define uma função onde a variável $x$ é de tipo $T$ e o corpo da função, $\tau$, é um termo.
-A aplicação de função $\tau_1 \tau_2$ indica que $\tau_1$ é uma função que é aplicada ao argumento $\tau_2$, o qual deve ter um tipo compatível com o tipo esperado por $\tau_1$.
-
-Essa formalização facilita a composição de funções e o raciocínio sobre a estrutura dos programas, pois cada termo pode ser avaliado dentro de um contexto de tipagem.
-A sintaxe dos tipos, como $T \to T$, define uma função que aceita um argumento do tipo $T$ e retorna um valor também do tipo $T$.
+\begin{equation} \label{eq:stlc}
+  e::=x\mid \lambda x{\mathbin {:}}\tau .e\mid e\,e\mid c
+\end{equation}
 
 % Explicar a sintaxe
-A inferência de tipos no Cálculo Lambda Simplesmente Tipado assegura que cada expressão tenha um tipo bem-definido, baseado nas regras de tipagem.
-A tipagem de termos é feita através de um conjunto de regras formais que garantem a consistência dos tipos no programa.
-Por exemplo, a regra de tipagem para abstrações lambda é a seguinte:
+Tal qual o formalismo, a sintaxe é uma extensão da sintaxe do cálculo lambda, recebendo a adição de anotações de tipos nas abstrações.
 
-\[
-  \frac{\Gamma, x:T_1 \vdash \tau:T_2}{\Gamma \vdash (\lambda x:T_1. \tau): T_1 \to T_2}
-\]
+% Relacionar lógica intuicionista e cálculo lambda simplesmente tipado
+%% O cálculo lambda simplesmente tipado também está intimamente relacionado à lógica intuicionista, onde proposições podem ser vistas como tipos, e provas como programas. Essa correspondência é um princípio-chave da Teoria de Tipos.
 
-Isso significa que, se o termo $t$ possui o tipo $T_2$ sob o contexto onde $x$ possui o tipo $T_1$, então a abstração $\lambda x:T_1. \tau$ tem o tipo $T_1 \to T_2$.
-Essa verificação de tipo garante que, ao aplicar a função, o tipo do argumento corresponde ao tipo esperado pela função.
+% Correspondência Curry-Howard
+%% A Correspondência Curry-Howard formaliza a relação entre lógica e computação, associando tipos a proposições e programas a demonstrações. Esse princípio é fundamental para entender a base teórica por trás da inferência de tipos, especialmente quando se trata da inferência de tipos polimórficos.
 
-% Relacionar com a lógica intuicionista e Correspondência Curry-Howard
-O Cálculo Lambda Simplesmente Tipado está intimamente relacionado com a lógica intuicionista proposicional.
-Esse vínculo é formalizado pela Correspondência Curry-Howard, que estabelece uma correspondência direta entre proposições lógicas e tipos, e entre provas e programas.
-Em outras palavras, tipos podem ser interpretados como proposições lógicas, e termos tipados como provas dessas proposições \cite{PIERCE2002}.
+% Explicar como a inferência de tipos funciona e sua importância:
+%% A inferência de tipos é o processo automático de determinar o tipo de uma expressão sem a necessidade de anotações explícitas. Algoritmos como o Algoritmo W são responsáveis por inferir tipos de maneira eficiente, permitindo que linguagens de programação modernas mantenham a sintaxe simples e concisa, enquanto oferecem garantias de segurança tipológica.
+%% A inferência de tipos é um processo que automatiza a dedução de tipos em expressões, sem a necessidade de anotações explícitas. Algoritmos como o Algoritmo W, discutido no próximo capítulo, são essenciais para que linguagens funcionais modernas possam realizar essa inferência de maneira eficiente.
 
-Por exemplo, o tipo $A \to B$ no Cálculo Lambda Simplesmente Tipado pode ser visto como a implicação lógica se $A$, então $B$.
-Assim, uma função que aceita um argumento do tipo $A$ e retorna um valor do tipo $B$ é equivalente a uma prova de que $A$ implica em $B$.
-Esse princípio permite usar ferramentas da teoria de tipos para construir provas formais de teoremas em lógica intuicionista, fornecendo uma base teórica robusta para assistentes de prova automatizados, como o Coq \cite{COQUAND1998}.
-
-Além disso, a Correspondência Curry-Howard não apenas conecta tipos e lógica, mas também oferece um método sistemático para projetar e raciocinar sobre sistemas de inferência de tipos, garantindo que programas tipados sejam corretos em relação às especificações lógicas.
-
-% Explicar como a inferência de tipos funciona e sua importância
-A inferência de tipos desempenha um papel fundamental na programação funcional moderna, especialmente em linguagens como Haskell e ML, que utilizam o Sistema Damas-Milner.
-O Algoritmo W, que será discutido em detalhe no próximo capítulo, é amplamente utilizado para deduzir automaticamente os tipos em expressões \cite{PIERCE2002}.
+% Conectar com o próximo capítulo (Sistema Damas-Milner e Algoritmo W):
+%% O Sistema Damas-Milner, discutido no próximo capítulo, representa uma grande inovação na inferência de tipos, introduzindo a ideia de polimorfismo de Hindley-Milner, no qual o Algoritmo W é central. Este sistema forma a base de muitos sistemas de tipos polimórficos em linguagens funcionais modernas, e a sua extensão para o estilo CPS será discutida mais adiante.
+%% O Sistema Damas-Milner, que será discutido no próximo capítulo, expande a inferência de tipos para sistemas polimórficos. O Algoritmo W, que é o coração desse sistema, desempenha um papel crucial na dedução automática de tipos em linguagens com tipagem polimórfica, preparando o terreno para sua extensão no contexto CPS.
