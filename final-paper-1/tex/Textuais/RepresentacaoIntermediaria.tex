@@ -38,6 +38,12 @@ A primeira forma refere-se às variáveis, que representam identificadores no si
 A segunda forma, chamada de abstração, define uma função lambda: uma função que associa o identificador $x$ a um termo $e$, seu corpo, com $x$ vinculado ao termo $e$.
 Finalmente, a aplicação ocorre quando um termo $e$ é aplicado a outro $e$, representando a chamada de uma função.
 
+No cálculo lambda, as variáveis podem ser classificadas como livres ou ligadas, dependendo de seu contexto em um termo.
+Variáveis são consideradas livres quando não estão associadas a uma abstração de função.
+Por exemplo, no termo $\lambda x. y$, a variável $y$ é livre, pois não está ligada a nenhum parâmetro introduzido.
+Em contraste, no termo $(\lambda x. x) y$, a variável $x$ está ligada dentro do corpo da abstração, enquanto $y$ permanece livre.
+Um termo sem variáveis livres é denominado fechado; por exemplo, $(\lambda x. \lambda y. x) y$ não possui variáveis livres, pois todas as variáveis estão ligadas às suas respectivas abstrações.
+
 Para avaliar expressões no cálculo lambda, usamos três tipos de redução: $\alpha$, $\beta$ e $\eta$, que seguem as seguintes definições:
 
 \begin{description}
