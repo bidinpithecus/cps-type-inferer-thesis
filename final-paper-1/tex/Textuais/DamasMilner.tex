@@ -1,11 +1,3 @@
-% \chapter{Sistema Damas Milner}\label{ch:damas-milner}
-
-% O sistema Damas-Milner é um sistema de tipos para o cálculo lamda, com polimorfismo paramétrico criado por Hindley, Damas e Milner para a linguagem de programação de propósito geral ML \cite{HINDLEY1969, MILNER1978, DAMAS1984}.
-% Conforme destacado por \citeonline{DAMAS1982}, a linguagem ML possuia fortes aspectos como flexibilidade (através do polimorfismo), robustez (devido à \textit{soundness} semântica) e fortes mecanismos de detecção de erros em tempo de compilação.
-% Este equilíbrio, permite que linguagens funcionais como Haskell e OCaml herdem suas características e usem este sistema como base em seus sistemas de tipos.
-
-% \section{Algoritmo W}\label{sec:w-algo}
-
 \chapter{Sistema Damas-Milner}\label{ch:damas-milner}
 
 O sistema Damas-Milner, introduzido por Robin Milner e posteriormente formalizado em maior detalhe por Luis Damas \cite{MILNER1978, DAMAS1982}, é um dos sistemas de tipos mais influentes para linguagens funcionais.
@@ -48,13 +40,44 @@ Por exemplo, considere a expressão $\texttt{let id} \ = \lambda x.x \ \texttt{i
 O sistema generaliza o tipo de $\texttt{id}$ para $\forall \alpha. \alpha \rightarrow \alpha$, e instancia este tipo tanto para inteiros quanto para caracteres nas duas aplicações subsequentes.
 
 % Substituições
+Outro conceito presente no sistema Damas-Milner, é a substituição de tipos, onde estes são mapeados para outros tipos ou para variáveis de tipo.
+Formalmente, uma substituição de tipos é representada como um mapeamento finito de variáveis de tipo para tipos, denotado por $S$, e pode ser escrito na forma $[ \alpha_1 \mapsto \tau_1, \alpha_2 \mapsto \tau_2, \ldots, \alpha_n \mapsto \tau_n ]$.
+Aqui, $\alpha_i$ são variáveis de tipo distintas e $\tau_i$ são os tipos correspondentes.
+Em outras palavras, $S$ associa cada variável de tipo $\alpha_i$ a um tipo $\tau_i$ específico.
 
-% Variáveis livres
+A aplicação de uma substituição $S$ em um tipo $\tau$, denotada por $S\tau$, resulta na substituição de todas as ocorrências livres de $\alpha_i$ em $\tau$ por $\tau_i$.
+A definição formal, é dada por:
+\begin{figure}[h!]
+  \caption{Regras de aplicação da substituição de tipos}
+  \centering
+  \[
+    \begin{array}{rcl}
+      S\alpha_i                    & \equiv & \tau_i,                                                                          \\[8pt]
+      S\alpha,                     & \equiv & \alpha, \quad \text{se } \alpha \notin \{\alpha_1, \alpha_2, \ldots, \alpha_n\}, \\[8pt]
+      S(\tau_1 \rightarrow \tau_2) & \equiv & S\tau_1 \rightarrow S\tau_2,                                                     \\[8pt]
+      S(\forall \alpha.\sigma)     & \equiv & S' \sigma, \quad \text{onde } S' = S \setminus [\alpha \mapsto \_].
+    \end{array}
+  \]
+  \label{fig:substituicao-tipos}
+  \small{Fonte: \cite{CASTRO2019}}
+\end{figure}
+
+onde o símbolo de subtração ($\setminus$) indica que a substituição $S'$ é a substituição $S$ restrita ao conjunto de mapeamentos que não envolvem a variável $\alpha$.
+
+A instanciação de tipos é um processo onde um esquema de tipo $\sigma = \forall \alpha_1 \ldots \alpha_m. \tau$ é transformado em um tipo específico substituindo suas variáveis quantificadas por tipos concretos.
+Se $S$ é uma substituição, então $S\sigma$ é o esquema de tipo obtido substituindo cada ocorrência livre de $\alpha_i$ em $\sigma$ por $\tau_i$, renomeando as variáveis genéricas de $\sigma$, se necessário.
+O tipo resultante $S\sigma$ é chamado de uma instância de $\sigma$ \cite{DAMAS1982}.
+
+Um esquema de tipo também pode ter uma instância genérica $\sigma' = \forall \beta_1 \ldots \beta_n. \tau'$, se existir uma substituição $[ \tau_i / \alpha_i ]$ tal que $\tau' = [\tau_i / \alpha_i]\tau$, e as variáveis $\beta_j$ não aparecem livres em $\sigma$.
+Nesse caso, escrevemos $\sigma > \sigma'$, indicando que $\sigma$ é mais geral do que $\sigma'$.
+Vale notar que a instanciação age sobre variáveis livres, enquanto a instanciação genérica age sobre variáveis ligadas.
 
 % Regras de inferência
+
 
 \section{Algoritmo W}\label{sec:w-algo}
 
 % Algoritmo de unificação
 
 % Algoritmo W
+
