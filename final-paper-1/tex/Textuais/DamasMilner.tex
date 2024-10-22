@@ -73,11 +73,52 @@ Nesse caso, escrevemos $\sigma > \sigma'$, indicando que $\sigma$ é mais geral 
 Vale notar que a instanciação age sobre variáveis livres, enquanto a instanciação genérica age sobre variáveis ligadas.
 
 % Regras de inferência
+O sistema de tipos de Damas e Milner conta com um conjunto de regras de inferência de tipos, apresentados na Figura \ref{eq:type-inference}, possíveis de serem utilizados nas expressões deste mesmo sistema.
+As ditas regras são julgamentos de tipos como este: $\Gamma \vdash e: \sigma $, onde $\Gamma$ é o contexto, um conjunto de suposições com duplas de variáveis e seus tipos: $(e,\ \sigma)$, $e$ é a expressão sendo inferida e o tipo desta é $\sigma$ no contexto.
 
+\begin{figure}[h!]
+  \caption{Regras de Inferência do sistema Damas-Milner}
+  \centering
+  \[
+    \text{TAUT:} \quad \frac{x : \sigma \in \Gamma}{\Gamma \vdash x : \sigma}
+  \]
+
+  \[
+    \text{ABS:} \quad \frac{\Gamma, x : \tau \vdash e : \tau'}{\Gamma \vdash (\lambda x. e) : \tau \to \tau'}
+  \]
+
+  \[
+    \text{APP:} \quad \frac{\Gamma \vdash e : \tau' \to \tau \quad \Gamma \vdash e' : \tau'}{\Gamma \vdash (e \ e') : \tau}
+  \]
+
+  \[
+    \text{LET:} \quad \frac{\Gamma \vdash e : \sigma \quad \Gamma, x : \sigma  \vdash e' : \tau}{\Gamma \vdash (\texttt{let } x = e \ \texttt{in} \ e') : \tau}
+  \]
+
+  \[
+    \text{INST:} \quad \frac{\Gamma \vdash e : \sigma}{\Gamma \vdash e : \sigma'} \quad \scriptstyle (\sigma\ >\ \sigma')
+  \]
+
+  \[
+    \text{GEN:} \quad \frac{\Gamma \vdash e : \sigma}{\Gamma \vdash e : \forall \alpha \sigma} \quad \scriptstyle (\alpha \text{ não livre em } \Gamma)
+  \]
+
+  \small{Fonte: o autor. Adaptado de \cite{DAMAS1982}}
+  \label{eq:type-inference}
+\end{figure}
+
+As regras de inferência são interpretadas de baixo para cima.
+Por exemplo, na regra da tautologia (TAUT):
+\[
+  \frac{x : \sigma \in \Gamma}{\Gamma \vdash x : \sigma}
+\]
+significa que, se em um contexto $\Gamma$, a variável $x$ possui o tipo $\sigma$, então podemos concluir que $x$ tem o tipo $\sigma$ no mesmo contexto.
+Isso reflete o fato de que a associação de tipos no contexto é preservada.
+
+A seguir, será apresentado o Algoritmo W para inferência de tipos neste sistema.
 
 \section{Algoritmo W}\label{sec:w-algo}
 
-% Algoritmo de unificação
+% Mostrar e explicar algoritmo de unificação
 
-% Algoritmo W
-
+% Mostrar e explicar algoritmo W
