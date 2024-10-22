@@ -40,20 +40,22 @@ Por exemplo, considere a expressão $\texttt{let id} \ = \lambda x.x \ \texttt{i
 O sistema generaliza o tipo de $\texttt{id}$ para $\forall \alpha. \alpha \rightarrow \alpha$, e instancia este tipo tanto para inteiros quanto para caracteres nas duas aplicações subsequentes.
 
 % Substituições
-Outro conceito presente no sistema Damas-Milner, é a substituição de tipos, onde estes são mapeados para outros tipos ou para variáveis de tipo.
+Outro conceito presente no sistema Damas-Milner é a substituição de tipos, onde estes são mapeados para outros tipos ou para variáveis de tipo.
 Formalmente, uma substituição de tipos é representada como um mapeamento finito de variáveis de tipo para tipos, denotado por $S$, e pode ser escrito na forma $[ \alpha_1 \mapsto \tau_1, \alpha_2 \mapsto \tau_2, \ldots, \alpha_n \mapsto \tau_n ]$.
 Aqui, $\alpha_i$ são variáveis de tipo distintas e $\tau_i$ são os tipos correspondentes.
 Em outras palavras, $S$ associa cada variável de tipo $\alpha_i$ a um tipo $\tau_i$ específico.
 
 A aplicação de uma substituição $S$ em um tipo $\tau$, denotada por $S\tau$, resulta na substituição de todas as ocorrências livres de $\alpha_i$ em $\tau$ por $\tau_i$.
-A definição formal, é dada por:
+Esse conceito de substituição é fundamental para o processo de instanciação de tipos, que será discutido a seguir.
+A definição formal da aplicação de substituições é dada por:
+
 \begin{figure}[h!]
   \caption{Regras de aplicação da substituição de tipos}
   \centering
   \[
     \begin{array}{rcl}
       S\alpha_i                    & \equiv & \tau_i,                                                                          \\[8pt]
-      S\alpha,                     & \equiv & \alpha, \quad \text{se } \alpha \notin \{\alpha_1, \alpha_2, \ldots, \alpha_n\}, \\[8pt]
+      S\alpha                      & \equiv & \alpha, \quad \text{se } \alpha \notin \{\alpha_1, \alpha_2, \ldots, \alpha_n\}, \\[8pt]
       S(\tau_1 \rightarrow \tau_2) & \equiv & S\tau_1 \rightarrow S\tau_2,                                                     \\[8pt]
       S(\forall \alpha.\sigma)     & \equiv & S' \sigma, \quad \text{onde } S' = S \setminus [\alpha \mapsto \_].
     \end{array}
@@ -64,17 +66,17 @@ A definição formal, é dada por:
 
 onde o símbolo de subtração ($\setminus$) indica que a substituição $S'$ é a substituição $S$ restrita ao conjunto de mapeamentos que não envolvem a variável $\alpha$.
 
-A instanciação de tipos é um processo onde um esquema de tipo $\sigma = \forall \alpha_1 \ldots \alpha_m. \tau$ é transformado em um tipo específico substituindo suas variáveis quantificadas por tipos concretos.
+A instanciação de tipos é um processo em que um esquema de tipo $\sigma = \forall \alpha_1 \ldots \alpha_m. \tau$ é transformado em um tipo específico substituindo suas variáveis quantificadas por tipos concretos.
 Se $S$ é uma substituição, então $S\sigma$ é o esquema de tipo obtido substituindo cada ocorrência livre de $\alpha_i$ em $\sigma$ por $\tau_i$, renomeando as variáveis genéricas de $\sigma$, se necessário.
 O tipo resultante $S\sigma$ é chamado de uma instância de $\sigma$ \cite{DAMAS1982}.
+Esse processo é essencial para adaptar esquemas de tipos polimórficos a situações específicas em um programa, mantendo a flexibilidade e segurança do sistema de tipos.
 
 Um esquema de tipo também pode ter uma instância genérica $\sigma' = \forall \beta_1 \ldots \beta_n. \tau'$, se existir uma substituição $[ \tau_i / \alpha_i ]$ tal que $\tau' = [\tau_i / \alpha_i]\tau$, e as variáveis $\beta_j$ não aparecem livres em $\sigma$.
 Nesse caso, escrevemos $\sigma > \sigma'$, indicando que $\sigma$ é mais geral do que $\sigma'$.
-Vale notar que a instanciação age sobre variáveis livres, enquanto a instanciação genérica age sobre variáveis ligadas.
+Vale notar que a instanciação atua sobre variáveis livres, enquanto a instanciação genérica lida com variáveis ligadas.
 
-% Regras de inferência
-O sistema de tipos de Damas e Milner conta com um conjunto de regras de inferência de tipos, apresentados na Figura \ref{eq:type-inference}, possíveis de serem utilizados nas expressões deste mesmo sistema.
-As ditas regras são julgamentos de tipos como este: $\Gamma \vdash e: \sigma $, onde $\Gamma$ é o contexto, um conjunto de suposições com duplas de variáveis e seus tipos: $(e,\ \sigma)$, $e$ é a expressão sendo inferida e o tipo desta é $\sigma$ no contexto.
+O sistema de tipos de Damas e Milner conta com um conjunto de regras de inferência de tipos, apresentadas na Figura \ref{eq:type-inference}, que são usadas para determinar os tipos das expressões no sistema.
+Essas regras são julgamentos de tipos da forma $\Gamma \vdash e: \sigma$, onde $\Gamma$ é o contexto, um conjunto de suposições com pares de variáveis e seus tipos: $(e, \sigma)$, $e$ é a expressão sendo tipada, e $\sigma$ é o tipo inferido no contexto.
 
 \begin{figure}[h!]
   \caption{Regras de Inferência do sistema Damas-Milner}
@@ -92,7 +94,7 @@ As ditas regras são julgamentos de tipos como este: $\Gamma \vdash e: \sigma $,
   \]
 
   \[
-    \text{LET:} \quad \frac{\Gamma \vdash e : \sigma \quad \Gamma, x : \sigma  \vdash e' : \tau}{\Gamma \vdash (\texttt{let } x = e \ \texttt{in} \ e') : \tau}
+    \text{LET:} \quad \frac{\Gamma \vdash e : \sigma \quad \Gamma, x : \sigma \vdash e' : \tau}{\Gamma \vdash (\texttt{let } x = e \ \texttt{in} \ e') : \tau}
   \]
 
   \[
@@ -115,10 +117,69 @@ Por exemplo, na regra da tautologia (TAUT):
 significa que, se em um contexto $\Gamma$, a variável $x$ possui o tipo $\sigma$, então podemos concluir que $x$ tem o tipo $\sigma$ no mesmo contexto.
 Isso reflete o fato de que a associação de tipos no contexto é preservada.
 
-A seguir, será apresentado o Algoritmo W para inferência de tipos neste sistema.
+Na regra de generalização (GEN), a condição de que $\alpha$ não seja livre em $\Gamma$ assegura que o tipo generalizado não dependa de nenhum tipo específico presente no contexto.
+Isso permite que o tipo $\forall \alpha. \sigma$ seja usado de forma polimórfica em diferentes partes do programa.
+
+Essas regras garantem a solidez do sistema, preservando a segurança dos tipos ao inferir automaticamente os tipos mais gerais possíveis para as expressões.
+
+Antes de apresentar o Algoritmo W, é importante observar que ele é uma implementação prática das regras de inferência aqui descritas, usando o conceito de unificação para resolver as equações de tipo geradas durante a inferência.
+A seguir, será discutido em detalhes o funcionamento do Algoritmo W.
 
 \section{Algoritmo W}\label{sec:w-algo}
 
+O Algoritmo W, introduzido em \citeonline{DAMAS1982}, é um algoritmo eficiente para inferência de tipos em linguagens de programação funcional.
+Ele se baseia no processo de unificação para solucionar equações de tipos geradas durante a análise de expressões, atribuindo os tipos mais gerais possíveis, ou seja, os tipos mais polimórficos que ainda garantem a consistência do sistema.
+
 % Mostrar e explicar algoritmo de unificação
+A unificação é o processo de encontrar uma substituição de variáveis de tipo que torna dois tipos dados equivalentes.
+Formalmente, dados dois tipos $\tau_1$ e $\tau_2$, a unificação procura uma substituição $S$ tal que $S\tau_1 = S\tau_2$.
+Se tal substituição existe, os tipos são considerados unificáveis e $S$ é chamada de solução unificadora.
+Caso contrário, os tipos são incompatíveis.
+
+O algoritmo de unificação pode ser descrito pelas seguintes regras:
+
+\begin{figure}[h!]
+  \caption{Algoritmo de unificação utilizado no sistema de tipos Damas-Milner}
+  \centering
+  \begin{align*}
+    \text{unificar}(C) =
+    \begin{cases}
+      \text{se } C = \emptyset, \text{ então } [\ ]                                      \\
+      \text{senão, seja } \{S = T\} \cup C' = C \text{ tal que}                          \\
+      \quad \text{se } S = T                                                             \\
+      \quad \quad \text{então } \text{unificar}(C')                                      \\
+      \quad \text{senão, se } S = X \text{ e } X \notin \text{FV}(T)                     \\
+      \quad \quad \text{então } \text{unificar}([X \mapsto T]C') \circ [X \mapsto T]     \\
+      \quad \text{senão, se } T = X \text{ e } X \notin \text{FV}(S)                     \\
+      \quad \quad \text{então } \text{unificar}([X \mapsto S]C') \circ [X \mapsto S]     \\
+      \quad \text{senão, se } S = S_1 \rightarrow S_2 \text{ e } T = T_1 \rightarrow T_2 \\
+      \quad \quad \text{então } \text{unificar}(C' \cup \{S_1 = T_1, S_2 = T_2\})        \\
+      \text{senão}                                                                       \\
+      \quad \text{falha}                                                                 \\
+    \end{cases}
+  \end{align*}
+  \small{Fonte: autor. Adaptado de \cite{PIERCE2002}}
+  \label{eq:unify-algo}
+\end{figure}
+
+Neste algoritmo, $C$ representa um conjunto de equações de tipos a serem resolvidas, $S$ e $T$ são tipos que se tentam unificar, e $X$ representa uma variável de tipo.
+A função $\text{FV}$ calcula as variáveis livres em um tipo.
+
+O algoritmo trabalha iterativamente, tentando resolver a primeira equação do conjunto e, em seguida, aplicando recursivamente a unificação para o restante.
+Ele segue as seguintes etapas:
+
+1. Se o conjunto de equações $C$ estiver vazio, então a unificação é bem-sucedida e retorna a substituição vazia.
+
+2. Se a equação atual $S = T$ for tal que os tipos $S$ e $T$ são idênticos, a equação é considerada resolvida, e o algoritmo prossegue com a unificação do restante do conjunto.
+
+3. Se $S$ é uma variável de tipo $X$ que não ocorre livre em $T$, então substitui-se $X$ por $T$ em todas as equações restantes e prossegue-se com a unificação.
+
+4. Similarmente, se $T$ é uma variável de tipo $X$ que não ocorre livre em $S$, então substitui-se $X$ por $S$ e prossegue-se com a unificação.
+
+5. Se $S$ e $T$ são ambos tipos função, tenta-se unificar seus domínios e co-domínios.
+
+6. Caso nenhuma dessas condições seja satisfeita, a unificação falha.
+
+Essas regras são aplicadas iterativamente para resolver um conjunto de equações de tipos, formando a base para o funcionamento do Algoritmo W.
 
 % Mostrar e explicar algoritmo W
