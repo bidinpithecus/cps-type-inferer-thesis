@@ -133,7 +133,7 @@ Formalmente, dados dois tipos $\tau_1$ e $\tau_2$, a unificação procura uma su
 Se tal substituição existe, os tipos são considerados unificáveis e $S$ é chamada de solução unificadora.
 Caso contrário, os tipos são incompatíveis.
 
-Seja o algoritmo de unificação, $unify$, com tipagem $\tau_1 \to \tau_2 \to S$ que recebe como argumento dois tipos e retorna uma substituição, melhor explicada na Figura~\ref{fig:substituicao-tipos}, pode ser descrito pelas seguintes regras:
+Seja o algoritmo de unificação, $unify$, com tipagem $\texttt{unify} : \tau_1 \to \tau_2 \to S$, que recebe como argumento dois tipos e retorna uma substituição, melhor explicada na Figura~\ref{fig:substituicao-tipos}, pode ser descrito pelas seguintes regras:
 
 \begin{figure}[ht!]
   \caption{Algoritmo de unificação no formato de função}
@@ -170,19 +170,20 @@ A função $\text{FV}$ calcula as variáveis livres em um tipo.
 O algoritmo trabalha iterativamente, tentando resolver a primeira equação do conjunto e, em seguida, aplicando recursivamente a unificação para o restante.
 Ele segue as seguintes etapas:
 
-1. Se o conjunto de equações $C$ estiver vazio, então a unificação é bem-sucedida e retorna a substituição vazia.
+\begin{enumerate}
+  \item Se os tipos $\tau_1$ e $\tau_2$ são idênticos, retorna a substituição vazia, pois não há necessidade de realizar modificações. 
+  \item Caso contrário, o algoritmo considera as seguintes possibilidades:
+    \begin{itemize}
+      \item Se $\tau_1$ é uma variável de tipo que não ocorre livre em $\tau_2$, substitui $\tau_1$ por $\tau_2$ em todas as equações.
+      \item Se $\tau_2$ é uma variável de tipo que não ocorre livre em $\tau_1$, substitui $\tau_2$ por $\tau_1$ em todas as equações.
+      \item Se ambos são tipos função, tenta unificar os domínios e co-domínios.
+    \end{itemize}
+  \item Se nenhuma dessas condições é satisfeita, o algoritmo falha, indicando que os tipos são incompatíveis.
+\end{enumerate}
 
-2. Se a equação atual $S = T$ for tal que os tipos $S$ e $T$ são idênticos, a equação é considerada resolvida, e o algoritmo prossegue com a unificação do restante do conjunto.
-
-3. Se $S$ é uma variável de tipo $X$ que não ocorre livre em $T$, então substitui-se $X$ por $T$ em todas as equações restantes e prossegue-se com a unificação.
-
-4. Similarmente, se $T$ é uma variável de tipo $X$ que não ocorre livre em $S$, então substitui-se $X$ por $S$ e prossegue-se com a unificação.
-
-5. Se $S$ e $T$ são ambos tipos função, tenta-se unificar seus domínios e co-domínios.
-
-6. Caso nenhuma dessas condições seja satisfeita, a unificação falha.
-
-Essas regras são aplicadas iterativamente para resolver um conjunto de equações de tipos, formando a base para o funcionamento do Algoritmo W.
+O Algoritmo W é um método utilizado para inferência de tipos em expressões de linguagens funcionais.
+Ele atribui os tipos mais gerais possíveis a cada subexpressão, garantindo a consistência com as operações definidas.
+O algoritmo combina a unificação com regras de inferência de tipos para deduzir o tipo de uma expressão, explorando o polimorfismo de forma eficiente.
 
 \begin{figure}[ht!]
   \caption{Algoritmo W no formato de função.}
@@ -213,3 +214,18 @@ Essas regras são aplicadas iterativamente para resolver um conjunto de equaçõ
   \end{align*}
   \small{Fonte:~\cite{CASTRO2019}}\label{fig:algoritmo-w}
 \end{figure}
+
+O Algoritmo W pode ser descrito pelos seguintes casos:
+
+\begin{itemize}
+  \item Para uma variável $x$, o algoritmo verifica se existe uma atribuição de tipo para $x$ no contexto $\Gamma$. Se $x$ é associado ao tipo $\forall \alpha_1 \ldots \alpha_n . \tau$, realiza-se a substituição das variáveis ligadas $\alpha_i$ por novos tipos frescos e retorna-se o tipo resultante.
+  
+  \item Para uma aplicação $e\ e'$, o algoritmo infere os tipos de $e$ e $e'$ recursivamente, unifica o tipo de $e$ com um tipo função $\tau' \to \alpha$ e retorna o tipo da aplicação.
+  
+  \item Para uma abstração $\lambda x . e$, o algoritmo infere o tipo de $e$ no contexto atualizado com a variável $x$ e retorna o tipo função resultante.
+  
+  \item Para uma expressão do tipo `let', o algoritmo infere o tipo da expressão vinculada e o tipo do corpo da expressão com a variável adicionada ao contexto, utilizando a generalização para permitir polimorfismo.
+\end{itemize}
+
+
+Essas etapas garantem que o algoritmo seja capaz de inferir tipos de forma eficiente, atribuindo os tipos mais polimórficos possíveis para expressões em linguagens funcionais.
