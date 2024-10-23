@@ -527,7 +527,7 @@ FUNCTION {format.names}
         't
       if$
       nameptr #1 + 'nameptr :=
-      namesleft #1 - 'namesleft := }
+      namesleft #1 --- 'namesleft := }
   while$
   } if$
 }
@@ -557,7 +557,7 @@ FUNCTION {format.names.plain}
 	't
       if$
       nameptr #1 + 'nameptr :=
-      namesleft #1 - 'namesleft :=
+      namesleft #1 --- 'namesleft :=
     }
   while$
 }
@@ -1212,7 +1212,7 @@ FUNCTION {format.journal}
 }
 
 
-%generates the first label in \abntrefinfo to be used with \citeonline
+%generates the first label in \abntrefinfo to be used with~\citeonline
 FUNCTION {format.names.for.label1} %abnt-alf only
 { 's := "" 't :=
    #1 'nameptr :=  s num.names$ 'numnames :=
@@ -1240,11 +1240,11 @@ FUNCTION {format.names.for.label1} %abnt-alf only
         't
       if$
       nameptr #1 + 'nameptr :=
-      namesleft #1 - 'namesleft := }
+      namesleft #1 --- 'namesleft := }
   while$
 }
 
-%generates the second label in \abntrefinfo to be used with \cite
+%generates the second label in \abntrefinfo to be used with~\cite
 FUNCTION {format.names.for.label2} %abnt-alf only
 { 's := "" 't :=
    #1 'nameptr :=  s num.names$ 'numnames :=
@@ -1270,7 +1270,7 @@ FUNCTION {format.names.for.label2} %abnt-alf only
         't
       if$
       nameptr #1 + 'nameptr :=
-      namesleft #1 - 'namesleft := }
+      namesleft #1 --- 'namesleft := }
   while$
 }
 
@@ -1979,7 +1979,7 @@ FUNCTION {sort.format.names}
         { t sortify * }
       if$
       nameptr #1 + 'nameptr :=
-      namesleft #1 - 'namesleft :=
+      namesleft #1 --- 'namesleft :=
     }
   while$
 }
@@ -2035,8 +2035,8 @@ FUNCTION {set.default.abnt.variables}
   #0 'abnt.and.type     :=     % #0 "e"; #1 "&"
   "\emph" 'abnt.emphasize :=
   #0 'abnt.cite.style :=       %default norm version for NBR10520
-                               %#0 \cite=(AUTHOR, YEAR)
-			       %#1 \cite=(Author, YEAR)
+                               %#0~\cite=(AUTHOR, YEAR)
+			       %#1~\cite=(Author, YEAR)
   #0 'abnt.experimental :=
   abnt.doi.expand.to.url 'abnt.doi :=
   #3 'abnt.etal.cite :=
@@ -2086,7 +2086,7 @@ FUNCTION {search.reprinted}
 ITERATE {search.reprinted}
 FUNCTION {abntreprintinfo}
 {"\providecommand{\abntreprintinfo}[1]{%" write$ newline$
- " \citeonline{#1}}" write$ newline$}
+ "~\citeonline{#1}}" write$ newline$}
 EXECUTE {abntreprintinfo}
 ITERATE {presort}
 SORT

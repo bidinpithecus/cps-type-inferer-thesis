@@ -208,7 +208,7 @@
 % ---
 
 % ---
-% Margens - NBR 14724/2011 - 5.1 Formato
+% Margens --- NBR 14724/2011 --- 5.1 Formato
 % ---
 \setlrmarginsandblock{3cm}{2cm}{*}
 \setulmarginsandblock{3cm}{2cm}{*}
@@ -216,7 +216,7 @@
 % ---
 
 % ---
-% Espacamento entre linhas - NBR 14724/2011 - 5.2 Espacamento
+% Espacamento entre linhas --- NBR 14724/2011 --- 5.2 Espacamento
 % ---
 \OnehalfSpacing
 % ---
@@ -228,7 +228,7 @@
 % ------------------------------------------------------------------------
 
 % ---
-% ``Tamanho menor e uniforme'' ditada pela NBR 14724/2011 - 5.1
+% ``Tamanho menor e uniforme'' ditada pela NBR 14724/2011 --- 5.1
 % ---
 \newcommand{\ABNTEXfontereduzida}{\footnotesize}
 % ---
@@ -306,7 +306,7 @@
 % ------------------------------------------------------------------------
 
 % ---
-% Notas de rodape - footnotes - NBR 14724/2011 - 5.2.1 
+% Notas de rodape --- footnotes --- NBR 14724/2011 --- 5.2.1 
 \setlength{\footmarkwidth}{1.2em} % largura do footnotemark
 \setlength{\footmarksep}{0em}
 \footmarkstyle{\footnotesize{\textsuperscript{#1}}\hfill}
@@ -411,7 +411,7 @@
 % -----
 % Configuracoes do TOC
 % -----
-% nivel de profundidade (implementa o quinto nivel - subsubsubsection)
+% nivel de profundidade (implementa o quinto nivel --- subsubsubsection)
 \setsecnumdepth{paragraph}
 \settocdepth{paragraph}
 \setcounter{tocdepth}{5}
@@ -560,7 +560,7 @@
 % ---
 % Configuracao dos titulos dos capitulos
 % Novo estido do memoir 
-% ABNT NBR 14724-2011 - 5.2.2-5.2.4; ABNT NBR 6024-2003 - 3.1-3.8
+% ABNT NBR 14724-2011 --- 5.2.2-5.2.4; ABNT NBR 6024-2003 --- 3.1-3.8
 \provideboolean{abntex@innonumchapter}
 \setboolean{abntex@innonumchapter}{true}
 \makechapterstyle{abnt}{%
@@ -690,52 +690,52 @@
 % ------------------------------------------------------------------------
 % ------------------------------------------------------------------------
 
-% Comandos de dados - titulo do documento
+% Comandos de dados --- titulo do documento
 \newcommand{\titulo}[1]{\title{#1}}
 \newcommand{\imprimirtitulo}{\thetitle}
 
-% Comandos de dados - titulo do documento
+% Comandos de dados --- titulo do documento
 \newcommand{\tituloestrangeiro}[1]{\providecommand{\theforeigntitle}{#1}}
 \newcommand{\imprimirtituloestrangeiro}{\theforeigntitle}
 
 
-% Comandos de dados - autor (use \and para multiplos autores)
+% Comandos de dados --- autor (use \and para multiplos autores)
 \newcommand{\autor}[1]{\author{#1}}
 \newcommand{\imprimirautor}{\theauthor}
 
-% Comandos de dados - data
+% Comandos de dados --- data
 \let\olddate\date
 \renewcommand{\date}[1]{\AtBeginDocument{\olddate{#1}}}
 \newcommand{\data}[1]{\date{#1}}
 \newcommand{\imprimirdata}{\thedate}
 
-% Comandos de dados - instituicao
+% Comandos de dados --- instituicao
 \providecommand{\imprimirinstituicao}{}
 \newcommand{\instituicao}[1]{\renewcommand{\imprimirinstituicao}{#1}}
 
-% Comandos de dados - local
+% Comandos de dados --- local
 \providecommand{\imprimirlocal}{}
 \newcommand{\local}[1]{\renewcommand{\imprimirlocal}{#1}}
 
-% Comandos de dados - preambulo
+% Comandos de dados --- preambulo
 \providecommand{\imprimirpreambulo}{}
 \newcommand{\preambulo}[1]{\renewcommand{\imprimirpreambulo}{#1}}
 
-% Comandos de dados - orientador
+% Comandos de dados --- orientador
 \providecommand{\imprimirorientadorRotulo}{}
 \providecommand{\imprimirorientador}{}
 \newcommand{\orientador}[2][\orientadorname]%
 {\renewcommand{\imprimirorientadorRotulo}{#1}%
   \renewcommand{\imprimirorientador}{#2}}
 
-% Comandos de dados - coorientador
+% Comandos de dados --- coorientador
 \providecommand{\imprimircoorientadorRotulo}{}
 \providecommand{\imprimircoorientador}{}
 \newcommand{\coorientador}[2][\coorientadorname]%
 {\renewcommand{\imprimircoorientadorRotulo}{#1}%
   \renewcommand{\imprimircoorientador}{#2}}
 
-% Comandos de dados - tipo de trabalho
+% Comandos de dados --- tipo de trabalho
 \providecommand{\imprimirtipotrabalho}{}
 \newcommand{\tipotrabalho}[1]{\renewcommand{\imprimirtipotrabalho}{#1}}
 
@@ -777,7 +777,7 @@
 % ---
 
 % ---
-% Folha de aprovacao - NBR 14724/2011 - 4.2.1.3
+% Folha de aprovacao --- NBR 14724/2011 --- 4.2.1.3
 \newenvironment{folhadeaprovacao}[1][\folhadeaprovacaoname]{%
   \clearpage%
   \PRIVATEbookmarkthis{#1}%
@@ -811,7 +811,7 @@
 % ---
 
 % ---
-% Resumo e abstracts em diferentes idiomas - NBR 14724/2011
+% Resumo e abstracts em diferentes idiomas --- NBR 14724/2011
 
 % altera as margens padrões do memoir para abstract caso nao seja article
 \ifthenelse{\equal{\ABNTEXisarticle}{true}}{%
@@ -898,12 +898,12 @@
 % ---
 
 % ---
-% Apendices - comando 
+% Apendices --- comando 
 \newcommand{\apendices}{%
   \PRIVATEapendiceconfig{\apendicename}{\apendicesname}
   \appendix
 }
-% Apendices - ambiente
+% Apendices --- ambiente
 \newenvironment{apendicesenv}{%
   \PRIVATEapendiceconfig{\apendicename}{\apendicesname}
   \begin{appendix}
@@ -915,7 +915,7 @@
 % ---
 
 % ---
-% Anexos - comando
+% Anexos --- comando
 \newcommand{\anexos}{%
   \cftinserthook{toc}{AAA}
 
@@ -923,7 +923,7 @@
   \appendix
   \renewcommand\theHchapter{anexochapback.\arabic{chapter}}
 }
-% Anexos - ambiente
+% Anexos --- ambiente
 \newenvironment{anexosenv}{%
   \cftinserthook{toc}{AAA}
 
@@ -966,7 +966,7 @@
 % ------------------------------------------------------------------------
 
 % ---
-% Citacao direta com mais de 3 linhas - ABNT NBR 10520/2002 - 5.3
+% Citacao direta com mais de 3 linhas --- ABNT NBR 10520/2002 --- 5.3
 \newlength{\ABNTEXcitacaorecuo}% recuo de 4 cm da margem esquerda
 \ifthenelse{\equal{\ABNTEXistwocolumn}{true}}{%
   \setlength{\ABNTEXcitacaorecuo}{1.8cm}
@@ -987,7 +987,7 @@
 
 % ---
 % Ambiente para alineas e e subalineas (incisos)
-% ABNT NBR 6024/2012 - 4.2 e 4.3
+% ABNT NBR 6024/2012 --- 4.2 e 4.3
 \newlist{alineas}{enumerate}{2}
 \setlist[alineas,1]{label={\alph*)},topsep=0pt,itemsep=0pt,leftmargin=\parindent+\labelwidth-\labelsep}%
 \setlist[alineas,2]{label={--},topsep=0pt,itemsep=0pt,leftmargin=*}

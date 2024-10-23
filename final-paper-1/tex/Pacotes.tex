@@ -105,16 +105,16 @@
 % CONFIGURAÇÕES DE PACOTES
 % Configurações do pacote backref
 % Usado sem a opção hyperpageref de backref
-\renewcommand{\backrefpagesname}{Citado na(s) página(s):~}
+\renewcommand{\backrefpagesname}{Citado na (s) página (s):~}
 % Texto padrão antes do número das páginas
 \renewcommand{\backref}{}
 % Define os textos da citação
 \renewcommand*{\backrefalt}[4]{
-	\ifcase #1 %
+	\ifcase#1%
 		Nenhuma citação no texto.%
-	\or
+	\or%
 		Citado na página #2.%
-	\else
+	\else%
 		Citado #1 vezes nas páginas #2.%
 	\fi}%
 
@@ -175,11 +175,11 @@
 % Controle do espaçamento entre um parágrafo e outro:
 \setlength{\parskip}{0.0cm}  % tente também \onelineskip
 %\SingleSpacing % Espaçamento simples 
-\OnehalfSpacing % Espaçamento 1,5 (UDESC/CCT)
+\OnehalfSpacing% Espaçamento 1,5 (UDESC/CCT)
 %\DoubleSpacing	% Espaçamento duplo
 
 % ---
-% Margens - NBR 14724/2011 - 5.1 Formato
+% Margens --- NBR 14724/2011 --- 5.1 Formato
 % ---
 \setlrmarginsandblock{3cm}{2cm}{*}
 \setulmarginsandblock{3cm}{2cm}{*}
@@ -197,10 +197,10 @@
 % So you have to make them robust. The example below uses etoolbox with \robustify:
 %
 \usepackage{etoolbox}
-\robustify\setcounter
-\robustify\addtocounter
-\robustify\setlength
-\robustify\addtolength
+\robustify\setcounter%
+\robustify\addtocounter%
+\robustify\setlength%
+\robustify\addtolength%
 
 
 %% How to silence memoir class warning against the use of caption package?
@@ -229,7 +229,7 @@
 \renewcommand{\ABNTEXsubsectionfont}{\fontseries{b}} %\bfseries
 \renewcommand{\ABNTEXsubsectionfontsize}{\normalsize}
 % --- SubSubSection ---
-\renewcommand{\ABNTEXsubsubsectionfont}{\itshape}
+\renewcommand{\ABNTEXsubsubsectionfont}{\itshape\/}
 \renewcommand{\ABNTEXsubsubsectionfontsize}{\normalsize}
 
 \renewcommand{\ABNTEXsubsubsubsectionfont}{\normalfont}
@@ -252,7 +252,7 @@
 \renewcommand{\cftsubsectionfont}{\ABNTEXsubsectionfont\selectfont}
 \renewcommand{\cftsubsectionpagefont}{\normalsize\selectfont}
 
-\renewcommand{\cftsubsubsectionfont}{\normalfont\itshape\selectfont}
+\renewcommand{\cftsubsubsectionfont}{\normalfont\itshape\selectfont\/}
 \renewcommand{\cftsubsubsectionpagefont}{\normalsize\selectfont}
 
 \renewcommand{\cftparagraphfont}{\normalfont\selectfont}
@@ -266,13 +266,13 @@
 
 \makeatletter
 
-\let\oldcontentsline\contentsline
+\let\oldcontentsline\contentsline%
 \def\contentsline#1#2{%
-\expandafter\ifx\csname l@#1\endcsname\l@section
-	\expandafter\@firstoftwo
-\else
-	\expandafter\@secondoftwo
-\fi
+\expandafter\ifx\csname l@#1\endcsname\l@section%
+	\expandafter\@firstoftwo%
+\else%
+	\expandafter\@secondoftwo%
+\fi%
 {%
 \oldcontentsline{#1}{\MakeTextUppercase{#2}}%
 }{%
@@ -308,14 +308,14 @@
 	\memlegendinfo{#2}%
 	\par
 	\begingroup
-	\@parboxrestore
-	\if@minipage
-		\@setminipage
+	\@parboxrestore%
+	\if@minipage%
+		\@setminipage%
 	\fi
-	\ABNTEXfontereduzida
-	\configureseparator
+	\ABNTEXfontereduzida%
+	\configureseparator%
 	\captiondelim{\ABNTEXcaptionfontedelim}
-	\@makecaption{#1}{\ignorespaces #2}\par
+	\@makecaption{#1}{\ignorespaces#2}\par%
 	\endgroup}
 
 
@@ -348,7 +348,7 @@
 		\setlength{\itemsep}{0pt}	% Ajuste para Espaçamento 1,5 (UDESC/CCT)
 		}{% 
 	\end{symbols}
-	\cleardoublepage
+	\cleardoublepage%
 }
 % ---
 
@@ -360,10 +360,10 @@
 		\setlength{\itemsep}{0pt}	% Ajuste para Espaçamento 1,5 (UDESC/CCT)
 		}{%
 	\end{symbols}
-	\cleardoublepage
+	\cleardoublepage%
 }
 % ---
 
 % ---
-% FIM DAS CUSTOMIZAÇÕES PARA A  Universidade do Estado de Santa Catarina - UDESC/CCT
+% FIM DAS CUSTOMIZAÇÕES PARA A  Universidade do Estado de Santa Catarina --- UDESC/CCT
 % ---

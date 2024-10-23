@@ -2,7 +2,7 @@
 
 A compilação de programas envolve diversas fases, cada uma com funções específicas, como análise léxica, análise sintática, análise semântica, otimizações, e, finalmente, a geração de código.
 Uma etapa crítica nesse processo é a otimização, que frequentemente se baseia em representações intermediárias (IRs).
-Essas representações atuam como ponte entre o código fonte e o código de máquina, permitindo que transformações e otimizações sejam aplicadas de maneira mais eficaz \cite{PLOTKIN1975125}.
+Essas representações atuam como ponte entre o código fonte e o código de máquina, permitindo que transformações e otimizações sejam aplicadas de maneira mais eficaz~\cite{PLOTKIN1975125}.
 
 As representações intermediárias variam conforme o paradigma da linguagem de programação.
 Para linguagens imperativas, a Representação em Atribuição Única Estática (SSA) é amplamente adotada.
@@ -12,23 +12,23 @@ Este trabalho foca especificamente no CPS, uma IR que oferece vantagens particul
 Essas características do CPS se tornam ainda mais evidentes quando comparamos como diferentes linguagens de lidam com o fluxo de execução. Em linguagens de alto nível, por exemplo, a pilha de chamadas atua como uma abstração fundamental para gerenciar o controle de retorno das funções. No entanto, em linguagens de baixo nível, como \textit{assembly}, não há tal abstração, exigindo que o controle do fluxo seja manualmente tratado por meio de endereços de retorno.
 
 Nesse contexto, o CPS se destaca ao tornar as continuações explícitas no código.
-Ao invés de confiar na pilha de chamadas para gerenciar retornos, o CPS introduz um parâmetro adicional em cada função, representando a continuação — isto é, o que deve ser feito com o resultado da função \cite{KENNEDY2007}.
+Ao invés de confiar na pilha de chamadas para gerenciar retornos, o CPS introduz um parâmetro adicional em cada função, representando a continuação — isto é, o que deve ser feito com o resultado da função~\cite{KENNEDY2007}.
 Desta forma, em vez de simplesmente retornar um valor diretamente, a função invoca essa continuação, transferindo explicitamente o controle à próxima etapa da computação.
 Isso elimina a dependência da pilha de chamadas, simplificando o modelo de execução e tornando-o mais alinhado com as necessidades de linguagens de baixo nível.
 
 Além disso, a adoção do CPS como representação intermediária vai além da tradução de linguagens de alto nível para código de máquina.
-O CPS facilita a aplicação de otimizações avançadas, como a eliminação de chamadas de cauda e a fusão de funções, além de permitir uma correspondência mais direta com o código gerado em linguagens de montagem \cite{FLANAGAN1993}.
+O CPS facilita a aplicação de otimizações avançadas, como a eliminação de chamadas de cauda e a fusão de funções, além de permitir uma correspondência mais direta com o código gerado em linguagens de montagem~\cite{FLANAGAN1993}.
 
-Por outro lado, um ponto importante a ser considerado é que muitas implementações do CPS optam por uma representação não tipada \cite{MORRISSET1999}. Embora essa abordagem simplifique a implementação inicial, ele pode comprometer a segurança e a correção do código.
+Por outro lado, um ponto importante a ser considerado é que muitas implementações do CPS optam por uma representação não tipada~\cite{MORRISSET1999}. Embora essa abordagem simplifique a implementação inicial, ele pode comprometer a segurança e a correção do código.
 Um sistema de tipos robusto pode não apenas garantir a correção de certas transformações e otimizações, mas também identificar uma classe inteira de erros antes da execução, proporcionando assim maior confiabilidade ao processo de compilação.
 
 Diante dessas considerações, a linguagem de programação Haskell foi escolhida para a implementação deste trabalho.
-Haskell, sendo uma linguagem funcional pura fortemente tipada, possui características desejáveis, como transparência referencial \cite{SONDERGAARD1990} e um sistema de tipos robusto para explorar as vantagens do CPS e aplicar o sistema de tipos de maneira rigorosa.
+Haskell, sendo uma linguagem funcional pura fortemente tipada, possui características desejáveis, como transparência referencial~\cite{SONDERGAARD1990} e um sistema de tipos robusto para explorar as vantagens do CPS e aplicar o sistema de tipos de maneira rigorosa.
 Dessa forma, a escolha de Haskell não apenas facilita o desenvolvimento de uma implementação segura e eficiente do CPS, como também conta com garantias de seguranças que são fundamentais para o sucesso deste trabalho.
 
 \section{Objetivo Geral}\label{sec:objetivo-geral}
 
-Este trabalho visa explorar a inferência de tipos para CPS, propondo uma extensão do algoritmo W - um algoritmo de inferência de tipos para o sistema Damas-Milner - para CPS, definido em \cite{TORRENS2024} na linguagem de programação Haskell.
+Este trabalho visa explorar a inferência de tipos para CPS, propondo uma extensão do algoritmo W --- um algoritmo de inferência de tipos para o sistema Damas-Milner --- para CPS, definido em~\cite{TORRENS2024} na linguagem de programação Haskell.
 
 \section{Objetivos específicos}\label{sec:objetivos-especificos}
 
@@ -50,8 +50,8 @@ A validação consistirá em comparar os tipos inferidos pelo algoritmo com os t
 
 \section{Estrutura do Trabalho}\label{sec:estrutura-trabalho}
 
-Este trabalho está estruturado de maneira que será fornecida, antes da formalização da extensão e implementação do algoritmo W, nos capítulos \ref{ch:formalizacao} e \ref{ch:implementacao}, uma fundamentação teórica.
-Inicialmente, será abordada a representação intermediária no capítulo \ref{ch:IR}, com um aprofundamento em CPS na seção \ref{sec:cps}.
-Na sequência, o capítulo \ref{ch:type-theory} discutirá a teoria de tipos, apresentando os conceitos e definições necessários para a compreensão do tema.
-O sistema Damas-Hindley-Milner será detalhado no capítulo \ref{ch:damas-milner}, incluindo o algoritmo W, discutido de forma mais específica na seção \ref{sec:w-algo}.
-Por fim, o capítulo \ref{ch:conclusao} trará as considerações finais, sintetizando os principais pontos e contribuições do trabalho.
+Este trabalho está estruturado de maneira que será fornecida, antes da formalização da extensão e implementação do algoritmo W, nos capítulos~\ref{ch:formalizacao} e~\ref{ch:implementacao}, uma fundamentação teórica.
+Inicialmente, será abordada a representação intermediária no capítulo~\ref{ch:IR}, com um aprofundamento em CPS na seção~\ref{sec:cps}.
+Na sequência, o capítulo~\ref{ch:type-theory} discutirá a teoria de tipos, apresentando os conceitos e definições necessários para a compreensão do tema.
+O sistema Damas-Hindley-Milner será detalhado no capítulo~\ref{ch:damas-milner}, incluindo o algoritmo W, discutido de forma mais específica na seção~\ref{sec:w-algo}.
+Por fim, o capítulo~\ref{ch:conclusao} trará as considerações finais, sintetizando os principais pontos e contribuições do trabalho.

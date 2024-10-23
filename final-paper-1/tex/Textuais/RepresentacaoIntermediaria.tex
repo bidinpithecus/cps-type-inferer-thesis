@@ -2,34 +2,33 @@
 
 Na computação, um compilador é um programa responsável por traduzir um código escrito em uma linguagem de programação para outra, geralmente do código-fonte para código de máquina, permitindo assim a execução do programa.
 Durante esse processo, é fundamental que o mínimo de informações seja perdido, uma vez que a semântica original deve ser preservada no processo de tradução.
-Uma abordagem comum utilizada para manter a integridade semântica e possibilitar otimizações, são as representações intermediárias (IR, do inglês \textit{intermediate representation}) \cite{cooper2014}.
+Uma abordagem comum utilizada para manter a integridade semântica e possibilitar otimizações, são as representações intermediárias (IR, do inglês \textit{intermediate representation})~\cite{cooper2014}.
 
 Compiladores modernos, amplamente utilizados na indústria, empregam mais de uma IR para tirar proveito das vantagens de cada uma, uma vez que essas representações são projetadas para diferentes objetivos, como otimizações específicas.
 As IRs podem ser classificadas de acordo com o nível de abstração e são comumente aplicados em sequência.
-Representações com um nível maior de abstração são usadas próximas ao código-fonte, enquanto aquelas de nível mais baixo estão mais próximas do código de máquina \cite{aho2008compilers}, como ilustrado na figura \ref{fig:abstraction-level-irs}.
+Representações com um nível maior de abstração são usadas próximas ao código-fonte, enquanto aquelas de nível mais baixo estão mais próximas do código de máquina~\cite{aho2008compilers}, como ilustrado na figura~\ref{fig:abstraction-level-irs}.
 
 \begin{figure}
   \centering
   \includegraphics[width=.7\textwidth]{Imagens/abstraction-level-irs.png}
-  \caption{Sequência de representações intermediárias}
-  \label{fig:abstraction-level-irs}
-  \small{Fonte: \cite{aho2008compilers}}
+  \caption{Sequência de representações intermediárias}\label{fig:abstraction-level-irs}
+  \small{Fonte:~\cite{aho2008compilers}}
 \end{figure}
 
 Uma das principais informações que deve ser preservada em uma IR, é o fluxo de controle, isto é, a ordem em que as instruções do programa são executadas, como chamadas de função, \textit{loops} e condições.
-Para garantir que o compilador mantenha a semântica correta do programa, o fluxo de controle deve ser repassado de alguma maneira durante o processo de tradução \cite{cooper2014}.
+Para garantir que o compilador mantenha a semântica correta do programa, o fluxo de controle deve ser repassado de alguma maneira durante o processo de tradução~\cite{cooper2014}.
 Uma das maneiras disso ser feito explicitamente, é com o uso de continuações, que são funções que descrevem o próximo passo de uma computação em um ponto particular da execução do programa.
 
 \section{CPS}\label{sec:cps}
 
-O estilo de passagem de continuações (CPS, do inglês \textit{continuation passing style}) é uma técnica de transformação de código que torna o fluxo de controle de um programa explícito, ao converter o estilo convencional de chamadas de função em chamadas que passam explicitamente o controle para a próxima etapa, conhecida como continuação (do inglês, \textit{continuation}) \cite{appel1992compiling}.
+O estilo de passagem de continuações (CPS, do inglês \textit{continuation passing style}) é uma técnica de transformação de código que torna o fluxo de controle de um programa explícito, ao converter o estilo convencional de chamadas de função em chamadas que passam explicitamente o controle para a próxima etapa, conhecida como continuação (do inglês, \textit{continuation})~\cite{appel1992compiling}.
 Em vez de retornar diretamente o resultado de uma função, o CPS transforma cada função para que, ao finalizar sua computação, ela invoque uma \textit{continuation}, que representa o próximo passo a ser executado no programa.
 
-O cálculo lambda, definido por \citeonline{church1932set}, é um sistema formal que serve como base para a maioria das linguagens funcionais.
+O cálculo lambda, definido por~\citeonline{church1932set}, é um sistema formal que serve como base para a maioria das linguagens funcionais.
 Ele é capaz de representar qualquer computação utilizando abstrações e aplicações através de reduções.
 Sua sintaxe consiste em três regras simples que definem os elementos principais do sistema: variável, abstração e aplicação, conforme apresentados a seguir:
 
-\begin{equation} \label{eq:lambda-calculus}
+\begin{equation}\label{eq:lambda-calculus}
   e ::= x \mid \lambda x. e \mid e e
 \end{equation}
 
@@ -49,17 +48,17 @@ Para avaliar expressões no cálculo lambda, usamos três tipos de redução: $\
 \begin{description}
   \item[$\alpha$-redução:] Renomeação de variáveis ligadas.
         \begin{align}
-          \lambda x . e[x] & \rightarrow \lambda y . e[y] \label{eq:alpha-reduction}
+          \lambda x . e[x] & \rightarrow \lambda y . e[y]\label{eq:alpha-reduction}
         \end{align}
 
   \item[$\beta$-redução:] Aplicação de função.
         \begin{align}
-          (\lambda x . e_1) e_2 & \rightarrow e_1 [e_2 / x] \label{eq:beta-reduction}
+          (\lambda x . e_1) e_2 & \rightarrow e_1 [e_2 / x]\label{eq:beta-reduction}
         \end{align}
 
   \item[$\eta$-redução:] Expansão de função.
         \begin{align}
-          \lambda x . (e \, x) & \rightarrow e \quad \text{se } x \text{ não ocorre livre em } e \label{eq:eta-reduction}
+          \lambda x . (e \, x) & \rightarrow e \quad \text{se } x \text{ não ocorre livre em } e\label{eq:eta-reduction}
         \end{align}
 \end{description}
 
@@ -75,10 +74,10 @@ Cada função, em vez de retornar diretamente um valor, recebe um argumento extr
 Por exemplo, a expressão $\lambda x. x + 1$ no cálculo lambda tradicional retornaria o valor $x + 1$. Ao transformar essa expressão para CPS, ela se torna $\lambda x. \lambda k. k (x + 1)$.
 
 Aqui, $k$ é a continuação que processa o resultado $x + 1$.
-Essa técnica é especialmente poderosa no contexto de compiladores, uma vez que facilita várias formas de otimizações e análises, como eliminação de chamadas de função (TCO, do inglês \textit{tail-call optimization}), expansão \textit{inline}, representação de \textit{closures}, alocação de registradores, entre outras \cite{appel1992compiling}.
+Essa técnica é especialmente poderosa no contexto de compiladores, uma vez que facilita várias formas de otimizações e análises, como eliminação de chamadas de função (TCO, do inglês \textit{tail-call optimization}), expansão \textit{inline}, representação de \textit{closures}, alocação de registradores, entre outras~\cite{appel1992compiling}.
 Ao transformar o código para CPS, todo o fluxo de execução do programa é capturado como uma série de chamadas encadeadas de funções, sem depender de uma pilha de execução implícita.
 
-O cálculo de continuações (do inglês, \textit{CPS-calculus}), conforme definido por \citeonline{thielecke1997}, é um sistema formal que leva o CPS além de seu uso tradicional como uma técnica de transformação de código, tratando-o como um modelo computacional por si só.
+O cálculo de continuações (do inglês, \textit{CPS-calculus}), conforme definido por~\citeonline{thielecke1997}, é um sistema formal que leva o CPS além de seu uso tradicional como uma técnica de transformação de código, tratando-o como um modelo computacional por si só.
 Enquanto o CPS é utilizado como uma IR em compiladores, o cálculo de continuações oferece uma estrutura para raciocinar formalmente sobre computações onde o fluxo de controle é explicitamente representado.
 Os termos do cálculo de continuações, chamados de comandos, são descritos pelas seguintes regras:
 
@@ -91,7 +90,7 @@ Os termos do cálculo de continuações, chamados de comandos, são descritos pe
 Aqui, $x\langle \vec{x} \rangle$ representa um salto (\textit{jump}), isto é, uma chamada para a continuação $x$ com os parâmetros $\vec{x}$, sendo essencialmente uma chamada direta para a continuação, enquanto $M\{x\langle \vec{x} \rangle = M\}$ representa um vínculo (\textit{binding}), onde o corpo $M$ está vinculado à continuação $x$ com os parâmetros $\vec{x}$, isto é, uma chamada intermediária que, ao ser chamada, executará o próximo passo da computação.
 
 % Explicar a transformação para CPS, contendo exemplos em Haskell.
-A tradução para CPS converte um código escrito em estilo direto (onde o controle de fluxo é implícito) para o estilo de passagem de continuações \cite{FLANAGAN1993}.
+A tradução para CPS converte um código escrito em estilo direto (onde o controle de fluxo é implícito) para o estilo de passagem de continuações~\cite{FLANAGAN1993}.
 A principal ideia por trás dessa transformação é modificar as funções para que elas não retornem um valor diretamente, mas, em vez disso, passem o resultado para uma continuação, que representará o próximo passo da computação.
 
 \begin{figure}
@@ -106,8 +105,8 @@ A principal ideia por trás dessa transformação é modificar as funções para
   \lstinputlisting[style=haskell, label=code:add_cps]{Code/add_cps.hs}
 \end{figure}
 
-Por exemplo, a Figura \ref{code:add} apresenta um programa na linguagem Haskell que soma dois números no estilo direto, retornando o valor após realizar o cálculo.
-Já a Figura \ref{code:add_cps} mostra um programa equivalente em CPS.
+Por exemplo, a Figura~\ref{code:add} apresenta um programa na linguagem Haskell que soma dois números no estilo direto, retornando o valor após realizar o cálculo.
+Já a Figura~\ref{code:add_cps} mostra um programa equivalente em CPS\@.
 Nesta versão, o controle de fluxo do programa é explícito, pois a função $k$ é chamada para processar o resultado da soma dos argumentos.
 
 \begin{figure}
@@ -122,19 +121,19 @@ Nesta versão, o controle de fluxo do programa é explícito, pois a função $k
   \lstinputlisting[style=haskell, label=code:factorial_cps]{Code/factorial_cps.hs}
 \end{figure}
 
-Para ilustrar melhor, a Figura \ref{code:factorial} apresenta um programa em Haskell que calcula o fatorial no estilo direto, utilizando funções definidas para multiplicação e subtração.
-Na Figura \ref{code:factorial_cps}, um programa similar em CPS é definido, com as funções auxiliares também transformadas para CPS.
+Para ilustrar melhor, a Figura~\ref{code:factorial} apresenta um programa em Haskell que calcula o fatorial no estilo direto, utilizando funções definidas para multiplicação e subtração.
+Na Figura~\ref{code:factorial_cps}, um programa similar em CPS é definido, com as funções auxiliares também transformadas para CPS\@.
 Na função \texttt{factorialCps} é possível notar duas funções lambda (continuacões), \texttt{nMinus1} e \texttt{factNMinus1}.
-A primeira continuação guarda o resultado da operação $n - 1$, enquanto a segunda recebe recursivamente o cálculo do fatorial de $n - 1$, multiplica por $n$ e finalmente passa o resultado para a continuação $k$.
+A primeira continuação guarda o resultado da operação $n --- 1$, enquanto a segunda recebe recursivamente o cálculo do fatorial de $n --- 1$, multiplica por $n$ e finalmente passa o resultado para a continuação $k$.
 
 Outro fato importante a se observado nos códigos apresentados é a tipagem das funções.
-Na função de soma, definida na Figura \ref{code:add}, a função tem tipo $Int \rightarrow Int \rightarrow Int$, ou seja, ela recebe dois inteiros e retorna um inteiro.
-Já a função de soma em CPS, definido na Figura \ref{code:add_cps}, possui o tipo $Int \rightarrow Int \rightarrow (Int \rightarrow r) \rightarrow r$. Isso significa que a função recebe dois inteiros e uma continuação, que é uma função de tipo $Int \rightarrow r$, onde \texttt{r} pode ser qualquer tipo, e retorna esse mesmo tipo \texttt{r}.
+Na função de soma, definida na Figura~\ref{code:add}, a função tem tipo $Int \rightarrow Int \rightarrow Int$, ou seja, ela recebe dois inteiros e retorna um inteiro.
+Já a função de soma em CPS, definido na Figura~\ref{code:add_cps}, possui o tipo $Int \rightarrow Int \rightarrow (Int \rightarrow r) \rightarrow r$. Isso significa que a função recebe dois inteiros e uma continuação, que é uma função de tipo $Int \rightarrow r$, onde \texttt{r} pode ser qualquer tipo, e retorna esse mesmo tipo \texttt{r}.
 
-Essa transformação de tipo reflete a diferença fundamental entre o estilo direto e o CPS: em vez de retornar um valor diretamente, a função em CPS recebe uma continuação que especifica o próximo passo da computação.
-O mesmo padrão pode ser observado nas funções para o cálculo do fatorial nas Figuras \ref{code:factorial} e \ref{code:factorial_cps}.
+Essa transformação de tipo reflete a diferença fundamental entre o estilo direto e o CPS\@: em vez de retornar um valor diretamente, a função em CPS recebe uma continuação que especifica o próximo passo da computação.
+O mesmo padrão pode ser observado nas funções para o cálculo do fatorial nas Figuras~\ref{code:factorial} e~\ref{code:factorial_cps}.
 No estilo direto, a função \texttt{factorial} tem o tipo $Int \rightarrow Int$, enquanto na versão CPS, a função \texttt{factorialCps} tem o tipo $Int \rightarrow (Int \rightarrow r) \rightarrow r$.
 
 Essa correspondência entre os tipos não é uma coincidência.
-Como discutido por \cite{TORRENS2019}, uma função em estilo direto com tipo $A \rightarrow B$ pode ser transformada em uma função em CPS com o tipo $A \times (B \rightarrow \perp) \rightarrow \perp$.
+Como discutido por~\cite{TORRENS2019}, uma função em estilo direto com tipo $A \rightarrow B$ pode ser transformada em uma função em CPS com o tipo $A \times (B \rightarrow \perp) \rightarrow \perp$.
 Aqui, $\perp$ representa o tipo dos valores que nunca retornam, uma característica associada ao estilo de passagem de continuations, onde as funções são compostas de forma a encadear continuações até que a execução termine de maneira explícita.
