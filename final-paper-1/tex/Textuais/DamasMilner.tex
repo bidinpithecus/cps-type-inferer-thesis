@@ -133,23 +133,23 @@ Formalmente, dados dois tipos $\tau_1$ e $\tau_2$, a unificação procura uma su
 Se tal substituição existe, os tipos são considerados unificáveis e $S$ é chamada de solução unificadora.
 Caso contrário, os tipos são incompatíveis.
 
-Seja o algoritmo de unificação, $unify$, com tipagem $\texttt{unify} : \tau_1 \to \tau_2 \to S$, que recebe como argumento dois tipos e retorna uma substituição, melhor explicada na Figura~\ref{fig:substituicao-tipos}, pode ser descrito pelas seguintes regras:
+Seja o algoritmo de unificação, $unify$, que recebe como argumento um conjunto de tipos simples e retorna uma substituição, melhor explicada na Figura~\ref{fig:substituicao-tipos}, pode ser descrito pelas seguintes regras:
 
 \begin{figure}[ht!]
   \caption{Algoritmo de unificação no formato de função}
   \centering
   \begin{align*}
-    & \texttt{$unify$($\tau_1$, $\tau_2$) =} \\
-    & \qquad{}\qquad{}\texttt{se $\tau_1 == \tau_2$ então} \\
+    & \texttt{$unify$($C$) =} \\
+    & \qquad{}\qquad{}\texttt{se $C = \varnothing$ então} \\
     & \qquad{}\qquad{}\qquad{}\texttt{retorna $[\ ]$} \\
     & \qquad{}\qquad{}\texttt{senão, seja $\{ S = T \}$ $\cup$ $C'$ $=$ $C$ tal que} \\
-    & \qquad{}\qquad{}\qquad{}\texttt{se $S == T$ então} \\
+    & \qquad{}\qquad{}\qquad{}\texttt{se $S = T$ então} \\
     & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna $unify$($C'$)} \\
-    & \qquad{}\qquad{}\qquad{}\texttt{senão, se $S == X$ $\land$ $X$ $\notin$ FV($T$) então} \\
+    & \qquad{}\qquad{}\qquad{}\texttt{senão, se $S = X$ $\land$ $X$ $\notin$ FV($T$) então} \\
     & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna $unify$($[X$ $\mapsto$ $T]C'$) $\circ$ $[X$ $\mapsto$ $T]$} \\
-    & \qquad{}\qquad{}\qquad{}\texttt{senão, se $T == X$ $\land$ $X$ $\notin$ FV($S$) então} \\
+    & \qquad{}\qquad{}\qquad{}\texttt{senão, se $T = X$ $\land$ $X$ $\notin$ FV($S$) então} \\
     & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna $unify$($[X$ $\mapsto$ $S]C'$) $\circ$ $[X$ $\mapsto$ $S]$} \\
-    & \qquad{}\qquad{}\qquad{}\texttt{senão, se $S == S_1$ $\to$ $S_2$ $\land$ $T == T_1$ $\to$ $T_2$ então}\\
+    & \qquad{}\qquad{}\qquad{}\texttt{senão, se $S = S_1$ $\to$ $S_2$ $\land$ $T = T_1$ $\to$ $T_2$ então}\\
     & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna $unify$($C'$ $\cup$ \{$S_1 = T_1$,\ $S_2 = T_2$\})} \\
     & \qquad{}\qquad{}\texttt{senão} \\
     & \qquad{}\qquad{}\qquad{}\texttt{falha}
@@ -183,7 +183,7 @@ O algoritmo combina a unificação com regras de inferência de tipos para deduz
   \centering
   \begin{align*}
      & \texttt{$W$($\Gamma$, $x$) = } \\
-     & \qquad{}\qquad{}\texttt{se $\Gamma(x) == \forall$ $\alpha_1 \ldots \alpha_n$ $.$ $\tau$, então} \\
+     & \qquad{}\qquad{}\texttt{se $\Gamma(x) = \forall$ $\alpha_1 \ldots \alpha_n$ $.$ $\tau$, então} \\
      & \qquad{}\qquad{}\qquad{}\texttt{retorna ([$\alpha_i$ $\mapsto$ $\tau_i$]$\tau$, Id), onde $\alpha_i'$ fresh} \\
      & \qquad{}\qquad{}\texttt{senão} \\
      & \qquad{}\qquad{}\qquad{}\texttt{falha} \\
@@ -191,7 +191,7 @@ O algoritmo combina a unificação com regras de inferência de tipos para deduz
      & \texttt{$W$($\Gamma$, $e$ $e'$) = } \\
      & \qquad{}\qquad{}\texttt{($\tau$, $S_1$) $\leftarrow$ $W$($\Gamma$, $e$)} \\
      & \qquad{}\qquad{}\texttt{($\tau'$, $S_2$) $\leftarrow$ $W$($S_1\Gamma$, $e'$)} \\
-     & \qquad{}\qquad{}\texttt{S $\leftarrow$ unify($S_2\tau$, $\tau'$ $\to$ $\alpha$), onde $\alpha$ fresh} \\
+     & \qquad{}\qquad{}\texttt{S $\leftarrow$ unify(\{$S_2\tau$, $\tau'$ $\to$ $\alpha$\}), onde $\alpha$ fresh} \\
      & \qquad{}\qquad{}\texttt{retorna (S$\alpha$, S $\circ$ $S_2$ $\circ$ $S_1$)} \\
      \\
      & \texttt{$W$($\Gamma$, $\lambda x.e$) = } \\

@@ -124,7 +124,7 @@ Nesta versão, o controle de fluxo do programa é explícito, pois a função $k
 Para ilustrar melhor, a Figura~\ref{code:factorial} apresenta um programa em Haskell que calcula o fatorial no estilo direto, utilizando funções definidas para multiplicação e subtração.
 Na Figura~\ref{code:factorial_cps}, um programa similar em CPS é definido, com as funções auxiliares também transformadas para CPS\@.
 Na função \texttt{factorialCps} é possível notar duas funções lambda (continuacões), \texttt{nMinus1} e \texttt{factNMinus1}.
-A primeira continuação guarda o resultado da operação $n --- 1$, enquanto a segunda recebe recursivamente o cálculo do fatorial de $n --- 1$, multiplica por $n$ e finalmente passa o resultado para a continuação $k$.
+A primeira continuação guarda o resultado da operação $n - 1$, enquanto a segunda recebe recursivamente o cálculo do fatorial de $n - 1$, multiplica por $n$ e finalmente passa o resultado para a continuação $k$.
 
 Outro fato importante a se observado nos códigos apresentados é a tipagem das funções.
 Na função de soma, definida na Figura~\ref{code:add}, a função tem tipo $Int \rightarrow Int \rightarrow Int$, ou seja, ela recebe dois inteiros e retorna um inteiro.
