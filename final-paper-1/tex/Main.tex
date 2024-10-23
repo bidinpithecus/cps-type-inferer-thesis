@@ -5,7 +5,7 @@
 	a4paper,																		% tamanho do papel.
 	chapter=TITLE,															% títulos de capítulos convertidos em letras maiúsculas
 	section=TITLE,															% títulos de seções convertidos em letras maiúsculas
-	sumario=abnt-6027-2012,
+	% sumario=abnt-6027--2012,
 	english,																		% idioma adicional para hifenização
 	brazil,																			% o último idioma é o principal do documento
 ]{abntex2}
@@ -63,7 +63,7 @@
 
 \frenchspacing
 
-\pretextual
+\pretextual%
 
 % Caso não utilize a Ficha Catalográfica entre na folha de rosto e retire o * de dentro do arquivo Folha de Rosto
 \include{PreTextuais/Capa}										% Elemento Obrigatório
@@ -79,7 +79,7 @@
 \include{PreTextuais/Listas}									% Elemento Opcional
 \include{PreTextuais/Sumario}									% Elemento Obrigatório
 
-\textual
+\textual%
 
 \pagestyle{PagNumReduzida}										% Comando para cabeçalho somente com numeração de página 10pt
 \aliaspagestyle{chapter}{PagNumReduzida}			% Deixar numeração da primeira página com tamanho igual ao resto da numeração
@@ -92,7 +92,7 @@
 \include{Textuais/Implementacao}
 \include{Textuais/Conclusao}
 
-\postextual
+\postextual%
 
 % Referências bibliográficas
 \bibliography{referencias}										% Elemento Obrigatório

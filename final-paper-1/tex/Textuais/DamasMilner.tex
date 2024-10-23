@@ -1,11 +1,11 @@
 \chapter{Sistema Damas-Milner}\label{ch:damas-milner}
 
-O sistema Damas-Milner, introduzido por Robin Milner e posteriormente formalizado em maior detalhe por Luis Damas \cite{MILNER1978, DAMAS1982}, é um dos sistemas de tipos mais influentes para linguagens funcionais.
+O sistema Damas-Milner, introduzido por Robin Milner e posteriormente formalizado em maior detalhe por Luis Damas~\cite{MILNER1978, DAMAS1982}, é um dos sistemas de tipos mais influentes para linguagens funcionais.
 Este sistema tem como principal característica a inferência automática de tipos polimórficos, sem a necessidade de anotações explícitas por parte do programador, como ocorre em linguagens como ML, Haskell e OCaml.
 A sua base é o cálculo lambda com polimorfismo paramétrico, permitindo que funções possam operar sobre múltiplos tipos de maneira genérica.
 
-A introdução do sistema Damas-Milner trouxe duas contribuições principais: a definição de um sistema de tipos que é robusto, garantindo propriedades como \textit{soundness} (consistência semântica), e a criação de um algoritmo, o Algoritmo W, capaz de inferir o tipo mais geral (também chamado de \textit{principal type-scheme}), conforme demonstrado em \citeonline{DAMAS1984}.
-Como resultado, a linguagem ML e suas derivadas se tornaram notórias por fornecer ao programador a capacidade de escrever programas sem erros de tipo detectáveis durante a compilação, permitindo um desenvolvimento mais seguro e robusto \cite{MILNER1978, DAMAS1984}.
+A introdução do sistema Damas-Milner trouxe duas contribuições principais: a definição de um sistema de tipos que é robusto, garantindo propriedades como \textit{soundness} (consistência semântica), e a criação de um algoritmo, o Algoritmo W, capaz de inferir o tipo mais geral (também chamado de \textit{principal type-scheme}), conforme demonstrado em~\citeonline{DAMAS1984}.
+Como resultado, a linguagem ML e suas derivadas se tornaram notórias por fornecer ao programador a capacidade de escrever programas sem erros de tipo detectáveis durante a compilação, permitindo um desenvolvimento mais seguro e robusto~\cite{MILNER1978, DAMAS1984}.
 
 A sintaxe do sistema DM define as expressões e os tipos usados no processo de inferência.
 Abaixo, segue a gramática das expressões e tipos:
@@ -49,7 +49,7 @@ A aplicação de uma substituição $S$ em um tipo $\tau$, denotada por $S\tau$,
 Esse conceito de substituição é fundamental para o processo de instanciação de tipos, que será discutido a seguir.
 A definição formal da aplicação de substituições é dada por:
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
   \caption{Regras de aplicação da substituição de tipos}
   \centering
   \[
@@ -59,26 +59,25 @@ A definição formal da aplicação de substituições é dada por:
       S(\tau_1 \rightarrow \tau_2) & \equiv & S\tau_1 \rightarrow S\tau_2,                                                     \\[8pt]
       S(\forall \alpha.\sigma)     & \equiv & S' \sigma, \quad \text{onde } S' = S \setminus [\alpha \mapsto \_].
     \end{array}
-  \]
-  \label{fig:substituicao-tipos}
-  \small{Fonte: \cite{CASTRO2019}}
+  \]\label{fig:substituicao-tipos}
+  \small{Fonte:~\cite{CASTRO2019}}
 \end{figure}
 
 onde o símbolo de subtração ($\setminus$) indica que a substituição $S'$ é a substituição $S$ restrita ao conjunto de mapeamentos que não envolvem a variável $\alpha$.
 
 A instanciação de tipos é um processo em que um esquema de tipo $\sigma = \forall \alpha_1 \ldots \alpha_m. \tau$ é transformado em um tipo específico substituindo suas variáveis quantificadas por tipos concretos.
 Se $S$ é uma substituição, então $S\sigma$ é o esquema de tipo obtido substituindo cada ocorrência livre de $\alpha_i$ em $\sigma$ por $\tau_i$, renomeando as variáveis genéricas de $\sigma$, se necessário.
-O tipo resultante $S\sigma$ é chamado de uma instância de $\sigma$ \cite{DAMAS1982}.
+O tipo resultante $S\sigma$ é chamado de uma instância de $\sigma$~\cite{DAMAS1982}.
 Esse processo é essencial para adaptar esquemas de tipos polimórficos a situações específicas em um programa, mantendo a flexibilidade e segurança do sistema de tipos.
 
 Um esquema de tipo também pode ter uma instância genérica $\sigma' = \forall \beta_1 \ldots \beta_n. \tau'$, se existir uma substituição $[ \tau_i / \alpha_i ]$ tal que $\tau' = [\tau_i / \alpha_i]\tau$, e as variáveis $\beta_j$ não aparecem livres em $\sigma$.
 Nesse caso, escrevemos $\sigma > \sigma'$, indicando que $\sigma$ é mais geral do que $\sigma'$.
 Vale notar que a instanciação atua sobre variáveis livres, enquanto a instanciação genérica lida com variáveis ligadas.
 
-O sistema de tipos de Damas e Milner conta com um conjunto de regras de inferência de tipos, apresentadas na Figura \ref{eq:type-inference}, que são usadas para determinar os tipos das expressões no sistema.
+O sistema de tipos de Damas e Milner conta com um conjunto de regras de inferência de tipos, apresentadas na Figura~\ref{eq:type-inference}, que são usadas para determinar os tipos das expressões no sistema.
 Essas regras são julgamentos de tipos da forma $\Gamma \vdash e: \sigma$, onde $\Gamma$ é o contexto, um conjunto de suposições com pares de variáveis e seus tipos: $(e, \sigma)$, $e$ é a expressão sendo tipada, e $\sigma$ é o tipo inferido no contexto.
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
   \caption{Regras de Inferência do sistema Damas-Milner}
   \centering
   \[
@@ -105,8 +104,7 @@ Essas regras são julgamentos de tipos da forma $\Gamma \vdash e: \sigma$, onde 
     \text{GEN:} \quad \frac{\Gamma \vdash e : \sigma}{\Gamma \vdash e : \forall \alpha \sigma} \quad \scriptstyle (\alpha \text{ não livre em } \Gamma)
   \]
 
-  \small{Fonte: o autor. Adaptado de \cite{DAMAS1982}}
-  \label{eq:type-inference}
+  \small{Fonte: o autor. Adaptado de~\cite{DAMAS1982}}\label{eq:type-inference}
 \end{figure}
 
 As regras de inferência são interpretadas de baixo para cima.
@@ -127,40 +125,44 @@ A seguir, será discutido em detalhes o funcionamento do Algoritmo W.
 
 \section{Algoritmo W}\label{sec:w-algo}
 
-O Algoritmo W, introduzido em \citeonline{DAMAS1982}, é um algoritmo eficiente para inferência de tipos em linguagens de programação funcional.
+O Algoritmo W, introduzido em~\citeonline{DAMAS1982}, é um algoritmo eficiente para inferência de tipos em linguagens de programação funcional.
 Ele se baseia no processo de unificação para solucionar equações de tipos geradas durante a análise de expressões, atribuindo os tipos mais gerais possíveis, ou seja, os tipos mais polimórficos que ainda garantem a consistência do sistema.
 
-% Mostrar e explicar algoritmo de unificação
 A unificação é o processo de encontrar uma substituição de variáveis de tipo que torna dois tipos dados equivalentes.
 Formalmente, dados dois tipos $\tau_1$ e $\tau_2$, a unificação procura uma substituição $S$ tal que $S\tau_1 = S\tau_2$.
 Se tal substituição existe, os tipos são considerados unificáveis e $S$ é chamada de solução unificadora.
 Caso contrário, os tipos são incompatíveis.
 
-O algoritmo de unificação pode ser descrito pelas seguintes regras:
+Seja o algoritmo de unificação, $unify$, com tipagem $\tau_1 \to \tau_2 \to S$ que recebe como argumento dois tipos e retorna uma substituição, melhor explicada na Figura~\ref{fig:substituicao-tipos}, pode ser descrito pelas seguintes regras:
 
-\begin{figure}[h!]
-  \caption{Algoritmo de unificação utilizado no sistema de tipos Damas-Milner}
+\begin{figure}[ht!]
+  \caption{Algoritmo de unificação no formato de função}
   \centering
   \begin{align*}
-    \text{unificar}(C) =
-    \begin{cases}
-      \text{se } C = \emptyset, \text{ então } [\ ]                                      \\
-      \text{senão, seja } \{S = T\} \cup C' = C \text{ tal que}                          \\
-      \quad \text{se } S = T                                                             \\
-      \quad \quad \text{então } \text{unificar}(C')                                      \\
-      \quad \text{senão, se } S = X \text{ e } X \notin \text{FV}(T)                     \\
-      \quad \quad \text{então } \text{unificar}([X \mapsto T]C') \circ [X \mapsto T]     \\
-      \quad \text{senão, se } T = X \text{ e } X \notin \text{FV}(S)                     \\
-      \quad \quad \text{então } \text{unificar}([X \mapsto S]C') \circ [X \mapsto S]     \\
-      \quad \text{senão, se } S = S_1 \rightarrow S_2 \text{ e } T = T_1 \rightarrow T_2 \\
-      \quad \quad \text{então } \text{unificar}(C' \cup \{S_1 = T_1, S_2 = T_2\})        \\
-      \text{senão}                                                                       \\
-      \quad \text{falha}                                                                 \\
-    \end{cases}
+    & \texttt{unify($\tau_1$, $\tau_2$) $=$} \\
+    & \qquad{}\qquad{}\texttt{se $\tau_1 = \tau_2$ então} \\
+    & \qquad{}\qquad{}\qquad{}\texttt{retorna $[\ ]$} \\
+    & \qquad{}\qquad{}\texttt{senão, seja $\{ S = T \}$ $\cup$ $C'$ $=$ $C$ tal que} \\
+    & \qquad{}\qquad{}\qquad{}\texttt{se $S = T$ então} \\
+    & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna unify($C'$)} \\
+    & \qquad{}\qquad{}\qquad{}\texttt{senão, se $S = X$ $\land$ $X$ $\notin$ FV($T$) então} \\
+    & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna unify($[X$ $\mapsto$ $T]C'$) $\circ$ $[X$ $\mapsto$ $T]$} \\
+    & \qquad{}\qquad{}\qquad{}\texttt{senão, se $T = X$ $\land$ $X$ $\notin$ FV($S$) então} \\
+    & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna unify($[X$ $\mapsto$ $S]C'$) $\circ$ $[X$ $\mapsto$ $S]$} \\
+    & \qquad{}\qquad{}\qquad{}\texttt{senão, se $S = S_1$ $\to$ $S_2$ $\land$ $T = T_1$ $\to$ $T_2$ então}\\
+    & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna unify($C'$ $\cup$ \{$S_1 = T_1$,\ $S_2 = T_2$\})} \\
+    & \qquad{}\qquad{}\texttt{senão} \\
+    & \qquad{}\qquad{}\qquad{}\texttt{falha}
   \end{align*}
-  \small{Fonte: autor. Adaptado de \cite{PIERCE2002}}
-  \label{eq:unify-algo}
+  \small{Fonte: autor. Adaptado de~\cite{PIERCE2002}}\label{fig:unify-algo}
 \end{figure}
+
+\begin{itemize}
+  \item \textbf{TODO:} explicar direito o algoritmo de unificação com a versão nova (recebendo dois argumentos tipos ao invés de um conjuntos);
+  \item \textbf{TODO:} introduzir o algoritmo W\@;
+  \item \textbf{TODO:} escrever o algoritmo W mais bonitinho usando monospace igual com o unify;
+  \item \textbf{TODO:} explicar o algoritmo W\@.
+\end{itemize}
 
 Neste algoritmo, $C$ representa um conjunto de equações de tipos a serem resolvidas, $S$ e $T$ são tipos que se tentam unificar, e $X$ representa uma variável de tipo.
 A função $\text{FV}$ calcula as variáveis livres em um tipo.
@@ -182,4 +184,32 @@ Ele segue as seguintes etapas:
 
 Essas regras são aplicadas iterativamente para resolver um conjunto de equações de tipos, formando a base para o funcionamento do Algoritmo W.
 
-% Mostrar e explicar algoritmo W
+\begin{figure}[ht!]
+  \caption{Algoritmo W no formato de função.}
+  \centering
+  \begin{align*}
+     & W(\Gamma,\ x)                                       =
+    \\
+     & \qquad{}\qquad{}\text{se } \Gamma(x) = \forall \alpha_1 \ldots \alpha_n . \tau, \text{ então retorna } ([\alpha_i \mapsto \tau_i] \tau, Id), \text{ onde } \alpha_i' \text{ fresh} \\
+     & \qquad{}\qquad{}\text{senão falha}
+    \\
+    \\
+     & W(\Gamma,\ e\  e')                                =                                                                                                                                \\
+     & \qquad{}\qquad{}(\tau, S_1) \leftarrow W(\Gamma, e)                                                                                                                                \\
+     & \qquad{}\qquad{}(\tau', S_2) \leftarrow W(S_1 \Gamma, e')                                                                                                                          \\
+     & \qquad{}\qquad{}S \leftarrow \text{unify}(S_2 \tau, \tau' \to \alpha), \text{ onde } \alpha \text{ fresh}                                                                          \\
+     & \qquad{}\qquad{}\text{retorna } (S \alpha, S \circ S_2 \circ S_1)
+    \\
+    \\
+     & W(\Gamma,\ \lambda x . e)                          =                                                                                                                                \\
+     & \qquad{}\qquad{}(\tau, S) \leftarrow W(\Gamma[x : \alpha], e), \text{ onde } \alpha \text{ fresh}                                                                                  \\
+     & \qquad{}\qquad{}\text{retorna } (S (\alpha \to \tau), S)
+    \\
+    \\
+     & W(\Gamma,\ \text{let } x = e \text{ in } e') =                                                                                                                                \\
+     & \qquad{}\qquad{}(\tau, S_1) \leftarrow W(\Gamma, e)                                                                                                                                \\
+     & \qquad{}\qquad{}(\tau', S_2) \leftarrow W(S_1 \Gamma[x : \text{gen}(S_1 \Gamma, \tau)], e')                                                                                        \\
+     & \qquad{}\qquad{}\text{retorna } (\tau', S_2 \circ S_1)
+  \end{align*}
+  \small{Fonte:~\cite{CASTRO2019}}\label{fig:algoritmo-w}
+\end{figure}
