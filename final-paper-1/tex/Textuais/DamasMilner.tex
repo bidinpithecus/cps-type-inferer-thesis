@@ -139,30 +139,23 @@ Seja o algoritmo de unificação, $unify$, com tipagem $\texttt{unify} : \tau_1 
   \caption{Algoritmo de unificação no formato de função}
   \centering
   \begin{align*}
-    & \texttt{unify($\tau_1$, $\tau_2$) $=$} \\
-    & \qquad{}\qquad{}\texttt{se $\tau_1 = \tau_2$ então} \\
+    & \texttt{$unify$($\tau_1$, $\tau_2$) =} \\
+    & \qquad{}\qquad{}\texttt{se $\tau_1 == \tau_2$ então} \\
     & \qquad{}\qquad{}\qquad{}\texttt{retorna $[\ ]$} \\
     & \qquad{}\qquad{}\texttt{senão, seja $\{ S = T \}$ $\cup$ $C'$ $=$ $C$ tal que} \\
-    & \qquad{}\qquad{}\qquad{}\texttt{se $S = T$ então} \\
-    & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna unify($C'$)} \\
-    & \qquad{}\qquad{}\qquad{}\texttt{senão, se $S = X$ $\land$ $X$ $\notin$ FV($T$) então} \\
-    & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna unify($[X$ $\mapsto$ $T]C'$) $\circ$ $[X$ $\mapsto$ $T]$} \\
-    & \qquad{}\qquad{}\qquad{}\texttt{senão, se $T = X$ $\land$ $X$ $\notin$ FV($S$) então} \\
-    & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna unify($[X$ $\mapsto$ $S]C'$) $\circ$ $[X$ $\mapsto$ $S]$} \\
-    & \qquad{}\qquad{}\qquad{}\texttt{senão, se $S = S_1$ $\to$ $S_2$ $\land$ $T = T_1$ $\to$ $T_2$ então}\\
-    & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna unify($C'$ $\cup$ \{$S_1 = T_1$,\ $S_2 = T_2$\})} \\
+    & \qquad{}\qquad{}\qquad{}\texttt{se $S == T$ então} \\
+    & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna $unify$($C'$)} \\
+    & \qquad{}\qquad{}\qquad{}\texttt{senão, se $S == X$ $\land$ $X$ $\notin$ FV($T$) então} \\
+    & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna $unify$($[X$ $\mapsto$ $T]C'$) $\circ$ $[X$ $\mapsto$ $T]$} \\
+    & \qquad{}\qquad{}\qquad{}\texttt{senão, se $T == X$ $\land$ $X$ $\notin$ FV($S$) então} \\
+    & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna $unify$($[X$ $\mapsto$ $S]C'$) $\circ$ $[X$ $\mapsto$ $S]$} \\
+    & \qquad{}\qquad{}\qquad{}\texttt{senão, se $S == S_1$ $\to$ $S_2$ $\land$ $T == T_1$ $\to$ $T_2$ então}\\
+    & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna $unify$($C'$ $\cup$ \{$S_1 = T_1$,\ $S_2 = T_2$\})} \\
     & \qquad{}\qquad{}\texttt{senão} \\
     & \qquad{}\qquad{}\qquad{}\texttt{falha}
   \end{align*}
   \small{Fonte: autor. Adaptado de~\cite{PIERCE2002}}\label{fig:unify-algo}
 \end{figure}
-
-\begin{itemize}
-  \item \textbf{TODO:} explicar direito o algoritmo de unificação com a versão nova (recebendo dois argumentos tipos ao invés de um conjuntos);
-  \item \textbf{TODO:} introduzir o algoritmo W\@;
-  \item \textbf{TODO:} escrever o algoritmo W mais bonitinho usando monospace igual com o unify;
-  \item \textbf{TODO:} explicar o algoritmo W\@.
-\end{itemize}
 
 Neste algoritmo, $C$ representa um conjunto de equações de tipos a serem resolvidas, $S$ e $T$ são tipos que se tentam unificar, e $X$ representa uma variável de tipo.
 A função $\text{FV}$ calcula as variáveis livres em um tipo.
@@ -189,28 +182,26 @@ O algoritmo combina a unificação com regras de inferência de tipos para deduz
   \caption{Algoritmo W no formato de função.}
   \centering
   \begin{align*}
-     & W(\Gamma,\ x)                                       =
-    \\
-     & \qquad{}\qquad{}\text{se } \Gamma(x) = \forall \alpha_1 \ldots \alpha_n . \tau, \text{ então retorna } ([\alpha_i \mapsto \tau_i] \tau, Id), \text{ onde } \alpha_i' \text{ fresh} \\
-     & \qquad{}\qquad{}\text{senão falha}
-    \\
-    \\
-     & W(\Gamma,\ e\  e')                                =                                                                                                                                \\
-     & \qquad{}\qquad{}(\tau, S_1) \leftarrow W(\Gamma, e)                                                                                                                                \\
-     & \qquad{}\qquad{}(\tau', S_2) \leftarrow W(S_1 \Gamma, e')                                                                                                                          \\
-     & \qquad{}\qquad{}S \leftarrow \text{unify}(S_2 \tau, \tau' \to \alpha), \text{ onde } \alpha \text{ fresh}                                                                          \\
-     & \qquad{}\qquad{}\text{retorna } (S \alpha, S \circ S_2 \circ S_1)
-    \\
-    \\
-     & W(\Gamma,\ \lambda x . e)                          =                                                                                                                                \\
-     & \qquad{}\qquad{}(\tau, S) \leftarrow W(\Gamma[x : \alpha], e), \text{ onde } \alpha \text{ fresh}                                                                                  \\
-     & \qquad{}\qquad{}\text{retorna } (S (\alpha \to \tau), S)
-    \\
-    \\
-     & W(\Gamma,\ \text{let } x = e \text{ in } e') =                                                                                                                                \\
-     & \qquad{}\qquad{}(\tau, S_1) \leftarrow W(\Gamma, e)                                                                                                                                \\
-     & \qquad{}\qquad{}(\tau', S_2) \leftarrow W(S_1 \Gamma[x : \text{gen}(S_1 \Gamma, \tau)], e')                                                                                        \\
-     & \qquad{}\qquad{}\text{retorna } (\tau', S_2 \circ S_1)
+     & \texttt{$W$($\Gamma$, $x$) = } \\
+     & \qquad{}\qquad{}\texttt{se $\Gamma(x) == \forall$ $\alpha_1 \ldots \alpha_n$ $.$ $\tau$, então} \\
+     & \qquad{}\qquad{}\qquad{}\texttt{retorna ([$\alpha_i$ $\mapsto$ $\tau_i$]$\tau$, Id), onde $\alpha_i'$ fresh} \\
+     & \qquad{}\qquad{}\texttt{senão} \\
+     & \qquad{}\qquad{}\qquad{}\texttt{falha} \\
+     \\
+     & \texttt{$W$($\Gamma$, $e$ $e'$) = } \\
+     & \qquad{}\qquad{}\texttt{($\tau$, $S_1$) $\leftarrow$ $W$($\Gamma$, $e$)} \\
+     & \qquad{}\qquad{}\texttt{($\tau'$, $S_2$) $\leftarrow$ $W$($S_1\Gamma$, $e'$)} \\
+     & \qquad{}\qquad{}\texttt{S $\leftarrow$ unify($S_2\tau$, $\tau'$ $\to$ $\alpha$), onde $\alpha$ fresh} \\
+     & \qquad{}\qquad{}\texttt{retorna (S$\alpha$, S $\circ$ $S_2$ $\circ$ $S_1$)} \\
+     \\
+     & \texttt{$W$($\Gamma$, $\lambda x.e$) = } \\
+     & \qquad{}\qquad{}\texttt{($\tau$, $S$) $\leftarrow$ $W$($\Gamma$[$x$ $:$ $\alpha$], $e$), onde $\alpha$ fresh} \\
+     & \qquad{}\qquad{}\texttt{retorna ($S$ ($\alpha$ $\to$ $\tau$), $S$)} \\
+     \\
+     & \texttt{$W$($\Gamma$, let $x = e$ in $e'$) = } \\
+     & \qquad{}\qquad{}\texttt{($\tau$, $S_1$) $\leftarrow$ $W$($\Gamma$, $e$)} \\
+     & \qquad{}\qquad{}\texttt{($\tau'$, $S_2$) $\leftarrow$ $W$($S_1$ $\Gamma$[$x$ $:$ gen($S_1\Gamma$, $\tau$)], $e'$)} \\
+     & \qquad{}\qquad{}\texttt{retorna ($\tau'$, $S_2$ $\circ$ $S_1$)} \\
   \end{align*}
   \small{Fonte:~\cite{CASTRO2019}}\label{fig:algoritmo-w}
 \end{figure}
@@ -226,6 +217,5 @@ O Algoritmo W pode ser descrito pelos seguintes casos:
   
   \item Para uma expressão do tipo `let', o algoritmo infere o tipo da expressão vinculada e o tipo do corpo da expressão com a variável adicionada ao contexto, utilizando a generalização para permitir polimorfismo.
 \end{itemize}
-
 
 Essas etapas garantem que o algoritmo seja capaz de inferir tipos de forma eficiente, atribuindo os tipos mais polimórficos possíveis para expressões em linguagens funcionais.
