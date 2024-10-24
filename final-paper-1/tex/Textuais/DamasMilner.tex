@@ -142,7 +142,7 @@ Seja o algoritmo de unificação, $unify$, que recebe como argumento um conjunto
     & \texttt{$unify$($C$) =} \\
     & \qquad{}\qquad{}\texttt{se $C = \varnothing$ então} \\
     & \qquad{}\qquad{}\qquad{}\texttt{retorna $[\ ]$} \\
-    & \qquad{}\qquad{}\texttt{senão, seja $\{ S = T \}$ $\cup$ $C'$ $=$ $C$ tal que} \\
+    & \qquad{}\qquad{}\texttt{senão, seja $\{ S = T \}$ $\cup$ $C'$ = $C$ tal que} \\
     & \qquad{}\qquad{}\qquad{}\texttt{se $S = T$ então} \\
     & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna $unify$($C'$)} \\
     & \qquad{}\qquad{}\qquad{}\texttt{senão, se $S = X$ $\land$ $X$ $\notin$ FV($T$) então} \\
@@ -157,24 +157,17 @@ Seja o algoritmo de unificação, $unify$, que recebe como argumento um conjunto
   \small{Fonte: autor. Adaptado de~\cite{PIERCE2002}}\label{fig:unify-algo}
 \end{figure}
 
-Neste algoritmo, $C$ representa um conjunto de equações de tipos a serem resolvidas, $S$ e $T$ são tipos que se tentam unificar, e $X$ representa uma variável de tipo.
-A função $\text{FV}$ calcula as variáveis livres em um tipo.
+Este algoritmo é executado de maneira iterativa, tentando resolver a primeira equação do conjunto e, em seguida, aplicando recursivamente a unificação para o restante das equações.
+Quando o conjunto de equações é vazio, a unificação é considerada bem-sucedida e o algoritmo retorna uma substituição vazia.
+Caso contrário, para a equação atual $S = T$, se os tipos $S$ e $T$ são idênticos, a equação é considerada resolvida e o algoritmo prossegue com a unificação do restante do conjunto.
 
-O algoritmo trabalha iterativamente, tentando resolver a primeira equação do conjunto e, em seguida, aplicando recursivamente a unificação para o restante.
-Ele segue as seguintes etapas:
+Quando $S$ é uma variável de tipo $X$ que não ocorre livre em $T$, o algoritmo substitui $X$ por $T$ em todas as equações restantes e prossegue com a unificação.
+De maneira semelhante, se $T$ é uma variável de tipo $X$ que não ocorre livre em $S$, o algoritmo substitui $X$ por $S$ e continua com a unificação.
+Se ambos $S$ e $T$ são tipos função, o algoritmo tenta unificar seus domínios e co-domínios.
+Caso nenhuma dessas condições seja satisfeita, a unificação falha.
+Esse procedimento permite ao algoritmo lidar de maneira eficiente com equações de tipos que surgem durante o processo de inferência.
 
-\begin{enumerate}
-  \item Se os tipos $\tau_1$ e $\tau_2$ são idênticos, retorna a substituição vazia, pois não há necessidade de realizar modificações. 
-  \item Caso contrário, o algoritmo considera as seguintes possibilidades:
-    \begin{itemize}
-      \item Se $\tau_1$ é uma variável de tipo que não ocorre livre em $\tau_2$, substitui $\tau_1$ por $\tau_2$ em todas as equações.
-      \item Se $\tau_2$ é uma variável de tipo que não ocorre livre em $\tau_1$, substitui $\tau_2$ por $\tau_1$ em todas as equações.
-      \item Se ambos são tipos função, tenta unificar os domínios e co-domínios.
-    \end{itemize}
-  \item Se nenhuma dessas condições é satisfeita, o algoritmo falha, indicando que os tipos são incompatíveis.
-\end{enumerate}
-
-O Algoritmo W é um método utilizado para inferência de tipos em expressões de linguagens funcionais.
+O Algoritmo W, descrito na Figura~\ref{fig:algoritmo-w} é um método utilizado para inferência de tipos em expressões de linguagens funcionais.
 Ele atribui os tipos mais gerais possíveis a cada subexpressão, garantindo a consistência com as operações definidas.
 O algoritmo combina a unificação com regras de inferência de tipos para deduzir o tipo de uma expressão, explorando o polimorfismo de forma eficiente.
 
@@ -196,7 +189,7 @@ O algoritmo combina a unificação com regras de inferência de tipos para deduz
      \\
      & \texttt{$W$($\Gamma$, $\lambda x.e$) = } \\
      & \qquad{}\qquad{}\texttt{($\tau$, $S$) $\leftarrow$ $W$($\Gamma$[$x$ $:$ $\alpha$], $e$), onde $\alpha$ fresh} \\
-     & \qquad{}\qquad{}\texttt{retorna ($S$ ($\alpha$ $\to$ $\tau$), $S$)} \\
+     & \qquad{}\qquad{}\texttt{retorna ($S$($\alpha$ $\to$ $\tau$), $S$)} \\
      \\
      & \texttt{$W$($\Gamma$, let $x = e$ in $e'$) = } \\
      & \qquad{}\qquad{}\texttt{($\tau$, $S_1$) $\leftarrow$ $W$($\Gamma$, $e$)} \\
@@ -206,16 +199,20 @@ O algoritmo combina a unificação com regras de inferência de tipos para deduz
   \small{Fonte:~\cite{CASTRO2019}}\label{fig:algoritmo-w}
 \end{figure}
 
-O Algoritmo W pode ser descrito pelos seguintes casos:
+O funcionamento deste pode ser analisado para os diferentes tipos de expressões a seguir.
+Para uma variável $x$, o algoritmo verifica se existe uma atribuição de tipo para $x$ no contexto $\Gamma$.
+Se $x$ estiver associada a um tipo polimórfico da forma $\forall \alpha_1 \ldots \alpha_n . \tau$, realiza-se a substituição das variáveis ligadas $\alpha_i$ por novos tipos frescos, que não aparecem em outros lugares do contexto, e retorna-se o tipo resultante, juntamente com a substituição identidade.
+Caso $x$ não esteja no contexto, a inferência falha.
 
-\begin{itemize}
-  \item Para uma variável $x$, o algoritmo verifica se existe uma atribuição de tipo para $x$ no contexto $\Gamma$. Se $x$ é associado ao tipo $\forall \alpha_1 \ldots \alpha_n . \tau$, realiza-se a substituição das variáveis ligadas $\alpha_i$ por novos tipos frescos e retorna-se o tipo resultante.
-  
-  \item Para uma aplicação $e\ e'$, o algoritmo infere os tipos de $e$ e $e'$ recursivamente, unifica o tipo de $e$ com um tipo função $\tau' \to \alpha$ e retorna o tipo da aplicação.
-  
-  \item Para uma abstração $\lambda x . e$, o algoritmo infere o tipo de $e$ no contexto atualizado com a variável $x$ e retorna o tipo função resultante.
-  
-  \item Para uma expressão do tipo `let', o algoritmo infere o tipo da expressão vinculada e o tipo do corpo da expressão com a variável adicionada ao contexto, utilizando a generalização para permitir polimorfismo.
-\end{itemize}
+Para uma aplicação de função $e\ e'$, o algoritmo infere recursivamente os tipos das subexpressões $e$ e $e'$.
+A partir desses tipos, unifica o tipo de $e$ com um tipo função $\tau' \to \alpha$, onde $\alpha$ é um novo tipo variável introduzido durante a unificação.
+A substituição resultante é então aplicada ao tipo inferido de $e$ e o algoritmo retorna o tipo correspondente à aplicação.
 
-Essas etapas garantem que o algoritmo seja capaz de inferir tipos de forma eficiente, atribuindo os tipos mais polimórficos possíveis para expressões em linguagens funcionais.
+Quando a expressão é uma abstração $\lambda x . e$, o algoritmo atualiza o contexto adicionando uma nova variável de tipo para $x$ e procede inferindo o tipo de $e$.
+O tipo função resultante, $\alpha \to \tau$, é então retornado como o tipo inferido para a abstração.
+
+No caso de expressões do tipo \texttt{let}, onde uma variável é definida localmente, o algoritmo primeiro infere o tipo da expressão vinculada, seguido pelo tipo do corpo da expressão.
+O contexto é atualizado para incluir a variável definida com um tipo generalizado, permitindo polimorfismo na expressão resultante.
+A generalização é aplicada ao tipo inferido, de forma que as variáveis de tipo que não estão presentes no contexto sejam quantificadas, garantindo assim um nível adequado de polimorfismo na inferência de tipos.
+
+Essas etapas garantem que o Algoritmo W seja capaz de inferir tipos de forma eficiente, atribuindo os tipos mais polimórficos possíveis para expressões em linguagens funcionais e explorando as capacidades do sistema de tipos.
