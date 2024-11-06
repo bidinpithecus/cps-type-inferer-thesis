@@ -22,27 +22,30 @@ O CPS facilita a aplicação de otimizações avançadas, como a eliminação de
 Por outro lado, um ponto importante a ser considerado é que muitas implementações do CPS optam por uma representação não tipada~\cite{MORRISSET1999}. Embora essa abordagem simplifique a implementação inicial, ele pode comprometer a segurança e a correção do código.
 Um sistema de tipos robusto pode não apenas garantir a correção de certas transformações e otimizações, mas também identificar uma classe inteira de erros antes da execução, proporcionando assim maior confiabilidade ao processo de compilação.
 
-Diante dessas considerações, a linguagem de programação Haskell foi escolhida para a implementação deste trabalho.
-Haskell, sendo uma linguagem funcional pura fortemente tipada, possui características desejáveis, como transparência referencial~\cite{SONDERGAARD1990} e um sistema de tipos robusto para explorar as vantagens do CPS e aplicar o sistema de tipos de maneira rigorosa.
+Diante dessas considerações, este trabalho propõe apresentar e desenvolver uma formalização de um sistema de tipos para CPS, bem como um algoritmo de inferência de tipos para o mesmo.
+A escolha da linguagem de programação para a solução proposta será Haskell.
+Por ser uma linguagem funcional pura fortemente tipada, possui características desejáveis, como transparência referencial~\cite{SONDERGAARD1990} e um sistema de tipos robusto para explorar as vantagens do CPS e aplicar o sistema de tipos de maneira rigorosa.
 Dessa forma, a escolha de Haskell não apenas facilita o desenvolvimento de uma implementação segura e eficiente do CPS, como também conta com garantias de seguranças que são fundamentais para o sucesso deste trabalho.
 
 \section{Objetivo Geral}\label{sec:objetivo-geral}
 
-Este trabalho visa explorar a inferência de tipos para CPS, propondo uma extensão do algoritmo W --- um algoritmo de inferência de tipos para o sistema Damas-Milner --- para CPS, definido em~\cite{TORRENS2024} na linguagem de programação Haskell.
+Este trabalho tem como objetivo formalizar um sistema de tipos para CPS e investigar a possibilidade de propor um algoritmo de inferência, similar ao algoritmo W~\cite{}, para esta representação intermediária.
+
+% Este trabalho visa explorar a inferência de tipos para CPS, propondo uma extensão do algoritmo W --- um algoritmo de inferência de tipos para o sistema Damas-Milner --- para CPS, definido em~\cite{TORRENS2024} na linguagem de programação Haskell.
 
 \section{Objetivos específicos}\label{sec:objetivos-especificos}
 
 \begin{itemize}
-  \item Formular uma extensão do algoritmo W para CPS;
-  \item Implementar essa extensão em Haskell;
+  \item Formalizar um sistema de tipos para CPS;\@
+  \item Propor e implementar em Haskell um algoritmo de inferência de tipos para CPS;\@
   \item Validar a implementação do algoritmo por meio do teste de inferência para expressões. Se possível, realizar a geração de programas para verificação de que o algoritmo infere corretamente os tipos a eles.
 \end{itemize}
 
 \section{Metodologia}\label{sec:metodologia}
 
 A metodologia deste trabalho consistirá em duas principais etapas: pesquisa bibliográfica e implementação.
-A primeira etapa envolve uma extensa revisão de literatura sobre continuações e seu cálculo, bem como um aprofundamento do sistema Damas-Milner, com o objetivo de proporcionar uma compreensão completa ao autor.
-A segunda etapa trata da formulação do algoritmo W estendido para o cálculo de continuações, junto com sua implementação.
+A primeira etapa envolve uma extensa revisão de literatura sobre continuações e seu cálculo, bem como um aprofundamento no estudo de sistemas de tipos, com o objetivo de proporcionar uma compreensão completa ao autor.
+A segunda etapa trata da formulação do algoritmo de inferência para o cálculo de continuações, junto com sua implementação.
 
 Para validar a implementação, será testado a inferência do algoritmo com testes.
 Caso seja possível, será feito ainda a geração de programas de teste, nos quais a inferência de tipos será verificada.
