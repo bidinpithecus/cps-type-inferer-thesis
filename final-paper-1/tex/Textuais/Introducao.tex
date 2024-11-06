@@ -29,9 +29,7 @@ Dessa forma, a escolha de Haskell não apenas facilita o desenvolvimento de uma 
 
 \section{Objetivo Geral}\label{sec:objetivo-geral}
 
-Este trabalho tem como objetivo formalizar um sistema de tipos para CPS e investigar a possibilidade de propor um algoritmo de inferência, similar ao algoritmo W~\cite{}, para esta representação intermediária.
-
-% Este trabalho visa explorar a inferência de tipos para CPS, propondo uma extensão do algoritmo W --- um algoritmo de inferência de tipos para o sistema Damas-Milner --- para CPS, definido em~\cite{TORRENS2024} na linguagem de programação Haskell.
+Este trabalho tem como objetivo formalizar um sistema de tipos para CPS e investigar a possibilidade de propor um algoritmo de inferência, de maneira similar ao algoritmo W, para esta representação intermediária.
 
 \section{Objetivos específicos}\label{sec:objetivos-especificos}
 
@@ -47,14 +45,14 @@ A metodologia deste trabalho consistirá em duas principais etapas: pesquisa bib
 A primeira etapa envolve uma extensa revisão de literatura sobre continuações e seu cálculo, bem como um aprofundamento no estudo de sistemas de tipos, com o objetivo de proporcionar uma compreensão completa ao autor.
 A segunda etapa trata da formulação do algoritmo de inferência para o cálculo de continuações, junto com sua implementação.
 
-Para validar a implementação, será testado a inferência do algoritmo com testes.
-Caso seja possível, será feito ainda a geração de programas de teste, nos quais a inferência de tipos será verificada.
-A validação consistirá em comparar os tipos inferidos pelo algoritmo com os tipos esperados para esses programas.
+No escopo deste trabalho, a validação do algoritmo se dará por meio de testes de implementação.
+Em etapa posterior, será necessário a prova de consistência e completude do algoritmo em relação ao sistema de tipos proposto.
 
 \section{Estrutura do Trabalho}\label{sec:estrutura-trabalho}
 
-Este trabalho está estruturado de maneira que será fornecida, antes da formalização da extensão e implementação do algoritmo W, nos Capítulos~\ref{ch:formalizacao} e~\ref{ch:implementacao}, uma fundamentação teórica.
-Inicialmente, será abordada a representação intermediária no Capítulo~\ref{ch:IR}, com um aprofundamento em CPS na Seção~\ref{sec:cps}.
-Na sequência, o Capítulo~\ref{ch:type-theory} discutirá a teoria de tipos, apresentando os conceitos e definições necessários para a compreensão do tema.
-O sistema Damas-Hindley-Milner será detalhado no Capítulo~\ref{ch:damas-milner}, incluindo o algoritmo W, discutido de forma mais específica na seção~\ref{sec:w-algo}.
-Por fim, o Capítulo~\ref{ch:conclusao} trará as considerações finais, sintetizando os principais pontos e contribuições do trabalho.
+Esta primeira etapa consistiu principalmente na fundamentação teórica e revisão bibliográfica no estudo de CPS e sistemas de tipos.
+Em razão disto, o Capítulo~\ref{ch:fundamentacao-teorica} contém os conceitos e definições necessários para entendimento do tema.
+Este é separado em seções, tal que a Seção~\ref{sec:IR}, aborda representação intermediária, com um aprofundamento em CPS na Subseção~\ref{subsec:cps}.
+Teoria de tipos é então apresentada na Seção~\ref{sec:type-theory}.
+Um aprofundamento no sistema Damas-Hindley-Milner na Seção~\ref{sec:damas-milner}, discutindo de maneira mais específica o algoritmo W na Subseção~\ref{subsec:w-algo}.
+O Capítulo~\ref{ch:proposta} descreve a proposta e apresenta o cronograma do trabalho.

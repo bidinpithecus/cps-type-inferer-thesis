@@ -1,4 +1,4 @@
-\chapter{Sistema Damas-Milner}\label{ch:damas-milner}
+\section{Sistema Damas-Milner}\label{sec:damas-milner}
 
 O sistema Damas-Milner, introduzido por Robin Milner e posteriormente formalizado em maior detalhe por Luis Damas~\cite{MILNER1978, DAMAS1982}, é um dos sistemas de tipos mais influentes para linguagens funcionais.
 Este sistema tem como principal característica a inferência automática de tipos polimórficos, sem a necessidade de anotações explícitas por parte do programador, como ocorre em linguagens como ML, Haskell e OCaml.
@@ -123,7 +123,7 @@ Essas regras garantem a solidez do sistema, preservando a segurança dos tipos a
 Antes de apresentar o Algoritmo W, é importante observar que ele é uma implementação prática das regras de inferência aqui descritas, usando o conceito de unificação para resolver as equações de tipo geradas durante a inferência.
 A seguir, será discutido em detalhes o funcionamento do Algoritmo W.
 
-\section{Algoritmo W}\label{sec:w-algo}
+\subsection{Algoritmo W}\label{subsec:w-algo}
 
 O Algoritmo W, introduzido em~\citeonline{DAMAS1982}, é um algoritmo eficiente para inferência de tipos em linguagens de programação funcional.
 Ele se baseia no processo de unificação para solucionar equações de tipos geradas durante a análise de expressões, atribuindo os tipos mais gerais possíveis, ou seja, os tipos mais polimórficos que ainda garantem a consistência do sistema.
@@ -139,20 +139,20 @@ Seja o algoritmo de unificação, $unify$, que recebe como argumento um conjunto
   \caption{Algoritmo de unificação no formato de função}
   \centering
   \begin{align*}
-    & \texttt{$unify$($C$) =} \\
-    & \qquad{}\qquad{}\texttt{se $C = \varnothing$ então} \\
-    & \qquad{}\qquad{}\qquad{}\texttt{retorna $[\ ]$} \\
-    & \qquad{}\qquad{}\texttt{senão, seja $\{ S = T \}$ $\cup$ $C'$ = $C$ tal que} \\
-    & \qquad{}\qquad{}\qquad{}\texttt{se $S = T$ então} \\
-    & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna $unify$($C'$)} \\
-    & \qquad{}\qquad{}\qquad{}\texttt{senão, se $S = X$ $\land$ $X$ $\notin$ FV($T$) então} \\
-    & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna $unify$($[X$ $\mapsto$ $T]C'$) $\circ$ $[X$ $\mapsto$ $T]$} \\
-    & \qquad{}\qquad{}\qquad{}\texttt{senão, se $T = X$ $\land$ $X$ $\notin$ FV($S$) então} \\
-    & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna $unify$($[X$ $\mapsto$ $S]C'$) $\circ$ $[X$ $\mapsto$ $S]$} \\
-    & \qquad{}\qquad{}\qquad{}\texttt{senão, se $S = S_1$ $\to$ $S_2$ $\land$ $T = T_1$ $\to$ $T_2$ então}\\
-    & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna $unify$($C'$ $\cup$ \{$S_1 = T_1$,\ $S_2 = T_2$\})} \\
-    & \qquad{}\qquad{}\texttt{senão} \\
-    & \qquad{}\qquad{}\qquad{}\texttt{falha}
+     & \texttt{$unify$($C$) =}                                                                                     \\
+     & \qquad{}\qquad{}\texttt{se $C = \varnothing$ então}                                                         \\
+     & \qquad{}\qquad{}\qquad{}\texttt{retorna $[\ ]$}                                                             \\
+     & \qquad{}\qquad{}\texttt{senão, seja $\{ S = T \}$ $\cup$ $C'$ = $C$ tal que}                                \\
+     & \qquad{}\qquad{}\qquad{}\texttt{se $S = T$ então}                                                           \\
+     & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna $unify$($C'$)}                                              \\
+     & \qquad{}\qquad{}\qquad{}\texttt{senão, se $S = X$ $\land$ $X$ $\notin$ FV($T$) então}                       \\
+     & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna $unify$($[X$ $\mapsto$ $T]C'$) $\circ$ $[X$ $\mapsto$ $T]$} \\
+     & \qquad{}\qquad{}\qquad{}\texttt{senão, se $T = X$ $\land$ $X$ $\notin$ FV($S$) então}                       \\
+     & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna $unify$($[X$ $\mapsto$ $S]C'$) $\circ$ $[X$ $\mapsto$ $S]$} \\
+     & \qquad{}\qquad{}\qquad{}\texttt{senão, se $S = S_1$ $\to$ $S_2$ $\land$ $T = T_1$ $\to$ $T_2$ então}        \\
+     & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna $unify$($C'$ $\cup$ \{$S_1 = T_1$,\ $S_2 = T_2$\})}         \\
+     & \qquad{}\qquad{}\texttt{senão}                                                                              \\
+     & \qquad{}\qquad{}\qquad{}\texttt{falha}
   \end{align*}
   \small{Fonte: autor. Adaptado de~\cite{PIERCE2002}}\label{fig:unify-algo}
 \end{figure}
@@ -175,26 +175,26 @@ O algoritmo combina a unificação com regras de inferência de tipos para deduz
   \caption{Algoritmo W no formato de função.}
   \centering
   \begin{align*}
-     & \texttt{$W$($\Gamma$, $x$) = } \\
-     & \qquad{}\qquad{}\texttt{se $\Gamma(x) = \forall$ $\alpha_1 \ldots \alpha_n$ $.$ $\tau$, então} \\
-     & \qquad{}\qquad{}\qquad{}\texttt{retorna ([$\alpha_i$ $\mapsto$ $\tau_i$]$\tau$, Id), onde $\alpha_i'$ fresh} \\
-     & \qquad{}\qquad{}\texttt{senão} \\
-     & \qquad{}\qquad{}\qquad{}\texttt{falha} \\
-     \\
-     & \texttt{$W$($\Gamma$, $e$ $e'$) = } \\
-     & \qquad{}\qquad{}\texttt{($\tau$, $S_1$) $\leftarrow$ $W$($\Gamma$, $e$)} \\
-     & \qquad{}\qquad{}\texttt{($\tau'$, $S_2$) $\leftarrow$ $W$($S_1\Gamma$, $e'$)} \\
-     & \qquad{}\qquad{}\texttt{S $\leftarrow$ unify(\{$S_2\tau$, $\tau'$ $\to$ $\alpha$\}), onde $\alpha$ fresh} \\
-     & \qquad{}\qquad{}\texttt{retorna (S$\alpha$, S $\circ$ $S_2$ $\circ$ $S_1$)} \\
-     \\
-     & \texttt{$W$($\Gamma$, $\lambda x.e$) = } \\
-     & \qquad{}\qquad{}\texttt{($\tau$, $S$) $\leftarrow$ $W$($\Gamma$[$x$ $:$ $\alpha$], $e$), onde $\alpha$ fresh} \\
-     & \qquad{}\qquad{}\texttt{retorna ($S$($\alpha$ $\to$ $\tau$), $S$)} \\
-     \\
-     & \texttt{$W$($\Gamma$, let $x = e$ in $e'$) = } \\
-     & \qquad{}\qquad{}\texttt{($\tau$, $S_1$) $\leftarrow$ $W$($\Gamma$, $e$)} \\
+     & \texttt{$W$($\Gamma$, $x$) = }                                                                                     \\
+     & \qquad{}\qquad{}\texttt{se $\Gamma(x) = \forall$ $\alpha_1 \ldots \alpha_n$ $.$ $\tau$, então}                     \\
+     & \qquad{}\qquad{}\qquad{}\texttt{retorna ([$\alpha_i$ $\mapsto$ $\tau_i$]$\tau$, Id), onde $\alpha_i'$ fresh}       \\
+     & \qquad{}\qquad{}\texttt{senão}                                                                                     \\
+     & \qquad{}\qquad{}\qquad{}\texttt{falha}                                                                             \\
+    \\
+     & \texttt{$W$($\Gamma$, $e$ $e'$) = }                                                                                \\
+     & \qquad{}\qquad{}\texttt{($\tau$, $S_1$) $\leftarrow$ $W$($\Gamma$, $e$)}                                           \\
+     & \qquad{}\qquad{}\texttt{($\tau'$, $S_2$) $\leftarrow$ $W$($S_1\Gamma$, $e'$)}                                      \\
+     & \qquad{}\qquad{}\texttt{S $\leftarrow$ unify(\{$S_2\tau$, $\tau'$ $\to$ $\alpha$\}), onde $\alpha$ fresh}          \\
+     & \qquad{}\qquad{}\texttt{retorna (S$\alpha$, S $\circ$ $S_2$ $\circ$ $S_1$)}                                        \\
+    \\
+     & \texttt{$W$($\Gamma$, $\lambda x.e$) = }                                                                           \\
+     & \qquad{}\qquad{}\texttt{($\tau$, $S$) $\leftarrow$ $W$($\Gamma$[$x$ $:$ $\alpha$], $e$), onde $\alpha$ fresh}      \\
+     & \qquad{}\qquad{}\texttt{retorna ($S$($\alpha$ $\to$ $\tau$), $S$)}                                                 \\
+    \\
+     & \texttt{$W$($\Gamma$, let $x = e$ in $e'$) = }                                                                     \\
+     & \qquad{}\qquad{}\texttt{($\tau$, $S_1$) $\leftarrow$ $W$($\Gamma$, $e$)}                                           \\
      & \qquad{}\qquad{}\texttt{($\tau'$, $S_2$) $\leftarrow$ $W$($S_1$ $\Gamma$[$x$ $:$ gen($S_1\Gamma$, $\tau$)], $e'$)} \\
-     & \qquad{}\qquad{}\texttt{retorna ($\tau'$, $S_2$ $\circ$ $S_1$)} \\
+     & \qquad{}\qquad{}\texttt{retorna ($\tau'$, $S_2$ $\circ$ $S_1$)}                                                    \\
   \end{align*}
   \small{Fonte:~\cite{CASTRO2019}}\label{fig:algoritmo-w}
 \end{figure}

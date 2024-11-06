@@ -1,4 +1,4 @@
-\chapter{Representação Intermediária de Código}\label{ch:IR}
+\section{Representação Intermediária de Código}\label{sec:IR}
 
 Na computação, um compilador é um programa responsável por traduzir um código escrito em uma linguagem de programação para outra, geralmente do código-fonte para código de máquina, permitindo assim a execução do programa.
 Durante esse processo, é fundamental que o mínimo de informações seja perdido, uma vez que a semântica original deve ser preservada no processo de tradução.
@@ -6,7 +6,7 @@ Uma abordagem comum utilizada para manter a integridade semântica e possibilita
 
 Compiladores modernos, amplamente utilizados na indústria, empregam mais de uma IR para tirar proveito das vantagens de cada uma, uma vez que essas representações são projetadas para diferentes objetivos, como otimizações específicas.
 As IRs podem ser classificadas de acordo com o nível de abstração e são comumente aplicados em sequência.
-Representações com um nível maior de abstração são usadas próximas ao código-fonte, enquanto aquelas de nível mais baixo estão mais próximas do código de máquina~\cite{aho2008compilers}, como ilustrado na figura~\ref{fig:abstraction-level-irs}.
+Representações com um nível maior de abstração são usadas próximas ao código-fonte, enquanto aquelas de nível mais baixo estão mais próximas do código de máquina~\cite{aho2008compilers}, como ilustrado na Figura~\ref{fig:abstraction-level-irs}.
 
 \begin{figure}
   \centering
@@ -19,7 +19,7 @@ Uma das principais informações que deve ser preservada em uma IR, é o fluxo d
 Para garantir que o compilador mantenha a semântica correta do programa, o fluxo de controle deve ser repassado de alguma maneira durante o processo de tradução~\cite{cooper2014}.
 Uma das maneiras disso ser feito explicitamente, é com o uso de continuações, que são funções que descrevem o próximo passo de uma computação em um ponto particular da execução do programa.
 
-\section{CPS}\label{sec:cps}
+\subsection{CPS}\label{subsec:cps}
 
 O estilo de passagem de continuações (CPS, do inglês \textit{continuation passing style}) é uma técnica de transformação de código que torna o fluxo de controle de um programa explícito, ao converter o estilo convencional de chamadas de função em chamadas que passam explicitamente o controle para a próxima etapa, conhecida como continuação (do inglês, \textit{continuation})~\cite{appel1992compiling}.
 Em vez de retornar diretamente o resultado de uma função, o CPS transforma cada função para que, ao finalizar sua computação, ela invoque uma \textit{continuation}, que representa o próximo passo a ser executado no programa.
@@ -47,19 +47,19 @@ Para avaliar expressões no cálculo lambda, usamos três tipos de redução: $\
 
 \begin{description}
   \item[$\alpha$-redução:] Renomeação de variáveis ligadas.
-        \begin{align}
-          \lambda x . e[x] & \rightarrow \lambda y . e[y]\label{eq:alpha-reduction}
-        \end{align}
+    \begin{align}
+      \lambda x . e[x] & \rightarrow \lambda y . e[y]\label{eq:alpha-reduction}
+    \end{align}
 
   \item[$\beta$-redução:] Aplicação de função.
-        \begin{align}
-          (\lambda x . e_1) e_2 & \rightarrow e_1 [e_2 / x]\label{eq:beta-reduction}
-        \end{align}
+    \begin{align}
+      (\lambda x . e_1) e_2 & \rightarrow e_1 [e_2 / x]\label{eq:beta-reduction}
+    \end{align}
 
   \item[$\eta$-redução:] Expansão de função.
-        \begin{align}
-          \lambda x . (e \, x) & \rightarrow e \quad \text{se } x \text{ não ocorre livre em } e\label{eq:eta-reduction}
-        \end{align}
+    \begin{align}
+      \lambda x . (e \, x) & \rightarrow e \quad \text{se } x \text{ não ocorre livre em } e\label{eq:eta-reduction}
+    \end{align}
 \end{description}
 
 As reduções são responsáveis pela semântica operacional do cálculo lambda.
