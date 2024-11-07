@@ -111,10 +111,10 @@ Os termos do cálculo de continuações, chamados de comandos, são descritos pe
 
 % Explicar a sintaxe do cálculo de continuações
 Aqui, $x\langle \vec{x} \rangle$ representa um salto (\textit{jump}), isto é, uma chamada para a continuação $x$ com os parâmetros $\vec{x}$, sendo essencialmente uma chamada direta para a continuação, enquanto $M\{x\langle \vec{x} \rangle = M\}$ representa um vínculo (\textit{binding}), onde o corpo $M$ está vinculado à continuação $x$ com os parâmetros $\vec{x}$, isto é, uma chamada intermediária que, ao ser chamada, executará o próximo passo da computação.
+Vale ressaltar que \citeonline{APPEL1997} possuem uma sintaxe diferente para o cálculo de continuações, onde os termos são respectivamente representados como $k(\vec{x})$ e $\texttt{let }k(\vec{x}) = c \texttt{ in } b$.
 
-% Explicar a transformação para CPS, contendo exemplos em Haskell.
 A tradução para CPS converte um código escrito em estilo direto (onde o controle de fluxo é implícito) para o estilo de passagem de continuações~\cite{FLANAGAN1993}.
-A principal ideia por trás dessa transformação é modificar as funções para que elas não retornem um valor diretamente, mas, em vez disso, passem o resultado para uma continuação, que representará o próximo passo da computação.
+A principal ideia por trás dessa transformação é modificar as funções para que elas não retornem um valor diretamente, mas, em vez disso, passem o resultado para uma continuação.
 
 \begin{figure}
   \caption{Função soma em Haskell em Estilo Direto}
@@ -159,4 +159,7 @@ No estilo direto, a função \texttt{factorial} tem o tipo $Int \rightarrow Int$
 
 Essa correspondência entre os tipos não é uma coincidência.
 Como discutido por~\cite{TORRENS2019}, uma função em estilo direto com tipo $A \rightarrow B$ pode ser transformada em uma função em CPS com o tipo $A \rightarrow (B \rightarrow \perp) \rightarrow \perp$.
-Aqui, $\perp$ representa o tipo dos valores que nunca retornam, uma característica associada ao estilo de passagem de continuations, onde as funções são compostas de forma a encadear continuações até que a execução termine de maneira explícita.
+Aqui, $\perp$ representa o tipo dos valores que nunca retornam, uma característica associada ao estilo de passagem de continuações, onde as funções são compostas de forma a encadear continuações até que a execução termine de maneira explícita.
+
+Este exemplo simples da função fatorial em CPS ilustra as dificuldades inerentes ao uso de continuações explícitas, como a verbosidade do código, complexidade de compreensão e a propensão a erros.
+No entanto, apesar desses desafios, o CPS se mostra extremamente adequado para a aplicação de otimizações, sendo uma escolha eficiente para representações intermediárias, especialmente em cenários onde o desempenho é essencial.
