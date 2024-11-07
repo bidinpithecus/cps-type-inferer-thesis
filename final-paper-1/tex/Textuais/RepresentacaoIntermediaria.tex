@@ -1,6 +1,6 @@
 \section{Representação Intermediária de Código}\label{sec:IR}
 
-Na computação, um compilador é um programa responsável por traduzir um código escrito em uma linguagem de programação para outra, geralmente do código-fonte para código de máquina, permitindo assim a execução do programa.
+Um compilador é um programa responsável por traduzir um código escrito em uma linguagem de programação para outra, geralmente do código-fonte para código de máquina, permitindo assim a execução do programa.
 Durante esse processo, é fundamental que o mínimo de informações seja perdido, uma vez que a semântica original deve ser preservada no processo de tradução.
 Uma abordagem comum utilizada para manter a integridade semântica e possibilitar otimizações, são as representações intermediárias (IR, do inglês \textit{intermediate representation})~\cite{cooper2014}.
 
@@ -23,6 +23,30 @@ Uma das maneiras disso ser feito explicitamente, é com o uso de continuações,
 
 O estilo de passagem de continuações (CPS, do inglês \textit{continuation passing style}) é uma técnica de transformação de código que torna o fluxo de controle de um programa explícito, ao converter o estilo convencional de chamadas de função em chamadas que passam explicitamente o controle para a próxima etapa, conhecida como continuação (do inglês, \textit{continuation})~\cite{appel1992compiling}.
 Em vez de retornar diretamente o resultado de uma função, o CPS transforma cada função para que, ao finalizar sua computação, ela invoque uma \textit{continuation}, que representa o próximo passo a ser executado no programa.
+Assim, toda chamada de função se torna uma chamada de cauda.
+
+Uma chamada de cauda ocorre quando a última instrução executada em uma função é uma chamada a outra função, sem que restem computações adicionais a serem feitas após essa chamada~\cite{MUCHNICK1997}.
+Isso permite que a função atual libere seu quadro de ativação, otimizando o uso de memória, já que o compilador não precisa manter o estado da função anterior na pilha.
+Em constraste, uma chamada que não é de cauda ocorre quando ainda restam operações após a chamada, como somas ou multiplicações, o que exige que o quadro de ativação da função atual permaneça na pilha até a conclusão dessas operações.
+
+Na Figura~\ref{code:factorial_non_tail_call}, o exemplo da função fatorial demonstra uma chamada que não é de cauda, pois a chamada recursiva \texttt{factorial(n - 1)} não é a última operação a ser realizada.
+A função precisa aguardar o retorno desta chamada para, então, multiplicar o resultado por \texttt{n}, o que impede a liberação do quadro de ativação até o término da multiplicação.
+
+Em constrate, na Figura~\ref{code:factorial_tail_call} como exemplo, tem-se uma versão da função fatorial que utiliza chamada de cauda.
+A função auxiliar \texttt{go} acumula o valor do cálculo diretamente em seu argumento \texttt{a}, e a chamada recursiva \texttt{go (n - 1) (a * n)} é a última instrução a ser executada.
+Como não há operações pendentes após a chamada recursiva, o compilador pode otimizar a função, reutilizando o quadro de ativação da função \texttt{go} para a chamada subsequente, tornando o cálculo mais eficiente.
+
+\begin{figure}
+  \caption{Função fatorial em Haskell}
+  \small{Fonte: o autor}
+  \lstinputlisting[style=haskell, label=code:factorial_non_tail_call]{Code/factorial_non_tail_call.hs}
+\end{figure}
+
+\begin{figure}
+  \caption{Função fatorial em Haskell com chamada de cauda}
+  \small{Fonte: o autor}
+  \lstinputlisting[style=haskell, label=code:factorial_tail_call]{Code/factorial_tail_call.hs}
+\end{figure}
 
 O cálculo lambda, definido por~\citeonline{church1932set}, é um sistema formal que serve como base para a maioria das linguagens funcionais.
 Ele é capaz de representar qualquer computação utilizando abstrações e aplicações através de reduções.
@@ -41,7 +65,7 @@ No cálculo lambda, as variáveis podem ser classificadas como livres ou ligadas
 Variáveis são consideradas livres quando não estão associadas a uma abstração de função.
 Por exemplo, no termo $\lambda x. y$, a variável $y$ é livre, pois não está ligada a nenhum parâmetro introduzido.
 Em contraste, no termo $(\lambda x. x) y$, a variável $x$ está ligada dentro do corpo da abstração, enquanto $y$ permanece livre.
-Um termo sem variáveis livres é denominado fechado; por exemplo, $(\lambda x. \lambda y. x) y$ não possui variáveis livres, pois todas as variáveis estão ligadas às suas respectivas abstrações.
+Um termo sem variáveis livres é denominado fechado ou combinador; por exemplo, $\lambda x. \lambda y. x y$ é um combinador, pois todas as variáveis estão ligadas às suas respectivas abstrações.
 
 Para avaliar expressões no cálculo lambda, usamos três tipos de redução: $\alpha$, $\beta$ e $\eta$, que seguem as seguintes definições:
 
@@ -74,14 +98,13 @@ Cada função, em vez de retornar diretamente um valor, recebe um argumento extr
 Por exemplo, a expressão $\lambda x. x + 1$ no cálculo lambda tradicional retornaria o valor $x + 1$. Ao transformar essa expressão para CPS, ela se torna $\lambda x. \lambda k. k (x + 1)$.
 
 Aqui, $k$ é a continuação que processa o resultado $x + 1$.
-Essa técnica é especialmente poderosa no contexto de compiladores, uma vez que facilita várias formas de otimizações e análises, como eliminação de chamadas de função (TCO, do inglês \textit{tail-call optimization}), expansão \textit{inline}, representação de \textit{closures}, alocação de registradores, entre outras~\cite{appel1992compiling}.
+Essa técnica é especialmente poderosa no contexto de compiladores, uma vez que facilita várias formas de otimizações e análises, como eliminação de recursividade em cauda (TCO, do inglês \textit{tail-call optimization}), expansão \textit{inline}, representação de \textit{closures}, alocação de registradores, entre outras~\cite{appel1992compiling}.
 Ao transformar o código para CPS, todo o fluxo de execução do programa é capturado como uma série de chamadas encadeadas de funções, sem depender de uma pilha de execução implícita.
 
 O cálculo de continuações (do inglês, \textit{CPS-calculus}), conforme definido por~\citeonline{thielecke1997}, é um sistema formal que leva o CPS além de seu uso tradicional como uma técnica de transformação de código, tratando-o como um modelo computacional por si só.
 Enquanto o CPS é utilizado como uma IR em compiladores, o cálculo de continuações oferece uma estrutura para raciocinar formalmente sobre computações onde o fluxo de controle é explicitamente representado.
 Os termos do cálculo de continuações, chamados de comandos, são descritos pelas seguintes regras:
 
-% Sintaxe do cálculo de continuações (o ideal seria a que o cristiano pediu, mas enquanto não achar vai a do Thielecke msm)
 \begin{equation}
   M ::= x\langle \vec{x} \rangle \mid M\{x\langle \vec{x} \rangle = M\}
 \end{equation}
@@ -135,5 +158,5 @@ O mesmo padrão pode ser observado nas funções para o cálculo do fatorial nas
 No estilo direto, a função \texttt{factorial} tem o tipo $Int \rightarrow Int$, enquanto na versão CPS, a função \texttt{factorialCps} tem o tipo $Int \rightarrow (Int \rightarrow r) \rightarrow r$.
 
 Essa correspondência entre os tipos não é uma coincidência.
-Como discutido por~\cite{TORRENS2019}, uma função em estilo direto com tipo $A \rightarrow B$ pode ser transformada em uma função em CPS com o tipo $A \times (B \rightarrow \perp) \rightarrow \perp$.
+Como discutido por~\cite{TORRENS2019}, uma função em estilo direto com tipo $A \rightarrow B$ pode ser transformada em uma função em CPS com o tipo $A \rightarrow (B \rightarrow \perp) \rightarrow \perp$.
 Aqui, $\perp$ representa o tipo dos valores que nunca retornam, uma característica associada ao estilo de passagem de continuations, onde as funções são compostas de forma a encadear continuações até que a execução termine de maneira explícita.
