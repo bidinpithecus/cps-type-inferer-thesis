@@ -1,54 +1,45 @@
 \section{Teoria de Tipos}\label{sec:type-theory}
 
-% Introdução Teoria de Tipos (Paradoxo de Russel)
 A Teoria de Tipos, conforme apresentada por~\cite{COQUAND2022}, foi introduzida por Russell em 1908 ao encontrar um paradoxo na Teoria de Conjuntos, conhecido atualmente como o Paradoxo de Russell:
 
-% Definição do paradoxo
 \begin{equation}\label{eq:russell-paradox}
   \text{Seja } R = \{ x \mid x \notin x \}, \text{ então } R \in R \iff R \notin R
 \end{equation}
 
-% Explicação da definição
 Ou seja, considere $R$ como o conjunto dos conjuntos que não contêm a si mesmos.
 A contradição surge ao observar que, se o conjunto $R$ contém a si mesmo, isso implica que $R$ não contém a si mesmo, e vice-versa.
 
-% Paradoxo do barbeiro
 Outra maneira de descrever esse paradoxo é através do Paradoxo do Barbeiro: imagine uma cidade com apenas um barbeiro, onde ele somente barbeia aqueles que não se barbeiam.
 O paradoxo surge quando perguntamos: ``Quem barbeia o barbeiro?''
 Ele não pode fazer sua própria barba, pois barbeia apenas aqueles que não fazem a própria barba.
 No entanto, se ele não faz sua própria barba, então pertence ao grupo daqueles que devem ser barbeados pelo barbeiro, logo, ele deveria barbear-se.
 Essa situação gera uma contradição semelhante ao Paradoxo de Russell.
 
-% Utilidade Teoria de Tipos
 Atualmente, a principal aplicação da Teoria de Tipos está na formalização de sistemas de tipos para linguagens de programação.
-Ela tem diversas utilidades, como em assistentes de prova que utilizam sistemas de tipos para codificar provas.
-Por exemplo, o Coq utiliza o Cálculo de Construções~\cite{COQUAND1998}.
-Além disso, a Teoria de Tipos é fundamental em algoritmos de checagem de tipos, que fazem parte da análise semântica em compiladores, bem como na inferência de tipos em linguagens de programação, como o Cálculo Lambda Simplesmente Tipado.
+Um sistema de tipos garante a ausência de certos comportamentos dos programas classificando os valores computados em cada uma de suas sentenças~\cite{PIERCE2002}.
+Além disso, atribuir e verificar tipos para cada construção presente nos programas têm várias utilidades, como fornecer informações para auxiliar na modularização de programas, otimização de código executada pelo compilador e também pode ser usada como documentação do código.
+Sistemas de tipos também são usados na construção de assistentes de provas, por exemplo, o Coq utiliza o Cálculo de Construções~\cite{COQUAND1998}.
+Linguagens como Idris e Agda, que são funcionalmente dependentemente, também permitem a verificação de provas formais.
 
-% Introduzir conceitos de tipos simples, tipos dependentes e tipos polimórficos:
 No contexto das linguagens de programação, podemos distinguir três categorias principais de tipos: tipos simples, tipos polimórficos e tipos dependentes~\cite{PIERCE2002}.
 Tipos simples atribuem um tipo fixo a cada termo, enquanto tipos polimórficos introduzem a noção de generalidade, permitindo que funções possam ser aplicadas a argumentos de diferentes tipos sem a necessidade de serem redefinidas para cada um.
 Já os tipos dependentes permitem que tipos dependam de valores.
 
-% Exemplo 1: Tipos Simples
 Um exemplo de tipo simples é uma função que opera sobre números inteiros.
 Esta função recebe um número inteiro e retorna outro número inteiro.
 Seu tipo, portanto, é representado como $Int \rightarrow Int$, indicando que tanto a entrada quanto a saída são do tipo inteiro.
 
-% Exemplo 2: Tipos Polimórficos
 Um exemplo de polimorfismo é a função identidade, que recebe um elemento de qualquer tipo e retorna o mesmo elemento.
 Seu tipo é expresso como $a \rightarrow a$, onde $a$ pode ser qualquer tipo.
 Este tipo polimórfico indica que a função identidade pode ser usada com diferentes tipos de dados sem precisar ser modificada.
 
-% Exemplo 3: Tipos Dependentes
 Em linguagens com suporte a tipos dependentes, um exemplo seria o de um vetor cujo comprimento (número de elementos) faz parte de seu tipo.
 Nesse caso, uma função de concatenação de vetores deve garantir que somente vetores com tipos compatíveis em relação ao comprimento possam ser concatenados.
 O tipo da função de concatenação seria algo como\footnote{A notação exata pode variar entre diferentes linguagens de programação que suportam tipos dependentes. A estrutura apresentada serve apenas como uma ilustração conceitual do comportamento esperado.} $Vector(n) \rightarrow Vector(m) \rightarrow Vector(n+m)$, onde $n$ e $m$ são valores que representam os comprimentos dos vetores e fazem parte da definição de tipo.
 
-% Variedades de polimorfismo
-No contexto do polimorfismo,~\citeonline{PIERCE2002} define duas principais variedades: o polimorfismo paramétrico, que permite que uma única definição de função opere de maneira genérica, e o polimorfismo ad-hoc, que permite que uma função tenha diferentes comportamentos dependendo do tipo dos argumentos.
+No contexto do polimorfismo,~\citeonline{PIERCE2002} define duas principais variedades: o polimorfismo paramétrico, que permite que uma única definição de função opere de maneira genérica, e o polimorfismo com sobrecarga, que permite que uma função tenha diferentes comportamentos dependendo do tipo dos argumentos.
 No polimorfismo paramétrico, como no caso da função identidade, todas as instâncias de uma função genérica compartilham o mesmo comportamento, independentemente dos tipos específicos com os quais são instanciadas.
-Já no polimorfismo ad-hoc, o comportamento da função pode variar conforme o tipo dos dados, como acontece com sobrecarga de operadores. Uma função sobrecarregada pode ter múltiplas implementações, com a seleção adequada dependendo dos tipos dos argumentos.
+Já no polimorfismo com sobrecarga, o comportamento da função pode variar conforme o tipo dos dados, como acontece com sobrecarga de operadores. Uma função sobrecarregada pode ter múltiplas implementações, com a seleção adequada dependendo dos tipos dos argumentos.
 
 O polimorfismo desempenha um papel crucial na inferência de tipos.
 Em linguagens com suporte a inferência de tipos, como Haskell, o sistema de tipos é capaz de deduzir tanto tipos específicos quanto tipos genéricos, sempre que possível, para permitir polimorfismo~\cite{PIERCE2002}.
@@ -58,19 +49,22 @@ Esse tipo é conhecido como polimorfismo universal~\cite{PIERCE2002}.
 
 Já a função de soma apresentada na Figura~\ref{code:add} demonstra outro tipo de polimorfismo.
 Como possui tipagem explícita $Int \rightarrow Int \rightarrow Int$, apenas valores do tipo inteiro podem ser somados.
-No entanto, essa mesma função pode ser generalizada para permitir a soma de quaisquer números, contanto que sejam do mesmo tipo.
-Aqui entra o conceito de restrição de classe de tipos.
+No entanto, essa mesma função pode ser generalizada para permitir a soma de quaisquer números, desde que sejam do mesmo tipo, utilizando restrições de classe de tipos.
 
-Em Haskell, uma classe de tipos é um conjunto de tipos que compartilham um conjunto comum de operações.
-A classe \texttt{Num}, por exemplo, é a classe de tipos que suportam operações numéricas, como adição e multiplicação.
-Quando o tipo de uma função não é especificado em sua definição, o sistema de inferência de tipos deduz o tipo mais geral possível.
-Para a função de soma, o tipo inferido seria $Num\ a \Rightarrow a \rightarrow a \rightarrow a$.
-Esse tipo indica que a função pode ser aplicada a qualquer tipo \texttt{a}, desde que \texttt{a} pertença à classe \texttt{Num}, ou seja, a função é polimórfica, mas com a restrição de que os tipos envolvidos devem ser numéricos.
+Em Haskell, uma classe de tipos é um conjunto de tipos que compartilham um conjunto comum de operações, e as classes de tipos são a maneira pela qual a linguagem lida com sobrecarga.
+Por exemplo, a função \texttt{sumList}, que calcula a soma dos elementos de uma lista, pode ser definida com uma restrição de classe, na Figura~\ref{code:sum_list}.
 
-Dessa forma, a função pode ser usada tanto para somar inteiros quanto para somar valores de outros tipos numéricos, como \texttt{Float} ou \texttt{Double}.
-O polimorfismo restrito (ou polimorfismo ad-hoc) é o que permite essa generalização~\cite{PIERCE2002}, pois a função é capaz de operar sobre múltiplos tipos, mas dentro de uma classe específica de tipos, garantindo flexibilidade e segurança no sistema de tipos.
+\begin{figure}
+  \caption{Função somatório de elementos de lista em Haskell}
+  \small{Fonte: o autor}
+  \lstinputlisting[style=haskell, label=code:sum_list]{Code/sum_list.hs}
+\end{figure}
 
-% Falar sobre Cálculo Lambda Simplesmente Tipado
+Aqui, a restrição \texttt{Num a} indica que \texttt{sumList} pode operar sobre listas de qualquer tipo \texttt{a}, desde que \texttt{a} pertença à classe \texttt{Num}, que define os tipos numéricos em Haskell.
+Dessa forma, a função permite a soma de inteiros, valores \texttt{Float}, \texttt{Double} e outros tipos numéricos.
+
+O polimorfismo restrito (ou polimorfismo de sobrecarga) é o que permite essa generalização~\cite{PIERCE2002}, pois a função é capaz de operar sobre múltiplos tipos, mas dentro de uma classe específica de tipos, garantindo flexibilidade e segurança no sistema de tipos.
+
 O Cálculo Lambda Simplesmente Tipado é uma das primeiras e mais simples variantes do Cálculo Lambda que incorpora tipos em sua estrutura~\cite{CHURCH1940}.
 Enquanto o cálculo lambda original não faz distinção entre diferentes tipos de dados, no Cálculo Lambda Simplesmente Tipado, os termos são anotados com tipos.
 Cada função recebe e retorna valores de tipos específicos, o que permite prevenir uma série de erros comuns em programas, como a aplicação de funções a argumentos incorretos.
@@ -78,7 +72,6 @@ Cada função recebe e retorna valores de tipos específicos, o que permite prev
 Além disso, o sistema de tipos serve como uma ferramenta de verificação durante a compilação de programas, assegurando que erros de tipo sejam detectados antes da execução.
 Dessa forma, ele não apenas facilita a criação de software mais robusto, mas também oferece uma base formal para o estudo de linguagens de programação~\cite{PIERCE2002}.
 
-% Apresentar a sintaxe dele
 A sintaxe básica do Cálculo Lambda Simplesmente Tipado inclui:
 
 \begin{itemize}
@@ -94,7 +87,6 @@ A aplicação de função $\tau_1 \tau_2$ indica que $\tau_1$ é uma função qu
 Essa formalização facilita a composição de funções e o raciocínio sobre a estrutura dos programas, pois cada termo pode ser avaliado dentro de um contexto de tipagem.
 A sintaxe dos tipos, como $T \to T$, define uma função que aceita um argumento do tipo $T$ e retorna um valor também do tipo $T$.
 
-% Explicar a sintaxe
 A inferência de tipos no Cálculo Lambda Simplesmente Tipado assegura que cada expressão tenha um tipo bem-definido, baseado nas regras de tipagem.
 A tipagem de termos é feita através de um conjunto de regras formais que garantem a consistência dos tipos no programa.
 Por exemplo, a regra de tipagem para abstrações lambda é a seguinte:
@@ -106,7 +98,6 @@ Por exemplo, a regra de tipagem para abstrações lambda é a seguinte:
 Isso significa que, se o termo $t$ possui o tipo $T_2$ sob o contexto onde $x$ possui o tipo $T_1$, então a abstração $\lambda x:T_1. \tau$ tem o tipo $T_1 \to T_2$.
 Essa verificação de tipo garante que, ao aplicar a função, o tipo do argumento corresponde ao tipo esperado pela função.
 
-% Relacionar com a lógica intuicionista e Correspondência Curry-Howard
 O Cálculo Lambda Simplesmente Tipado está intimamente relacionado com a lógica intuicionista proposicional.
 Esse vínculo é formalizado pela Correspondência Curry-Howard, que estabelece uma correspondência direta entre proposições lógicas e tipos, e entre provas e programas.
 Em outras palavras, tipos podem ser interpretados como proposições lógicas, e termos tipados como provas dessas proposições~\cite{PIERCE2002}.
@@ -117,6 +108,5 @@ Esse princípio permite usar ferramentas da teoria de tipos para construir prova
 
 Além disso, a Correspondência Curry-Howard não apenas conecta tipos e lógica, mas também oferece um método sistemático para projetar e raciocinar sobre sistemas de inferência de tipos, garantindo que programas tipados sejam corretos em relação às especificações lógicas.
 
-% Explicar como a inferência de tipos funciona e sua importância
-A inferência de tipos desempenha um papel fundamental na programação funcional moderna, especialmente em linguagens como Haskell e ML, que utilizam o Sistema Damas-Milner.
-O Algoritmo W, que será discutido em detalhe na Subseção~\ref{subsec:w-algo}, é amplamente utilizado para deduzir automaticamente os tipos em expressões~\cite{PIERCE2002}.
+A inferência de tipos desempenha um papel fundamental na programação funcional moderna, sendo inicialmente introduzida com a linguagem ML por~\citeonline{DAMAS1982}, com o algoritmo W.
+A linguagem Haskell extende o sistema Damas-Milner, adicionando principalmente o suporte a sobrecarga de funções.
