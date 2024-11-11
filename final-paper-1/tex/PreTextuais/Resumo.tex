@@ -2,17 +2,12 @@
 % RESUMOS
 % ---
 
-% resumo em português
 \setlength{\absparsep}{18pt}    % ajusta o espaçamento dos parágrafos do resumo
 \begin{resumo}
-  Este trabalho propõe uma investigação sobre a inferência de tipos para o Estilo de
-  Passagem de Continuação (CPS) --- representação intermediária amplamente utilizada
-  em compiladores de linguagens funcionais. A pesquisa se concentra na extensão do
-  algoritmo W, tradicionalmente usado para inferência de tipos no sistema Damas-Milner,
-  para abranger o cálculo de continuações. A proposta inclui a implementação dessa
-  extensão na linguagem Haskell e a validação do algoritmo por meio de programas de
-  teste, assegurando que os tipos inferidos estejam corretos.
-
-  \textbf{Palavras-chave}: Inferência de Tipos, Estilo de Passagem de Continuação
-  (CPS), Algoritmo W, Damas-Milner, Haskell, Sistema de Tipos.
+  No contexto de compiladores, as representações intermediárias desempenham um papel fundamental, especialmente em ambientes de produção.
+  O \textit{Continuation Passing Style} (CPS) é uma dessas representações, notável para linguagens funcionais devido às otimizações avançadas que permite.
+  Contudo, há uma escassez de pesquisas e implementações dessa IR com termos devidamente tipados, o que impede a detecção de uma gama de erros durante as etapas de compilação.
+  Este trabalho, portanto, explora a formalização de um sistema de tipos para o CPS e o desenvolvimento de um algoritmo de inferência de tipos para essa representação, juntamente com sua implementação na linguagem de programação Haskell. 
+  
+  \textbf{Palavras-chave}: Inferência de Tipos, Estilo de Passagem de Continuação (CPS), Damas-Milner, Haskell, Sistema de Tipos.
 \end{resumo}
