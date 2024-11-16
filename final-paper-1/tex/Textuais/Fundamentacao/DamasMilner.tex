@@ -2,12 +2,13 @@
 
 O sistema Damas-Milner, introduzido por Robin Milner e posteriormente formalizado em maior detalhe por Luis Damas~\cite{MILNER1978, DAMAS1982}, é um dos sistemas de tipos mais influentes para linguagens funcionais.
 Este sistema tem como principal característica a inferência automática de tipos polimórficos, sem a necessidade de anotações explícitas por parte do programador, como ocorre em linguagens como ML, Haskell e OCaml.
-A sua base é o cálculo lambda com polimorfismo paramétrico, permitindo que funções possam operar sobre múltiplos tipos de maneira genérica.
+A sua base é o cálculo lambda com polimorfismo paramétrico - introduzido via \texttt{let} -, permitindo que funções possam operar sobre múltiplos tipos de maneira genérica.
 
-A introdução do sistema Damas-Milner trouxe duas contribuições principais: a definição de um sistema de tipos que é robusto, garantindo propriedades como \textit{soundness} (consistência semântica), e a criação de um algoritmo, o Algoritmo W, capaz de inferir o tipo mais geral (também chamado de \textit{principal type-scheme}), conforme demonstrado em~\citeonline{DAMAS1984}.
+A introdução do sistema Damas-Milner trouxe duas contribuições principais: a definição de um sistema de tipos robusto e a criação de um algoritmo, o Algoritmo W, capaz de inferir o tipo mais geral (também chamado de \textit{principal type-scheme}), conforme demonstrado em~\citeonline{DAMAS1984}.
+O algoritmo é consistente e completo em relação ao sistema de tipos: a consistência assegura que todo tipo inferido é correto, ou seja, pode ser derivado pelo sistema de tipos; já a completude garante que qualquer tipo derivado pelo sistema será uma instância do tipo inferido pelo algoritmo.
 Como resultado, a linguagem ML e suas derivadas se tornaram notórias por fornecer ao programador a capacidade de escrever programas sem erros de tipo detectáveis durante a compilação, permitindo um desenvolvimento mais seguro e robusto~\cite{MILNER1978, DAMAS1984}.
 
-A sintaxe do sistema DM define as expressões e os tipos usados no processo de inferência.
+A sintaxe do sistema Damas-Milner define as expressões e os tipos usados no processo de inferência.
 Abaixo, segue a gramática das expressões e tipos:
 
 \begin{equation}\label{eq:dm-syntax}
@@ -24,12 +25,14 @@ Abaixo, segue a gramática das expressões e tipos:
 \end{equation}
 
 Na sintaxe, $x$ representa variáveis que podem ser nomes de qualquer identificador, e $e$ descreve expressões que podem ser variáveis, aplicações de função, funções anônimas ou declarações \texttt{let}, que introduzem polimorfismo através de generalização de tipos.
-As variáveis de tipo $\alpha$ são usadas para representar tipos genéricos.
+$\alpha$ é usado para representar variáveis de tipos.
 Os tipos primitivos $\iota$ são usados para representar tipos constantes.
 Tipos $\tau$ podem ser tanto variáveis de tipo quanto funções entre tipos.
-Por fim, $\sigma$ denota \textit{schemes}, ou tipos polimórficos, que podem quantificar variáveis de tipo, permitindo reutilização de tipos genéricos em diferentes contextos.
+Por fim, $\sigma$ denota \textit{schemes}, ou tipos polimórficos, que podem quantificar variáveis de tipo, permitindo reutilização de variáveis de tipos em diferentes contextos.
 
-O polimorfismo no sistema Damas-Milner é introduzido pelas expressões \texttt{let}, que permitem a generalização de tipos. Ao declarar uma variável ou função usando \texttt{let}, o tipo inferido é generalizado para ser reutilizado em diferentes contextos. Isso significa que, ao declarar uma função como $\texttt{id} = \lambda x.x$, o sistema deduz o tipo mais geral $\forall \alpha. \alpha \rightarrow \alpha$, que pode ser usado com diferentes tipos conforme necessário.
+O polimorfismo no sistema Damas-Milner é introduzido pelas expressões \texttt{let}, que permitem a generalização de tipos.
+Ao declarar uma variável ou função usando \texttt{let}, o tipo inferido é generalizado para ser utilizado de maneira polimórfica na expressão que ocorre após o \texttt{in}.
+Isso significa que, ao declarar uma função como $\texttt{let id} = \lambda x.x$, o sistema deduz o tipo mais geral $\forall \alpha. \alpha \rightarrow \alpha$, que pode ter sua variável de tipo $\alpha$ instanciada para diferentes tipos conforme for necessário.
 
 A inferência de tipos envolve dois processos principais: generalização e instanciação.
 A generalização ocorre quando o sistema identifica que uma expressão pode ser tipada com um tipo mais geral, permitindo que seja reutilizada de maneira polimórfica.
@@ -39,7 +42,6 @@ Esse mecanismo garante a flexibilidade do sistema, ao mesmo tempo que mantém a 
 Por exemplo, considere a expressão $\texttt{let id} \ = \lambda x.x \ \texttt{in} \ (\texttt{id} \ \texttt{1}, \ \texttt{id} \ \texttt{`a'})$.
 O sistema generaliza o tipo de $\texttt{id}$ para $\forall \alpha. \alpha \rightarrow \alpha$, e instancia este tipo tanto para inteiros quanto para caracteres nas duas aplicações subsequentes.
 
-% Substituições
 Outro conceito presente no sistema Damas-Milner é a substituição de tipos, onde estes são mapeados para outros tipos ou para variáveis de tipo.
 Formalmente, uma substituição de tipos é representada como um mapeamento finito de variáveis de tipo para tipos, denotado por $S$, e pode ser escrito na forma $[ \alpha_1 \mapsto \tau_1, \alpha_2 \mapsto \tau_2, \ldots, \alpha_n \mapsto \tau_n ]$.
 Aqui, $\alpha_i$ são variáveis de tipo distintas e $\tau_i$ são os tipos correspondentes.
@@ -74,8 +76,8 @@ Um esquema de tipo também pode ter uma instância genérica $\sigma' = \forall 
 Nesse caso, escrevemos $\sigma > \sigma'$, indicando que $\sigma$ é mais geral do que $\sigma'$.
 Vale notar que a instanciação atua sobre variáveis livres, enquanto a instanciação genérica lida com variáveis ligadas.
 
-O sistema de tipos de Damas e Milner conta com um conjunto de regras de inferência de tipos, apresentadas na Figura~\ref{eq:type-inference}, que são usadas para determinar os tipos das expressões no sistema.
-Essas regras são julgamentos de tipos da forma $\Gamma \vdash e: \sigma$, onde $\Gamma$ é o contexto, um conjunto de suposições com pares de variáveis e seus tipos: $(e, \sigma)$, $e$ é a expressão sendo tipada, e $\sigma$ é o tipo inferido no contexto.
+O sistema de tipos de Damas e Milner é definido por um conjunto de regras de inferência de tipos, apresentadas na Figura~\ref{eq:type-inference}, que são usadas para determinar os tipos das expressões no sistema.
+Essas regras são representadas por meio de julgamentos de tipos da forma $\Gamma \vdash e: \sigma$, onde $\Gamma$ é o contexto, um conjunto de suposições com pares de variáveis e seus tipos: $(e, \sigma)$, $e$ é a expressão sendo tipada, e $\sigma$ ou $\tau$ são o tipo inferido no contexto.
 
 \begin{figure}[ht!]
   \caption{Regras de Inferência do sistema Damas-Milner}
@@ -125,7 +127,7 @@ A seguir, será discutido em detalhes o funcionamento do Algoritmo W.
 
 \subsection{Algoritmo W}\label{subsec:w-algo}
 
-O Algoritmo W, introduzido em~\citeonline{DAMAS1982}, é um algoritmo eficiente para inferência de tipos em linguagens de programação funcional.
+O Algoritmo W, introduzido em~\citeonline{DAMAS1982}, é um algoritmo eficiente\footnote{Para a grande maioria dos casos é um algoritmo eficiente, entretanto, em alguns casos, como as expressões que apresentam recursão polimórfica, o mesmo executa em tempo exponencial, conforme apresentado em~\cite{CRISTIANO2004}} para inferência de tipos em linguagens de programação funcional.
 Ele se baseia no processo de unificação para solucionar equações de tipos geradas durante a análise de expressões, atribuindo os tipos mais gerais possíveis, ou seja, os tipos mais polimórficos que ainda garantem a consistência do sistema.
 
 A unificação é o processo de encontrar uma substituição de variáveis de tipo que torna dois tipos dados equivalentes.
@@ -184,7 +186,7 @@ O algoritmo combina a unificação com regras de inferência de tipos para deduz
      & \texttt{$W$($\Gamma$, $e$ $e'$) = }                                                                                \\
      & \qquad{}\qquad{}\texttt{($\tau$, $S_1$) $\leftarrow$ $W$($\Gamma$, $e$)}                                           \\
      & \qquad{}\qquad{}\texttt{($\tau'$, $S_2$) $\leftarrow$ $W$($S_1\Gamma$, $e'$)}                                      \\
-     & \qquad{}\qquad{}\texttt{S $\leftarrow$ unify(\{$S_2\tau$, $\tau'$ $\to$ $\alpha$\}), onde $\alpha$ fresh}          \\
+     & \qquad{}\qquad{}\texttt{S $\leftarrow$ unify($S_2\tau$, $\tau'$ $\to$ $\alpha$), onde $\alpha$ fresh}              \\
      & \qquad{}\qquad{}\texttt{retorna (S$\alpha$, S $\circ$ $S_2$ $\circ$ $S_1$)}                                        \\
     \\
      & \texttt{$W$($\Gamma$, $\lambda x.e$) = }                                                                           \\

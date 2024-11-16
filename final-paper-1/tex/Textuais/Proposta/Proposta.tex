@@ -1,10 +1,43 @@
 \chapter{Proposta}\label{ch:proposta}
 
-Com base na tese de doutorado de \citeonline{thielecke1997}, \citeonline{TORRENS2024} propuseram uma semântica operacional para o Cálculo de Continuações baseada em reescrita de termos, demonstrando sua confluência.
-O presente trabalho, por sua vez, tem como objetivo investigar a viabilidade de formalizar um sistema de tipos, juntamente com um algoritmo de inferência para CPS, inspirado nas contribuições de \citeonline{TORRENS2024}.
+\citeonline{thielecke1997} propôs um sistema de tipos monomórfico para CPS que define um único construtor (chamado de negação poliádica) para representar continuações \cite{TORRENS2024}:
 
-A validação do algoritmo será realizada por meio de experimentos, mesmo que isso não constitua uma prova formal de sua correção.
-Destaca-se que a prova de completude e consistência do sistema de tipos desenvolvido pode ser um trabalho futuro.
+% Imagens foda latex
+
+\[
+    \textit{Types } \ \tau \ ::= \ \neg \vec{\tau} \ \mid \ X
+\]
+\[
+    \textit{Environments } \ \Gamma ::= \cdot \mid \Gamma, x : \tau
+\]
+
+\[
+\frac{
+  \Gamma(k) = \neg \vec{\tau} 
+  \quad \quad
+  \Gamma(\vec{x}) = \vec{\tau}
+}{
+  \Gamma \vdash k\langle \vec{x} \rangle
+} \quad (J)
+\]
+
+\[
+\frac{
+  \Gamma, k : \neg \vec{\tau} \vdash b
+  \quad \quad
+  \Gamma, \vec{x} : \vec{\tau} \vdash c
+}{
+  \Gamma \vdash b \{ k \langle \vec{x} \rangle = c \}
+} \quad (B)
+\]
+
+Enquanto uma sentença de tipos no sistema Damas-Milner: $\Gamma \vdash \text{e:}\tau$ declara que a expressão \texttt{e} possui tipo $\tau$ no contexto $\Gamma$, uma sentença de tipos: $\Gamma \vdash \text{b}$ declara que no contexto de tipos $\Gamma$, \texttt{b} é consistente.
+Portanto $\{\text{x:}\tau \text{, k:} \neg \tau\} \vdash \text{k}\langle \vec{x} \rangle$ estabelece que em um contexto em que \texttt{x} possui tipo $\tau$ e \texttt{k} possui tipo $\neg \tau \text{k}\langle \vec{x} \rangle$ não irá falhar \cite{thielecke1997}.
+\citeonline{TORRENS2024} demonstram a segurança (\textit{type safety}) desse sistema, provando preservação e progresso, ou seja, qualquer expressão bem tipada não apresentará comportamento inesperado quando reduzida.
+
+O presente trabalho tem com objetivo propor uma extensão ao sistema proposto por Thielecke, adicionando o suporte a tipos polimórficos de forma similar ao que ocorre no sistema Damas-Milner.
+Fornecendo também um algoritmo de inferência de tipos.
+Por uma questão de tempo disponível, a validação do resultado será feita apenas de forma empírica por meio de testes.
 
 Os próximos passos do trabalho proposto envolvem a formalização do sistema de tipos, bem como o desenvolvimento de um algoritmo de inferência para esse sistema.
 Por fim, serão realizados testes com expressões de tipos conhecidos para validar a implementação.
