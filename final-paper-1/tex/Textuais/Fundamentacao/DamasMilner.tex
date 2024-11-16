@@ -127,7 +127,7 @@ A seguir, será discutido em detalhes o funcionamento do Algoritmo W.
 
 \subsection{Algoritmo W}\label{subsec:w-algo}
 
-O Algoritmo W, introduzido em~\citeonline{DAMAS1982}, é um algoritmo eficiente\footnote{Para a grande maioria dos casos é um algoritmo eficiente, entretanto, em alguns casos, como as expressões que apresentam recursão polimórfica, o mesmo executa em tempo exponencial, conforme apresentado em~\cite{CRISTIANO2004}} para inferência de tipos em linguagens de programação funcional.
+O Algoritmo W, introduzido em~\citeonline{DAMAS1982}, é um algoritmo eficiente\footnote{Embora seja eficiente na grande maioria dos casos, há situações em que o Algoritmo W apresenta desempenho exponencial, como ocorre em expressões com recursão polimórfica, conforme discutido em~\cite{CRISTIANO2004}.} para inferência de tipos em linguagens de programação funcional.
 Ele se baseia no processo de unificação para solucionar equações de tipos geradas durante a análise de expressões, atribuindo os tipos mais gerais possíveis, ou seja, os tipos mais polimórficos que ainda garantem a consistência do sistema.
 
 A unificação é o processo de encontrar uma substituição de variáveis de tipo que torna dois tipos dados equivalentes.
