@@ -2,7 +2,7 @@
 
 O sistema Damas-Milner, introduzido por Robin Milner e posteriormente formalizado em maior detalhe por Luis Damas~\cite{MILNER1978, DAMAS1982}, é um dos sistemas de tipos mais influentes para linguagens funcionais.
 Este sistema tem como principal característica a inferência automática de tipos polimórficos, sem a necessidade de anotações explícitas por parte do programador, como ocorre em linguagens como ML, Haskell e OCaml.
-A sua base é o cálculo lambda com polimorfismo paramétrico - introduzido via \texttt{let} -, permitindo que funções possam operar sobre múltiplos tipos de maneira genérica.
+A sua base é o cálculo lambda com polimorfismo paramétrico, introduzido via \texttt{let}, permitindo que funções possam operar sobre múltiplos tipos de maneira genérica.
 
 A introdução do sistema Damas-Milner trouxe duas contribuições principais: a definição de um sistema de tipos robusto e a criação de um algoritmo, o Algoritmo W, capaz de inferir o tipo mais geral (também chamado de \textit{principal type-scheme}), conforme demonstrado em~\citeonline{DAMAS1984}.
 O algoritmo é consistente e completo em relação ao sistema de tipos: a consistência assegura que todo tipo inferido é correto, ou seja, pode ser derivado pelo sistema de tipos; já a completude garante que qualquer tipo derivado pelo sistema será uma instância do tipo inferido pelo algoritmo.
