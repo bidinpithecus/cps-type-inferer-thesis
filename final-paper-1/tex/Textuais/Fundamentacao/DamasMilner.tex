@@ -1,3 +1,25 @@
+\newcommand{\defas}{\ensuremath{\overset{def}{=}}}
+\newcommand{\fv}{\ensuremath{\text{FV}}}
+\newcommand{\fvc}{\ensuremath{\text{FVC}}}
+\newcommand{\eeq}{\ensuremath{\overset{e}{=}}}
+\newcommand{\append}{\ensuremath{\texttt{ ++ }}}
+\newcommand{\V}{\ensuremath{\mathcal{V}}}
+\newcommand{\C}{\ensuremath{\mathbb{C}}}
+\newcommand{\wf}{\ensuremath{\textit{ wf\/}}}
+\newcommand{\If}{\ensuremath{\text{if }}}
+\newcommand{\Let}{\ensuremath{\text{let }}}
+\newcommand{\In}{\ensuremath{\text{in }}}
+\newcommand{\Then}{\ensuremath{\text{ then }}}
+\newcommand{\Else}{\ensuremath{\text{ else }}}
+\newcommand{\fail}{\ensuremath{\text{fail}}}
+\newcommand{\unify}{\ensuremath{\textit{ unify\/}}}
+\newcommand{\occurs}{\ensuremath{\textit{ ocurrs\/}}}
+\newcommand{\dom}{\ensuremath{\textit{ dom\/}}}
+\newcommand{\size}{\ensuremath{\textit{ size\/}}}
+\newcommand{\unifier}{\ensuremath{\textit{ unifier\/}}}
+\newcommand{\True}{\ensuremath{\texttt{ True}}}
+\newcommand{\False}{\ensuremath{\texttt{ False}}}
+
 \section{Sistema Damas-Milner}\label{sec:damas-milner}
 
 O sistema Damas-Milner, introduzido por Robin Milner e posteriormente formalizado em maior detalhe por Luis Damas~\cite{MILNER1978, DAMAS1982}, é um dos sistemas de tipos mais influentes para linguagens funcionais.
@@ -137,39 +159,58 @@ Caso contrário, os tipos são incompatíveis.
 
 Seja o algoritmo de unificação, $unify$, que recebe como argumento um conjunto de tipos simples e retorna uma substituição, melhor explicada na Figura~\ref{fig:substituicao-tipos}, pode ser descrito pelas seguintes regras:
 
-\begin{figure}[ht!]
-  \caption{Algoritmo de unificação no formato de função}
-  \centering
-  \begin{align*}
-     & \texttt{$unify$($C$) =}                                                                                     \\
-     & \qquad{}\qquad{}\texttt{se $C = \varnothing$ então}                                                         \\
-     & \qquad{}\qquad{}\qquad{}\texttt{retorna $[\ ]$}                                                             \\
-     & \qquad{}\qquad{}\texttt{senão, seja $\{ S = T \}$ $\cup$ $C'$ = $C$ tal que}                                \\
-     & \qquad{}\qquad{}\qquad{}\texttt{se $S = T$ então}                                                           \\
-     & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna $unify$($C'$)}                                              \\
-     & \qquad{}\qquad{}\qquad{}\texttt{senão, se $S = X$ $\land$ $X$ $\notin$ FV($T$) então}                       \\
-     & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna $unify$($[X$ $\mapsto$ $T]C'$) $\circ$ $[X$ $\mapsto$ $T]$} \\
-     & \qquad{}\qquad{}\qquad{}\texttt{senão, se $T = X$ $\land$ $X$ $\notin$ FV($S$) então}                       \\
-     & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna $unify$($[X$ $\mapsto$ $S]C'$) $\circ$ $[X$ $\mapsto$ $S]$} \\
-     & \qquad{}\qquad{}\qquad{}\texttt{senão, se $S = S_1$ $\to$ $S_2$ $\land$ $T = T_1$ $\to$ $T_2$ então}        \\
-     & \qquad{}\qquad{}\qquad{}\qquad{}\texttt{retorna $unify$($C'$ $\cup$ \{$S_1 = T_1$,\ $S_2 = T_2$\})}         \\
-     & \qquad{}\qquad{}\texttt{senão}                                                                              \\
-     & \qquad{}\qquad{}\qquad{}\texttt{falha}
-  \end{align*}
-  \small{Fonte: autor. Adaptado de~\cite{PIERCE2002}}\label{fig:unify-algo}
+% \begin{figure}
+%   \caption{Algoritmo de unificação no formato de função.}
+%   \[
+%   \begin{array}{ll}
+%   (1) & \unify([\: ]) = [\: ]\\
+%   (2) & \unify((\alpha \eeq \alpha) :: \mathbb{C}) = \unify(\mathbb{C})\\
+%   (3) & \unify((\alpha \eeq\tau) :: \mathbb{C}) = 
+%         \If \occurs(\alpha,\tau) \Then \fail \Else \unify([\alpha\mapsto\tau]\mathbb{C})\circ [\alpha \mapsto \tau]\\
+%   (4) & \unify((\tau \eeq\alpha) :: \mathbb{C}) = 
+%         \If \occurs(\alpha,\tau) \Then \fail \Else \unify([\alpha\mapsto\tau]\mathbb{C})\circ [\alpha \mapsto \tau]\\
+%   (5) & \unify((\tau_1\to\tau_2 \eeq \tau\to\tau')::\mathbb{C}) = 
+%         \unify((\tau_1\eeq\tau)::(\tau_2\eeq\tau')::\mathbb{C}) \\
+%   (6) & \unify((\tau \eeq \tau')::\mathbb{C}) = \If \tau\equiv\tau' \Then \unify(\mathbb{C}) \Else \fail 
+%   \end{array}
+%   \]
+%       \small{Fonte: autor. Adaptado de~\cite{RIBEIRO2016}}\label{algo:unify}
+%   \end{figure}
+
+\begin{figure}
+\caption{Algoritmo de unificação no formato de função.}
+\[
+\begin{array}{ll}
+  \unify(\alpha, \alpha) = [\: ]\\
+  \unify(\alpha, \tau) = \If \occurs(\alpha,\tau) \Then \fail \Else [\alpha\mapsto\tau]\\
+  \unify(\tau, \alpha) = \If \occurs(\alpha,\tau) \Then \fail \Else [\alpha\mapsto\tau]\\
+  \unify(\tau_1 \to \tau_2, \tau_1' \to \tau_2') = \unify(\tau_1, \tau_1') \circ \unify(\tau_2, \tau_2')\\
+  % \unify(\tau, \tau') = \If \tau\equiv\tau' \Then [\: ] \Else \fail\\
+\end{array}
+\]
+    \small{Fonte: autor. Adaptado de~\cite{RIBEIRO2016}}\label{algo:unify}
 \end{figure}
 
-Este algoritmo é executado de maneira iterativa, tentando resolver a primeira equação do conjunto e, em seguida, aplicando recursivamente a unificação para o restante das equações.
-Quando o conjunto de equações é vazio, a unificação é considerada bem-sucedida e o algoritmo retorna uma substituição vazia.
-Caso contrário, para a equação atual $S = T$, se os tipos $S$ e $T$ são idênticos, a equação é considerada resolvida e o algoritmo prossegue com a unificação do restante do conjunto.
+Note que o algoritmo de unificação utiliza o algoritmo de verificação de
+ocorrência apresentado na Figura~\ref{algo:occurs}, responsável por
+garantir que uma variável de tipo não apareça em um tipo, evitando assim,
+definições circulares em uma substituição, como por exemplo em
+$[\alpha\mapsto\alpha\to\alpha]$~\cite{RIBEIRO2016}.
 
-Quando $S$ é uma variável de tipo $X$ que não ocorre livre em $T$, o algoritmo substitui $X$ por $T$ em todas as equações restantes e prossegue com a unificação.
-De maneira semelhante, se $T$ é uma variável de tipo $X$ que não ocorre livre em $S$, o algoritmo substitui $X$ por $S$ e continua com a unificação.
-Se ambos $S$ e $T$ são tipos função, o algoritmo tenta unificar seus domínios e co-domínios.
-Caso nenhuma dessas condições seja satisfeita, a unificação falha.
-Esse procedimento permite ao algoritmo lidar de maneira eficiente com equações de tipos que surgem durante o processo de inferência.
+\begin{figure}
+    \caption{Algoritmo \textit{occurs} no formato de função.}
+\[ \begin{array}{llp{.7\textwidth}}
+      \occurs (\alpha,\tau_1\to\tau_2) & = & $\occurs(\alpha,\tau_1) \lor occurs(\alpha,\tau_2)$ \\
+      \occurs (\alpha,\alpha)         & = & $\True$ \\
+      \occurs (\alpha, \tau)          & = & $\False$ \\
+  \end{array}
+\]
+\small{Fonte: autor. Adaptado de~\cite{RIBEIRO2016}}\label{algo:occurs}
+\end{figure}
 
-O Algoritmo W, descrito na Figura~\ref{fig:algoritmo-w} é um método utilizado para inferência de tipos em expressões de linguagens funcionais.
+!!!ADICIONAR DESCRIÇÃO ALGORITMO UNIFICAÇÃO!!!
+
+O Algoritmo W, descrito na Figura~\ref{algo:w} é um método utilizado para inferência de tipos em expressões de linguagens funcionais.
 Ele atribui os tipos mais gerais possíveis a cada subexpressão, garantindo a consistência com as operações definidas.
 O algoritmo combina a unificação com regras de inferência de tipos para deduzir o tipo de uma expressão, explorando o polimorfismo de forma eficiente.
 
@@ -198,7 +239,7 @@ O algoritmo combina a unificação com regras de inferência de tipos para deduz
      & \qquad{}\qquad{}\texttt{($\tau'$, $S_2$) $\leftarrow$ $W$($S_1$ $\Gamma$[$x$ $:$ gen($S_1\Gamma$, $\tau$)], $e'$)} \\
      & \qquad{}\qquad{}\texttt{retorna ($\tau'$, $S_2$ $\circ$ $S_1$)}                                                    \\
   \end{align*}
-  \small{Fonte:~\cite{CASTRO2019}}\label{fig:algoritmo-w}
+  \small{Fonte:~\cite{CASTRO2019}}\label{algo:w}
 \end{figure}
 
 O funcionamento deste pode ser analisado para os diferentes tipos de expressões a seguir.
