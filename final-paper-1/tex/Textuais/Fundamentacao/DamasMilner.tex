@@ -2,23 +2,20 @@
 \newcommand{\fv}{\ensuremath{\text{FV}}}
 \newcommand{\fvc}{\ensuremath{\text{FVC}}}
 \newcommand{\eeq}{\ensuremath{\overset{e}{=}}}
-\newcommand{\append}{\ensuremath{\texttt{ ++ }}}
-\newcommand{\V}{\ensuremath{\mathcal{V}}}
-\newcommand{\C}{\ensuremath{\mathbb{C}}}
-\newcommand{\wf}{\ensuremath{\textit{ wf\/}}}
-\newcommand{\If}{\ensuremath{\text{if }}}
-\newcommand{\Let}{\ensuremath{\text{let }}}
-\newcommand{\In}{\ensuremath{\text{in }}}
-\newcommand{\Then}{\ensuremath{\text{ then }}}
-\newcommand{\Else}{\ensuremath{\text{ else }}}
-\newcommand{\fail}{\ensuremath{\text{fail}}}
-\newcommand{\unify}{\ensuremath{\textit{ unify\/}}}
-\newcommand{\occurs}{\ensuremath{\textit{ ocurrs\/}}}
-\newcommand{\dom}{\ensuremath{\textit{ dom\/}}}
-\newcommand{\size}{\ensuremath{\textit{ size\/}}}
-\newcommand{\unifier}{\ensuremath{\textit{ unifier\/}}}
-\newcommand{\True}{\ensuremath{\texttt{ True}}}
-\newcommand{\False}{\ensuremath{\texttt{ False}}}
+\newcommand{\Append}{\ensuremath{\texttt{++}}}
+\newcommand{\If}{\ensuremath{\text{se}}}
+\newcommand{\Let}{\ensuremath{\text{let}}}
+\newcommand{\In}{\ensuremath{\text{in}}}
+\newcommand{\Then}{\ensuremath{\text{então}}}
+\newcommand{\Return}{\ensuremath{\text{retorna}}}
+\newcommand{\Else}{\ensuremath{\text{senão}}}
+\newcommand{\Elseif}{\ensuremath{\text{senão se}}}
+\newcommand{\Fail}{\ensuremath{\text{falha}}}
+\newcommand{\Unify}{\ensuremath{\textit{unify}}}
+\newcommand{\Occurs}{\ensuremath{\textit{ocurrs}}}
+\newcommand{\True}{\ensuremath{\texttt{Verdadeiro}}}
+\newcommand{\False}{\ensuremath{\texttt{Falso}}}
+\newcommand{\Whitespace}{\ensuremath{\texttt{ }}}
 
 \section{Sistema Damas-Milner}\label{sec:damas-milner}
 
@@ -160,35 +157,38 @@ Caso contrário, os tipos são incompatíveis.
 Seja o algoritmo de unificação, $unify$, que recebe como argumento um conjunto de tipos simples e retorna uma substituição, melhor explicada na Figura~\ref{fig:substituicao-tipos}, pode ser descrito pelas seguintes regras:
 
 % \begin{figure}
-%   \caption{Algoritmo de unificação no formato de função.}
-%   \[
-%   \begin{array}{ll}
-%   (1) & \unify([\: ]) = [\: ]\\
-%   (2) & \unify((\alpha \eeq \alpha) :: \mathbb{C}) = \unify(\mathbb{C})\\
-%   (3) & \unify((\alpha \eeq\tau) :: \mathbb{C}) = 
-%         \If \occurs(\alpha,\tau) \Then \fail \Else \unify([\alpha\mapsto\tau]\mathbb{C})\circ [\alpha \mapsto \tau]\\
-%   (4) & \unify((\tau \eeq\alpha) :: \mathbb{C}) = 
-%         \If \occurs(\alpha,\tau) \Then \fail \Else \unify([\alpha\mapsto\tau]\mathbb{C})\circ [\alpha \mapsto \tau]\\
-%   (5) & \unify((\tau_1\to\tau_2 \eeq \tau\to\tau')::\mathbb{C}) = 
-%         \unify((\tau_1\eeq\tau)::(\tau_2\eeq\tau')::\mathbb{C}) \\
-%   (6) & \unify((\tau \eeq \tau')::\mathbb{C}) = \If \tau\equiv\tau' \Then \unify(\mathbb{C}) \Else \fail 
-%   \end{array}
-%   \]
-%       \small{Fonte: autor. Adaptado de~\cite{RIBEIRO2016}}\label{algo:unify}
-%   \end{figure}
+% \caption{Algoritmo de unificação no formato de função.}
+% \[
+% \begin{array}{ll}
+%   \Unify(\alpha, \alpha) = [\: ]\\
+%   \Unify(\alpha, \tau) = \If \Occurs(\alpha,\tau) \Then \Fail \Else [\alpha\mapsto\tau]\\
+%   \Unify(\tau, \alpha) = \If \Occurs(\alpha,\tau) \Then \Fail \Else [\alpha\mapsto\tau]\\
+%   \Unify(\tau_1 \to \tau_2, \tau_1' \to \tau_2') = \Unify(\tau_1, \tau_1') \circ \Unify(\tau_2, \tau_2')\\
+% \end{array}
+% \]
+%     \small{Fonte: autor. Adaptado de~\cite{RIBEIRO2016}}\label{algo:unify}
+% \end{figure}
 
-\begin{figure}
-\caption{Algoritmo de unificação no formato de função.}
-\[
-\begin{array}{ll}
-  \unify(\alpha, \alpha) = [\: ]\\
-  \unify(\alpha, \tau) = \If \occurs(\alpha,\tau) \Then \fail \Else [\alpha\mapsto\tau]\\
-  \unify(\tau, \alpha) = \If \occurs(\alpha,\tau) \Then \fail \Else [\alpha\mapsto\tau]\\
-  \unify(\tau_1 \to \tau_2, \tau_1' \to \tau_2') = \unify(\tau_1, \tau_1') \circ \unify(\tau_2, \tau_2')\\
-  % \unify(\tau, \tau') = \If \tau\equiv\tau' \Then [\: ] \Else \fail\\
-\end{array}
-\]
-    \small{Fonte: autor. Adaptado de~\cite{RIBEIRO2016}}\label{algo:unify}
+\begin{figure}[ht!]
+  \caption{Algoritmo de unificação no formato de função.}
+  \centering
+  \begin{align*}
+    & \texttt{\Unify($\alpha, \Whitespace \alpha$) = }   \\
+    & \qquad{}\texttt{\Return \Whitespace $[\Whitespace]$}            \\
+    & \texttt{\Unify($\alpha, \Whitespace \tau)$ = }              \\
+    & \qquad{}\texttt{\If \Whitespace \Occurs($\alpha, \Whitespace \tau$), \Then}     \\
+    & \qquad{}\qquad{}\texttt{\Fail}     \\
+    & \qquad{}\texttt{\Else}     \\
+    & \qquad{}\qquad{}\texttt{\Return \Whitespace [$\alpha\mapsto\tau$]}     \\
+    & \texttt{\Unify($\tau, \Whitespace \alpha$) = }                \\
+    & \qquad{}\texttt{\If \Whitespace \Occurs($\alpha, \Whitespace \tau$), \Then}     \\
+    & \qquad{}\qquad{}\texttt{\Fail}     \\
+    & \qquad{}\texttt{\Else}     \\
+    & \qquad{}\qquad{}\texttt{\Return \Whitespace [$\alpha\mapsto\tau$]}     \\
+    & \texttt{\Unify($\tau_1 \to \tau_2, \Whitespace \tau_1' \to \tau_2'$) = }                \\
+    & \qquad{}\texttt{\Return \Whitespace $\Unify(\tau_1, \Whitespace \tau_1') \circ \Unify(\tau_2, \Whitespace \tau_2')$}
+  \end{align*}
+  \small{Fonte: autor. Adaptado de~\cite{RIBEIRO2016}}\label{algo:unify}
 \end{figure}
 
 Note que o algoritmo de unificação utiliza o algoritmo de verificação de
@@ -197,18 +197,21 @@ garantir que uma variável de tipo não apareça em um tipo, evitando assim,
 definições circulares em uma substituição, como por exemplo em
 $[\alpha\mapsto\alpha\to\alpha]$~\cite{RIBEIRO2016}.
 
-\begin{figure}
-    \caption{Algoritmo \textit{occurs} no formato de função.}
-\[ \begin{array}{llp{.7\textwidth}}
-      \occurs (\alpha,\tau_1\to\tau_2) & = & $\occurs(\alpha,\tau_1) \lor occurs(\alpha,\tau_2)$ \\
-      \occurs (\alpha,\alpha)         & = & $\True$ \\
-      \occurs (\alpha, \tau)          & = & $\False$ \\
-  \end{array}
-\]
-\small{Fonte: autor. Adaptado de~\cite{RIBEIRO2016}}\label{algo:occurs}
+\begin{figure}[ht!]
+  \caption{Algoritmo de verificação de ocorrência no formato de função.}
+  \centering
+  \begin{align*}
+    & \texttt{\Occurs($\alpha, \Whitespace \tau_1 \to \tau_2$) = }   \\
+    & \qquad{}\texttt{\Return \Whitespace $\Occurs(\alpha, \Whitespace \tau_1) \lor \Occurs(\alpha, \Whitespace\tau_2)$}            \\
+    & \texttt{\Occurs($\alpha, \Whitespace \alpha$) = }              \\
+    & \qquad{}\texttt{\Return \Whitespace \True}     \\
+    & \texttt{\Occurs($\alpha, \Whitespace \tau$) = }                \\
+    & \qquad{}\texttt{\Return \Whitespace \False}
+  \end{align*}
+  \small{Fonte: autor. Adaptado de~\cite{RIBEIRO2016}}\label{algo:occurs}
 \end{figure}
 
-!!!ADICIONAR DESCRIÇÃO ALGORITMO UNIFICAÇÃO!!!
+!!! ADICIONAR DESCRIÇÃO ALGORITMO UNIFICAÇÃO !!!
 
 O Algoritmo W, descrito na Figura~\ref{algo:w} é um método utilizado para inferência de tipos em expressões de linguagens funcionais.
 Ele atribui os tipos mais gerais possíveis a cada subexpressão, garantindo a consistência com as operações definidas.
@@ -219,25 +222,25 @@ O algoritmo combina a unificação com regras de inferência de tipos para deduz
   \centering
   \begin{align*}
      & \texttt{$W$($\Gamma$, $x$) = }                                                                                     \\
-     & \qquad{}\qquad{}\texttt{se $\Gamma(x) = \forall$ $\alpha_1 \ldots \alpha_n$ $.$ $\tau$, então}                     \\
-     & \qquad{}\qquad{}\qquad{}\texttt{retorna ([$\alpha_i$ $\mapsto$ $\tau_i$]$\tau$, Id), onde $\alpha_i'$ fresh}       \\
-     & \qquad{}\qquad{}\texttt{senão}                                                                                     \\
-     & \qquad{}\qquad{}\qquad{}\texttt{falha}                                                                             \\
+     & \qquad{}\texttt{se $\Gamma(x) = \forall$ $\alpha_1 \ldots \alpha_n$ $.$ $\tau$, então}                     \\
+     & \qquad{}\qquad{}\texttt{retorna ([$\alpha_i$ $\mapsto$ $\tau_i$]$\tau$, Id), onde $\alpha_i'$ fresh}       \\
+     & \qquad{}\texttt{senão}                                                                                     \\
+     & \qquad{}\qquad{}\texttt{falha}                                                                             \\
     \\
      & \texttt{$W$($\Gamma$, $e$ $e'$) = }                                                                                \\
-     & \qquad{}\qquad{}\texttt{($\tau$, $S_1$) $\leftarrow$ $W$($\Gamma$, $e$)}                                           \\
-     & \qquad{}\qquad{}\texttt{($\tau'$, $S_2$) $\leftarrow$ $W$($S_1\Gamma$, $e'$)}                                      \\
-     & \qquad{}\qquad{}\texttt{S $\leftarrow$ unify($S_2\tau$, $\tau'$ $\to$ $\alpha$), onde $\alpha$ fresh}              \\
-     & \qquad{}\qquad{}\texttt{retorna (S$\alpha$, S $\circ$ $S_2$ $\circ$ $S_1$)}                                        \\
+     & \qquad{}\texttt{($\tau$, $S_1$) $\leftarrow$ $W$($\Gamma$, $e$)}                                           \\
+     & \qquad{}\texttt{($\tau'$, $S_2$) $\leftarrow$ $W$($S_1\Gamma$, $e'$)}                                      \\
+     & \qquad{}\texttt{S $\leftarrow$ unify($S_2\tau$, $\tau'$ $\to$ $\alpha$), onde $\alpha$ fresh}              \\
+     & \qquad{}\texttt{retorna (S$\alpha$, S $\circ$ $S_2$ $\circ$ $S_1$)}                                        \\
     \\
      & \texttt{$W$($\Gamma$, $\lambda x.e$) = }                                                                           \\
-     & \qquad{}\qquad{}\texttt{($\tau$, $S$) $\leftarrow$ $W$($\Gamma$[$x$ $:$ $\alpha$], $e$), onde $\alpha$ fresh}      \\
-     & \qquad{}\qquad{}\texttt{retorna ($S$($\alpha$ $\to$ $\tau$), $S$)}                                                 \\
+     & \qquad{}\texttt{($\tau$, $S$) $\leftarrow$ $W$($\Gamma$[$x$ $:$ $\alpha$], $e$), onde $\alpha$ fresh}      \\
+     & \qquad{}\texttt{retorna ($S$($\alpha$ $\to$ $\tau$), $S$)}                                                 \\
     \\
      & \texttt{$W$($\Gamma$, let $x = e$ in $e'$) = }                                                                     \\
-     & \qquad{}\qquad{}\texttt{($\tau$, $S_1$) $\leftarrow$ $W$($\Gamma$, $e$)}                                           \\
-     & \qquad{}\qquad{}\texttt{($\tau'$, $S_2$) $\leftarrow$ $W$($S_1$ $\Gamma$[$x$ $:$ gen($S_1\Gamma$, $\tau$)], $e'$)} \\
-     & \qquad{}\qquad{}\texttt{retorna ($\tau'$, $S_2$ $\circ$ $S_1$)}                                                    \\
+     & \qquad{}\texttt{($\tau$, $S_1$) $\leftarrow$ $W$($\Gamma$, $e$)}                                           \\
+     & \qquad{}\texttt{($\tau'$, $S_2$) $\leftarrow$ $W$($S_1$ $\Gamma$[$x$ $:$ gen($S_1\Gamma$, $\tau$)], $e'$)} \\
+     & \qquad{}\texttt{retorna ($\tau'$, $S_2$ $\circ$ $S_1$)}                                                    \\
   \end{align*}
   \small{Fonte:~\cite{CASTRO2019}}\label{algo:w}
 \end{figure}
