@@ -22,10 +22,10 @@ Uma das maneiras disso ser feito explicitamente, é com o uso de continuações,
 \subsection{CPS}\label{subsec:cps}
 
 O estilo de passagem de continuações (CPS, do inglês \textit{continuation passing style}) é uma técnica de transformação de código que torna o fluxo de controle de um programa explícito, ao converter o estilo convencional de chamadas de função em chamadas que passam explicitamente o controle para a próxima etapa, conhecida como continuação (do inglês, \textit{continuation})~\cite{appel1992compiling}.
-Em vez de retornar diretamente o resultado de uma função, o CPS transforma cada função para que, ao finalizar sua computação, ela invoque uma \textit{continuation}, que representa o próximo passo a ser executado no programa.
+Em vez de retornar diretamente o resultado de uma função, o CPS transforma cada função para que, ao finalizar sua computação, ela invoque uma continuação, que representa o próximo passo a ser executado no programa.
 Assim, toda chamada de função se torna uma chamada de cauda.
 
-Uma chamada de cauda ocorre quando a última instrução executada em uma função é uma chamada a outra função, sem que restem computações adicionais a serem feitas após essa chamada~\cite{MUCHNICK1997}.
+Uma chamada de cauda (do inglês \textit{tail call}) ocorre quando a última instrução executada em uma função é uma chamada a outra função, sem que restem computações adicionais a serem feitas após essa chamada~\cite{MUCHNICK1997}.
 Isso permite que a função atual libere seu quadro de ativação, otimizando o uso de memória, já que o compilador não precisa manter o estado da função anterior na pilha.
 Em constraste, uma chamada que não é de cauda ocorre quando ainda restam operações após a chamada, como somas ou multiplicações, o que exige que o quadro de ativação da função atual permaneça na pilha até a conclusão dessas operações.
 
@@ -110,7 +110,7 @@ Os termos do cálculo de continuações, chamados de comandos, são descritos pe
 \end{equation}
 
 % Explicar a sintaxe do cálculo de continuações
-Aqui, $x\langle \vec{x} \rangle$ representa um salto (\textit{jump}), isto é, uma chamada para a continuação $x$ com os parâmetros $\vec{x}$, sendo essencialmente uma chamada direta para a continuação, enquanto $M\{x\langle \vec{x} \rangle = M\}$ representa um vínculo (\textit{binding}), onde o corpo $M$ está vinculado à continuação $x$ com os parâmetros $\vec{x}$, isto é, uma chamada intermediária que, ao ser chamada, executará o próximo passo da computação.
+Aqui, $x\langle \vec{x} \rangle$ representa um salto (do inglês \textit{jump}), isto é, uma chamada para a continuação $x$ com os parâmetros $\vec{x}$, sendo essencialmente uma chamada direta para a continuação, enquanto $M\{x\langle \vec{x} \rangle = M\}$ representa um vínculo (do inglês \textit{binding}), onde o corpo $M$ está vinculado à continuação $x$ com os parâmetros $\vec{x}$, isto é, uma chamada intermediária que, ao ser chamada, executará o próximo passo da computação.
 Vale ressaltar que \citeonline{APPEL1997} possuem uma sintaxe diferente para o cálculo de continuações, onde os termos são respectivamente representados como $k(\vec{x})$ e $\texttt{let }k(\vec{x}) = c \texttt{ in } b$.
 
 A tradução para CPS converte um código escrito em estilo direto (onde o controle de fluxo é implícito) para o estilo de passagem de continuações~\cite{FLANAGAN1993}.
@@ -146,7 +146,7 @@ Nesta versão, o controle de fluxo do programa é explícito, pois a função $k
 
 Para ilustrar melhor, a Figura~\ref{code:factorial} apresenta um programa em Haskell que calcula o fatorial no estilo direto, utilizando funções definidas para multiplicação e subtração.
 Na Figura~\ref{code:factorial_cps}, um programa similar em CPS é definido, com as funções auxiliares também transformadas para CPS\@.
-Na função \texttt{factorialCps} é possível notar duas funções lambda (continuacões), \texttt{nMinus1} e \texttt{factNMinus1}.
+Na função \texttt{factorialCps} é possível notar duas funções lambda (continuações), \texttt{nMinus1} e \texttt{factNMinus1}.
 A primeira continuação guarda o resultado da operação $n - 1$, enquanto a segunda recebe recursivamente o cálculo do fatorial de $n - 1$, multiplica por $n$ e finalmente passa o resultado para a continuação $k$.
 
 Outro fato importante a se observado nos códigos apresentados é a tipagem das funções.
