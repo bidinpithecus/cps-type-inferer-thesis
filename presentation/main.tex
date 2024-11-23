@@ -18,11 +18,7 @@
 \setsvg{inkscapeexe=inkscape}
 \setsvg{inkscapeopt=-z -D}
 
-\newcommand{\uglyphi}{\phi} % mantendo o \phi velho
-\renewcommand \phi{\varphi}
-\let \emptyset \varnothing
-
-\newcommand{\Ltac}{$\mathcal{L}$\unskip tac}
+\newcommand{\Ltac}{$\mathcal{L}$\unskip~tac}
 
 \graphicspath{{Figuras/}}
 \setbeamertemplate{frametitle continuation}{}
@@ -38,27 +34,24 @@
 \renewcommand{\figurename}{Figura}
 \renewcommand{\tablename}{Tabela}
 \sloppy
-\title{Interpretando Efeitos Algébricos por meio de Mônadas}
+\title{Inferência de Tipos para CPS}
 
-\author[Karla A S Joriatti]{
-    Karla Alexsandra de Souza Joriatti\\\smallskip
+\author[Vinícios Bidin]{
+    Vinícios Bidin Santos\\\smallskip
     {\scriptsize Universidade do Estado de Santa Catarina \\\smallskip
     \vspace{-2mm}
-    \texttt{kjoriatti@gmail.com}\\\medskip
-    {Orientador: Dr. Cristiano Damiani Vasconcellos}\\
+    \texttt{vinibidin@gmail.com}\\\medskip
+    {Orientador: Dr.~Cristiano Damiani Vasconcellos}\\
     {Coorientador: Me. Paulo Henrique Torrens}\\
     }
 }
 
 \date{\today}
 
-% \titlegraphic{Apoio:\\\includegraphics[scale=.15,keepaspectratio]{Logo-CNPq.png}}
-% \logo{\includegraphics[scale=.05,keepaspectratio]{Logo-Função.png}}
-
 \begin{document}
 
     \begin{frame}
-        \titlepage
+        \titlepage%
     \end{frame}
 
     \begin{frame}[allowframebreaks]{Sumário}
@@ -66,37 +59,26 @@
     \end{frame}
 
     \section[]{Introdução}
-    \include{Slides/introducao}
-    \include{Slides/objetivo}
-
-    % efeito algébrico:  abordagem de efeitos computacionais baseada na premissa de que comportamento impuro surge de um conjunto de operações. Tradicionalmente, os efeitos algébricos eram descritos não apenas por um conjunto de operações, mas também por uma teoria equacional que captura suas propriedades. (Matija Pretnar)
+    \include{Slides/Introducao/introducao}
+    \subsection[]{Objetivos}
+    \include{Slides/Introducao/objetivos}
 
     \section[]{Representação Intermediária de Código}
-    \include{Slides/RI/RI}
-    \subsection{Grafos de Fluxo de Controle}
-    \include{Slides/RI/CFG}
-    \subsection{Atribuição Estática Única}
-    \include{Slides/RI/SSA}
-    \subsection{Forma A-Normal}
-    \include{Slides/RI/lambda}
-    \include{Slides/RI/ANF}
+    \include{Slides/Fundamentacao/RI/RI}
+    \subsection{Estilo de Passagem de Continuação}
+    \include{Slides/Fundamentacao/RI/CPS}
 
-    \section[]{Conversão de SSA para Código Funcional}
-    \include{Slides/conversaoRI}
+    \section[]{Teoria de Tipos}
+    \include{Slides/Fundamentacao/TeoriaTipos}
 
-    \section[]{Efeitos Colaterais}
-    \include{Slides/Efeitos/efeitos}
-    \subsection{Mônadas}
-    \include{Slides/Efeitos/monadas}
-    \subsection{Sistema de Tipos e Efeitos}
-    \include{Slides/Efeitos/sistema-de-efeitos}
-
-    \section[]{Conversão de Sistema de Efeitos para Mônadas}
-    \include{Slides/conversao-efeitos}
+    \section[]{Sistema Damas-Milner}
+    \include{Slides/Fundamentacao/DamasMilner}
+    \subsection{Algoritmo W}
+    \include{Slides/Fundamentacao/W-algo}
 
     \section[]{Proposta}
-    \include{Slides/proposta}
-    \include{Slides/cronograma}
+    \include{Slides/Proposta/proposta}
+    \include{Slides/Proposta/cronograma}
 
     \section[]{Referências}
     \begin{frame}[allowframebreaks]{Referências}
