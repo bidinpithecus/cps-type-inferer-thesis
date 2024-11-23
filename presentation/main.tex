@@ -48,40 +48,39 @@
 \date{\today}
 
 \begin{document}
+\begin{frame}
+    \titlepage%
+\end{frame}
 
-    \begin{frame}
-        \titlepage%
-    \end{frame}
+\begin{frame}[allowframebreaks]{Sumário}
+    \tableofcontents
+\end{frame}
 
-    \begin{frame}[allowframebreaks]{Sumário}
-        \tableofcontents
-    \end{frame}
+\section[]{Introdução}
+\include{Slides/Introducao/introducao}
+\subsection[]{Objetivos}
+\include{Slides/Introducao/objetivos}
 
-    \section[]{Introdução}
-    \include{Slides/Introducao/introducao}
-    \subsection[]{Objetivos}
-    \include{Slides/Introducao/objetivos}
+\section[]{Representação Intermediária de Código}
+\include{Slides/Fundamentacao/RI/RI}
+\subsection{Estilo de Passagem de Continuação}
+\include{Slides/Fundamentacao/RI/CPS}
 
-    \section[]{Representação Intermediária de Código}
-    \include{Slides/Fundamentacao/RI/RI}
-    \subsection{Estilo de Passagem de Continuação}
-    \include{Slides/Fundamentacao/RI/CPS}
+\section[]{Teoria de Tipos}
+\include{Slides/Fundamentacao/TeoriaTipos}
 
-    \section[]{Teoria de Tipos}
-    \include{Slides/Fundamentacao/TeoriaTipos}
+\section[]{Sistema Damas-Milner}
+\include{Slides/Fundamentacao/DamasMilner}
+\subsection{Algoritmo W}
+\include{Slides/Fundamentacao/W-algo}
 
-    \section[]{Sistema Damas-Milner}
-    \include{Slides/Fundamentacao/DamasMilner}
-    \subsection{Algoritmo W}
-    \include{Slides/Fundamentacao/W-algo}
+\section[]{Proposta}
+\include{Slides/Proposta/proposta}
+\include{Slides/Proposta/cronograma}
 
-    \section[]{Proposta}
-    \include{Slides/Proposta/proposta}
-    \include{Slides/Proposta/cronograma}
-
-    \section[]{Referências}
-    \begin{frame}[allowframebreaks]{Referências}
-        \bibliography{referencias}
-    \end{frame}
+\section[]{Referências}
+\begin{frame}[allowframebreaks]{Referências}
+    \bibliography{referencias}
+\end{frame}
 
 \end{document}
