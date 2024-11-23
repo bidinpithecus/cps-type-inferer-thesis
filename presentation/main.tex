@@ -1,0 +1,106 @@
+\documentclass[xcolor=table]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[alf]{abntex2cite}
+\usepackage{udesc}
+\usepackage{amsfonts,amsmath,amssymb,mathtools}
+\usepackage{verbatim}
+\usepackage{listings}
+\usepackage[ddmmyyyy]{datetime}
+\usepackage{hyperref, url}
+\usepackage{graphicx}
+\usepackage{bussproofs}
+\usepackage{multirow}
+\usepackage{changepage}
+\usepackage{bussproofs}	
+
+\usepackage{svg}
+\setsvg{inkscapeexe=inkscape}
+\setsvg{inkscapeopt=-z -D}
+
+\newcommand{\uglyphi}{\phi} % mantendo o \phi velho
+\renewcommand \phi{\varphi}
+\let \emptyset \varnothing
+
+\newcommand{\Ltac}{$\mathcal{L}$\unskip tac}
+
+\graphicspath{{Figuras/}}
+\setbeamertemplate{frametitle continuation}{}
+
+% suprimindo warnings do hyperref
+\pdfstringdefDisableCommands{%
+  \def\\{}%
+  \def\texttt#1{<#1>}%
+  \def\smallskip{}%
+  \def\medskip{}%
+}
+
+\renewcommand{\figurename}{Figura}
+\renewcommand{\tablename}{Tabela}
+\sloppy
+\title{Interpretando Efeitos Algébricos por meio de Mônadas}
+
+\author[Karla A S Joriatti]{
+    Karla Alexsandra de Souza Joriatti\\\smallskip
+    {\scriptsize Universidade do Estado de Santa Catarina \\\smallskip
+    \vspace{-2mm}
+    \texttt{kjoriatti@gmail.com}\\\medskip
+    {Orientador: Dr. Cristiano Damiani Vasconcellos}\\
+    {Coorientador: Me. Paulo Henrique Torrens}\\
+    }
+}
+
+\date{\today}
+
+% \titlegraphic{Apoio:\\\includegraphics[scale=.15,keepaspectratio]{Logo-CNPq.png}}
+% \logo{\includegraphics[scale=.05,keepaspectratio]{Logo-Função.png}}
+
+\begin{document}
+
+    \begin{frame}
+        \titlepage
+    \end{frame}
+
+    \begin{frame}[allowframebreaks]{Sumário}
+        \tableofcontents
+    \end{frame}
+
+    \section[]{Introdução}
+    \include{Slides/introducao}
+    \include{Slides/objetivo}
+
+    % efeito algébrico:  abordagem de efeitos computacionais baseada na premissa de que comportamento impuro surge de um conjunto de operações. Tradicionalmente, os efeitos algébricos eram descritos não apenas por um conjunto de operações, mas também por uma teoria equacional que captura suas propriedades. (Matija Pretnar)
+
+    \section[]{Representação Intermediária de Código}
+    \include{Slides/RI/RI}
+    \subsection{Grafos de Fluxo de Controle}
+    \include{Slides/RI/CFG}
+    \subsection{Atribuição Estática Única}
+    \include{Slides/RI/SSA}
+    \subsection{Forma A-Normal}
+    \include{Slides/RI/lambda}
+    \include{Slides/RI/ANF}
+
+    \section[]{Conversão de SSA para Código Funcional}
+    \include{Slides/conversaoRI}
+
+    \section[]{Efeitos Colaterais}
+    \include{Slides/Efeitos/efeitos}
+    \subsection{Mônadas}
+    \include{Slides/Efeitos/monadas}
+    \subsection{Sistema de Tipos e Efeitos}
+    \include{Slides/Efeitos/sistema-de-efeitos}
+
+    \section[]{Conversão de Sistema de Efeitos para Mônadas}
+    \include{Slides/conversao-efeitos}
+
+    \section[]{Proposta}
+    \include{Slides/proposta}
+    \include{Slides/cronograma}
+
+    \section[]{Referências}
+    \begin{frame}[allowframebreaks]{Referências}
+        \bibliography{referencias}
+    \end{frame}
+
+\end{document}

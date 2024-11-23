@@ -1,0 +1,29 @@
+\begin{frame}{Sistema de Tipos e Efeitos}
+    \begin{itemize}
+        \item Introduzido por \citeonline{gifford1986integrating}, o Sistema de Tipos e Efeitos é uma extensão de um Sistema de Tipos.
+
+        \item No modelo utilizado por \citeonline{leijen2014koka}, uma sentença possui a forma $\Gamma \vdash e:\sigma | \epsilon$, e uma sentença geral, composta por premissa e conclusão, pode ser definida como:
+
+        \item [] \begin{prooftree}
+                \AxiomC{$\Gamma_{1} \vdash e_{1}:\sigma_{1} | \epsilon_{1}$}
+                \AxiomC{...}
+                \AxiomC{$\Gamma_{n} \vdash e_{n}:\sigma_{n} | \epsilon_{n}$}
+                \TrinaryInfC{$\Gamma \vdash e:\sigma | \epsilon $}
+            \end{prooftree}
+
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Sistema de Efeitos de Koka}
+    \begin{itemize}
+        \item \textbf{Koka:} linguagem funcional criada por \citeonline{leijen2014koka}, que utiliza sistema de efeitos.
+    
+        \item \textbf{Efeitos polimórficos:} o efeito de uma função é determinado a partir dos efeitos de algum de seus argumentos.
+
+        \item [] \begin{center}
+            $map : \forall \alpha \beta \mu . (list \langle \alpha \rangle, \alpha \rightarrow \mu \beta) \rightarrow \mu list \langle \beta \rangle$\\
+        \end{center}
+
+        \item \textbf{Row-polymorphism:} a combinação de dois efeitos básicos \textit{exn} e \textit{div} gera um \textit{effect-row} $\langle exn, div \rangle$. Por consequência, $\langle exn, exn \rangle \neq \langle exn\rangle$.
+    \end{itemize}
+\end{frame}
