@@ -31,6 +31,22 @@
   \def\medskip{}%
 }
 
+\lstdefinestyle{haskell}{
+    language=Haskell,
+    backgroundcolor=\color{white},   				  % background color
+    basicstyle=\ttfamily\small,      					% font style
+    keywordstyle=\color{blue},       				  % keyword color
+    commentstyle=\color{green!50!black}, 			% comment color
+    stringstyle=\color{red},          				% string color
+    numberstyle=\tiny\color{gray},    				% line number style
+    stepnumber=1,                     				% number every line
+    numbers=left,                     				% line numbers on the left
+    numbersep=5pt,                    				% distance of line numbers
+    frame=single,                     				% adds a frame around the code
+    tabsize=2,                        				% sets default tabsize
+    captionpos=b,                     				% sets the caption position
+}
+
 \renewcommand{\figurename}{Figura}
 \renewcommand{\tablename}{Tabela}
 \sloppy
@@ -63,7 +79,7 @@
 
 \section[]{Representação Intermediária de Código}
 \include{Slides/Fundamentacao/RI/RI}
-\subsection{Estilo de Passagem de Continuação}
+\subsection{Estilo de Passagem de Continuação (CPS)}
 \include{Slides/Fundamentacao/RI/CPS}
 
 \section[]{Teoria de Tipos}
