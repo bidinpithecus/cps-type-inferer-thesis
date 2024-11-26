@@ -1,0 +1,47 @@
+\begin{frame}{Estilo de Passagem de Continuação (CPS)}
+  \textbf{Cálculo Lambda:}
+  \citeonline{church1932set} define o cálculo-$\lambda$, que é representado pela seguinte gramática:
+
+  \begin{equation}
+    e ::= x \mid \lambda x. e \mid e e\nonumber
+  \end{equation}
+
+  \begin{itemize}
+    \item \textbf{Variável:} identificadores no sistema
+    \item \textbf{Abstração:} função que associa um identificador $x$ a um termo $e$
+    \item \textbf{Aplicação:} aplicação de um termo a outro
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Estilo de Passagem de Continuação (CPS)}
+  Variáveis no cálculo-$\lambda$ podem ser:
+  \begin{itemize}
+    \item \textbf{Livres:} quando não estão associadas a uma abstração de função
+          \begin{itemize}
+            \item[--] $\lambda x. y$
+          \end{itemize}
+    \item \textbf{Ligadas:} quando estão associadas a uma abstração de função
+          \begin{itemize}
+            \item[--] $(\lambda x. x) y$
+          \end{itemize}
+    \item[]
+  \end{itemize}
+
+  Para analisar expressões:
+  \begin{itemize}
+    \item \textbf{$\alpha$-redução:} Renomeação de variáveis ligadas.
+          \begin{align}
+            \lambda x . e[x] & \rightarrow \lambda y . e[y]\nonumber
+          \end{align}
+
+    \item \textbf{$\beta$-redução:} Aplicação de função.
+          \begin{align}
+            (\lambda x . e_1) e_2 & \rightarrow e_1 [e_2 / x]\nonumber
+          \end{align}
+
+    \item \textbf{$\eta$-redução:} Expansão de função.
+          \begin{align}
+            \lambda x . (e \, x) & \rightarrow e \quad \text{se } x \text{ não ocorre livre em } e\nonumber
+          \end{align}
+  \end{itemize}
+\end{frame}

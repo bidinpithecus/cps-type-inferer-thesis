@@ -1,0 +1,14 @@
+\begin{frame}{Estilo de Passagem de Continuação (CPS)}
+    \begin{itemize}
+        \item Técnica de transformação de código que torna o fluxo de controle explícito
+              \begin{itemize}
+                  \item[--] Chamadas de função passam o controle para a próxima etapa explicitamente, conhecida como continuação~\cite{appel1992compiling}
+                  \item[--] Ao invés das funções retornarem o resultado da computação, é invocado uma continuação, representando o próximo passo
+              \end{itemize}
+        \item Toda chamada de função passa então a ser uma chamada de cauda (do inglês \textit{tail-call})
+    \end{itemize}
+\end{frame}
+
+\input{Slides/Fundamentacao/RI/CPS/TailCall}
+
+\input{Slides/Fundamentacao/RI/CPS/Lambda}
