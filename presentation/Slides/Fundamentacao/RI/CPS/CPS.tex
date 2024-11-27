@@ -12,3 +12,17 @@
 \input{Slides/Fundamentacao/RI/CPS/TailCall}
 
 \input{Slides/Fundamentacao/RI/CPS/Lambda}
+
+\begin{frame}{Estilo de Passagem de Continuação (CPS)}
+    \textbf{Transformação CPS:}\\
+    No cálculo-$\lambda$ tradicional, o fluxo de execução é implícito
+    \begin{itemize}
+        \item Funções são aplicadas e os resultados são retornados
+        \item $\lambda x. x + 1$
+    \end{itemize}
+    Já no CPS, o fluxo de execução é explícito
+    \begin{itemize}
+        \item Uma série de chamadas de funções passam o resultado para um argumento extra, a continuação, indicando o próximo passo da computação
+        \item $\lambda x. \lambda k. k (x + 1)$
+    \end{itemize}
+\end{frame}
