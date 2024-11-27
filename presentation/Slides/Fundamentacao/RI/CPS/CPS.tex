@@ -5,7 +5,7 @@
                   \item[--] Chamadas de função passam o controle para a próxima etapa explicitamente, conhecida como continuação~\cite{appel1992compiling}
                   \item[--] Ao invés das funções retornarem o resultado da computação, é invocado uma continuação, representando o próximo passo
               \end{itemize}
-        \item Toda chamada de função passa então a ser uma chamada de cauda (do inglês \textit{tail-call})
+        \item Toda chamada de função passa então a ser uma chamada de cauda (\textit{tail-call})
     \end{itemize}
 \end{frame}
 
@@ -26,3 +26,75 @@
         \item $\lambda x. \lambda k. k (x + 1)$
     \end{itemize}
 \end{frame}
+
+\begin{frame}{Estilo de Passagem de Continuação (CPS)}
+    \textbf{Cálculo de Continuações (\textit{CPS-calculus}):}\\
+    \cite{thielecke1997} define como sendo um sistema formal que trata o CPS como um modelo computacional por si só\\
+    Seus termos são:
+    \begin{equation}
+        M ::= x\langle \vec{x} \rangle \mid M\{x\langle \vec{x} \rangle = M\}\nonumber
+    \end{equation}
+    \begin{itemize}
+        \item \textbf{Salto (\textit{jump}):} uma chamada para a continuação $x$ com os parâmetros $\vec{x}$
+        \item \textbf{Vínculo (\textit{binding}):} uma chamada onde o corpo $M$ está vinculado à continuação $x$ com os parâmetros $\vec{x}$
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Estilo de Passagem de Continuação (CPS)}
+    \textbf{Tradução CPS:}\\
+    Converte um código escrito em estilo direto para CPS~\cite{FLANAGAN1993}
+    \begin{itemize}
+        \item Modificar as funções para elas não retornarem um valor, mas sim, passarem o resultado para uma continuação
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Estilo de Passagem de Continuação (CPS)}
+    \begin{figure}
+        \caption{Função soma em Haskell em Estilo Direto}
+        \lstinputlisting[style=haskell, label=code:add]{Code/add.hs}
+        \small{Fonte: o autor}
+    \end{figure}
+
+    \begin{figure}
+        \caption{Função soma em Haskell em CPS}
+        \lstinputlisting[style=haskell, label=code:add_cps]{Code/add_cps.hs}
+        \small{Fonte: o autor}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Estilo de Passagem de Continuação (CPS)}
+    \begin{figure}
+        \caption{Função fatorial em Haskell em Estilo Direto}
+        \lstinputlisting[style=haskell, label=code:factorial]{Code/fat.hs}
+        \small{Fonte: o autor}
+    \end{figure}
+
+    \begin{figure}
+        \caption{Função fatorial em Haskell em CPS}
+        \lstinputlisting[style=haskell, label=code:factorial_cps]{Code/fat_cps.hs}
+        \small{Fonte: o autor}
+    \end{figure}
+\end{frame}
+
+% \begin{frame}{Estilo de Passagem de Continuação (CPS)}
+%     \textbf{Tranformação dos Tipos:}\\
+%     Função em Estilo direto
+%     \begin{itemize}
+%         \item $A \rightarrow B$
+%     \end{itemize}
+%     Função em CPS
+%     \begin{itemize}
+%         \item $A \rightarrow (B \rightarrow \perp) \rightarrow \perp$
+%     \end{itemize}
+
+%     % Na função de soma, definida na Figura~\ref{code:add}, a função tem tipo $Int \rightarrow Int \rightarrow Int$, ou seja, ela recebe dois inteiros e retorna um inteiro.
+%     % Já a função de soma em CPS, definido na Figura~\ref{code:add_cps}, possui o tipo $Int \rightarrow Int \rightarrow (Int \rightarrow r) \rightarrow r$. Isso significa que a função recebe dois inteiros e uma continuação, que é uma função de tipo $Int \rightarrow r$, onde \texttt{r} pode ser qualquer tipo, e retorna esse mesmo tipo \texttt{r}.
+
+%     % Essa transformação de tipo reflete a diferença fundamental entre o estilo direto e o CPS\@: em vez de retornar um valor diretamente, a função em CPS recebe uma continuação que especifica o próximo passo da computação.
+%     % O mesmo padrão pode ser observado nas funções para o cálculo do fatorial nas Figuras~\ref{code:factorial} e~\ref{code:factorial_cps}.
+%     % No estilo direto, a função \texttt{factorial} tem o tipo $Int \rightarrow Int$, enquanto na versão CPS, a função \texttt{factorialCps} tem o tipo $Int \rightarrow (Int \rightarrow r) \rightarrow r$.
+
+%     % Essa correspondência entre os tipos não é uma coincidência.
+%     % Como discutido por~\cite{TORRENS2019}, uma função em estilo direto com tipo $A \rightarrow B$ pode ser transformada em uma função em CPS com o tipo $A \rightarrow (B \rightarrow \perp) \rightarrow \perp$.
+%     % Aqui, $\perp$ representa o tipo dos valores que nunca retornam, uma característica associada ao estilo de passagem de continuações, onde as funções são compostas de forma a encadear continuações até que a execução termine de maneira explícita.
+% \end{frame}

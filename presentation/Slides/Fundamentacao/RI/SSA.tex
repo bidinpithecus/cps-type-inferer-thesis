@@ -1,6 +1,6 @@
 \begin{frame}{Atribuição Estática Única}
     \begin{itemize}
-        \item A forma de atribuição estática única (do inglês, \textit{static single assignment}, ou SSA) representa uma particularidade de CFG.
+        \item A forma de atribuição estática única (\textit{static single assignment}, ou SSA) representa uma particularidade de CFG.
 
         \item Para estar nesse formato, é estabelecido que cada referência a uma variável esteja vinculada a uma única atribuição.
 
@@ -30,14 +30,14 @@
 \begin{frame}{Análise de Dominância}
     \begin{itemize}
         \item Tabela de dominância: representada por $D_{OM}(n)$, onde $m\in D_{OM}(n)$ se, para alcançar $n$ é \textit{necessário} passar por $m$; e dominante imediato, indicado por $ID_{OM}(n)$, tal que se $m\in D_{OM}(n)$ e $m$ é o nó mais próximo de $n$ neste conjunto, com $m \neq n$, então $m$ é o dominante imediato de $n$. Se $m \in D_{OM}(n)$ e $m\neq n$ então dizemos que $m$ domina estritamente $n$, denotado por $m\gg n$.
-        \item[] 
+        \item[]
 
-        \item Tabela de Fronteira de Dominância: 
-        \begin{equation}
-            \begin{matrix}
-                DF(n) = \{m | (\exists P \in Pred(m)) & (n \in D_{om}(P) & e & n \not\gg m)\}
-            \end{matrix}
-        \end{equation}
+        \item Tabela de Fronteira de Dominância:
+              \begin{equation}
+                  \begin{matrix}
+                      DF(n) = \{m | (\exists P \in Pred(m)) & (n \in D_{om}(P) & e & n \not\gg m)\}
+                  \end{matrix}
+              \end{equation}
     \end{itemize}
 
 \end{frame}
