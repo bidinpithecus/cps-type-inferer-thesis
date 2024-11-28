@@ -1,28 +1,82 @@
 \begin{frame}{Sistema Damas-Milner}
-    % \begin{itemize}
-    %     \item A correspondência entre sistema de efeitos e mônadas foi observada por \citeonline{wadler2003marriage}.
+    Sistema de tipos robusto para linguagens funcionais~\cite{MILNER1978, DAMAS1982}
+    \begin{itemize}
+        \item Inferência automática de tipos polimórficos
+        \item Cálculo-$\lambda$ com polomorfismo paramétrico introduzido via \texttt{let}
+        \item[]
+    \end{itemize}
 
-    %     \item Seguindo essa abordagem, \citeonline{vazou2016monads} formalizam a tradução do sistema de efeitos de Koka para mônadas.
+    Sua sintaxe define as expressões e os tipos usados no processo de inferência:
 
-    %     \item[] 
-
-    %     \item [] \begin{figure}
-    %         \centering
-    %         \includegraphics[width=.9\textwidth]{Figuras/conv.png}
-    %         \caption{Exemplo de Tradução da Função \textit{xor} \cite{vazou2016monads}}
-    %         \label{fig:conv1}
-    %     \end{figure}
-    % \end{itemize}
+    \begin{equation*}\label{eq:dm-syntax}
+        \begin{array}{ll}
+            \text{Variáveis}         & x                                                                                 \\
+            \text{Expressões}        & e ::= x \mid e \ e' \mid \lambda x.e \mid \texttt{let} \ x = e \ \texttt{in} \ e' \\
+            \\
+            \text{Variáveis de tipo} & \alpha                                                                            \\
+            \text{Tipos primitivos}  & \iota                                                                             \\
+            \text{Tipos}             & \tau ::= \alpha \mid \iota \mid \tau \rightarrow \tau
+            \alpha                                                                                                       \\
+            \text{Schemes}           & \sigma ::= \forall \alpha. \sigma \mid \tau                                       \\
+        \end{array}
+    \end{equation*}
 \end{frame}
 
-% \begin{frame}{Conversão de Sistema de Efeitos para Mônadas}
-%     \begin{itemize}
-%         \item Para lidar com polimorfismo, cada função que utiliza efeitos polimórficos recebe um dicionário como argumento extra. O dicionário vai encontrar e retornar as funções de \textit{unit} e \textit{bind} correspondentes ao efeito gerado.
+\begin{frame}{Sistema Damas-Milner}
+    \begin{itemize}
+        \item Generalização
+              \begin{itemize}
+                  \item[$\blacktriangleright$] Tipo mais geral
+              \end{itemize}
+        \item Instanciação
+              \begin{itemize}
+                  \item[$\blacktriangleright$] Tipo concreto
+              \end{itemize}
+        \item $\texttt{let id} \ = \lambda x.x \ \texttt{in} \ (\texttt{id} \ \texttt{1}, \ \texttt{id} \ \texttt{`a'})$
+              \begin{itemize}
+                  \item[$\blacktriangleright$] $\forall \alpha. \alpha \rightarrow \alpha$
+              \end{itemize}
+        \item[]
+        \item Substituição de tipos
+              \begin{itemize}
+                  \item[$\blacktriangleright$] Mapeamento finito de variáveis de tipos para tipos, denotado por $S$
+                  \item[$\blacktriangleright$] $[ \alpha_1 \mapsto \tau_1, \alpha_2 \mapsto \tau_2, \ldots, \alpha_n \mapsto \tau_n ]$
+                  \item[$\blacktriangleright$] $S$ associa cada variável de tipo $\alpha_i$ a um tipo $\tau_i$ específico
+                  \item[$\blacktriangleright$] $S\tau$ substitui todas as ocorrências livres de $\alpha_i$ em $\tau$ por $\tau_i$
+              \end{itemize}
+    \end{itemize}
+\end{frame}
 
-%         \item Nos casos onde existe a necessidade de traduzir uma função com mais de um efeito (\textit{row-effects}), uma mônada é criada para representar a junção destes efeitos. Morfismos de \textit{lifting} de cada mônada de efeito para a mônada de junção também são criados.
-%     \end{itemize}
-% \end{frame}
-    % easter egg = Brian
-% \begin{frame}{Exemplo de Conversão de Row-Effect}
-%     Digamos que existam dois efeitos \textit{IO} e \textit{amb} já definidos e uma função $f$ cujo efeito gerado é $\langle IO, amb \rangle$. Neste caso, uma mônada \textit{IOamb} e as funções \textit{IO2IOamb} e \textit{amb2IOamb} são criadas, de modo que \textit{IO2IOamb} recebe uma mônada \textit{IO} e retorna uma mônada \textit{IOamb} e \textit{amb2IOamb} recebe uma mônada \textit{amb} e retorna uma mônada \textit{IOamb}.
-% \end{frame}
+\begin{frame}{Sistema Damas-Milner}
+    \begin{figure}[ht!]
+        \caption{Regras de Inferência do sistema Damas-Milner}
+        \centering
+        \[
+            \begin{array}{c}
+                \text{TAUT:} \quad \displaystyle\frac{x : \sigma \in \Gamma}{\Gamma \vdash x : \sigma}                                               \\[25pt]
+
+                \text{ABS:} \quad \displaystyle\frac{\Gamma, x : \tau \vdash e : \tau'}{\Gamma \vdash (\lambda x. e) : \tau \to \tau'}               \\[25pt]
+
+                \text{APP:} \quad \displaystyle\frac{\Gamma \vdash e : \tau' \to \tau \quad \Gamma \vdash e' : \tau'}{\Gamma \vdash (e \ e') : \tau} \\[25pt]
+            \end{array}
+        \]
+        \small{Fonte: o autor. Adaptado de~\cite{DAMAS1982}}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Sistema Damas-Milner}
+    \begin{figure}[ht!]
+        \caption{Regras de Inferência do sistema Damas-Milner (continuação)}
+        \centering
+        \[
+            \begin{array}{c}
+                \text{LET:} \quad \displaystyle\frac{\Gamma \vdash e : \sigma \quad \Gamma, x : \sigma \vdash e' : \tau}{\Gamma \vdash (\texttt{let } x = e \ \texttt{in} \ e') : \tau} \\[25pt]
+
+                \text{INST:} \quad \displaystyle\frac{\Gamma \vdash e : \sigma}{\Gamma \vdash e : \sigma'} \quad (\sigma > \sigma')                                                     \\[25pt]
+
+                \text{GEN:} \quad \displaystyle\frac{\Gamma \vdash e : \sigma}{\Gamma \vdash e : \forall \alpha \sigma} \quad (\alpha \text{ não livre em } \Gamma)
+            \end{array}
+        \]
+        \small{Fonte: o autor. Adaptado de~\cite{DAMAS1982}}
+    \end{figure}
+\end{frame}
