@@ -1,14 +1,102 @@
 \begin{frame}{Teoria de Tipos}
-    % \begin{itemize}
-    %     \item \citeonline{appel1998ssa} demonstra a equivalência entre código funcional e uma representação na forma SSA
+    Russel em 1908 apresentou uma contradição na Teoria de Conjuntos\\
+    \textbf{Paradoxo de Russell:}
+    \begin{equation}
+        \text{ Seja } R = \{ x \mid x \notin x \}, \text{ então } R \in R \iff R \notin R\nonumber
+    \end{equation}
 
-    %     \item []
+    Outra maneira de descrever este paradoxo é com o paradoxo do barbeiro:\\
+    \qquad{}\qquad{}Imagine uma cidade com apenas um barbeiro, onde ele somente barbeia aqueles que não se barbeiam
+\end{frame}
 
-    %     \item [] \begin{figure}
-    %         \centering
-    %         \includegraphics[width=.8\textwidth]{Figuras/ssa-funcional.png}
-    %         \caption{Representações Equivalentes \cite{appel1998ssa}}
-    %         \label{fig:conv1}
-    %     \end{figure}
-    % \end{itemize}
+\begin{frame}{Teoria de Tipos}
+    \textbf{Aplicações:}\\
+    \begin{itemize}
+        \item Formalização de sistemas de tipos para linguagens de programação
+        \item Construção de assistentes de provas
+              \begin{itemize}
+                  \item[$\blacktriangleright$] Coq utiliza Cálculo de Construções~\cite{COQUAND1998}
+              \end{itemize}
+        \item Linguagens como Idris e Agda, também permitem a verificação de provas formais
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Teoria de Tipos}
+    Em linguagens de programação~\cite{PIERCE2002}:
+    \begin{itemize}
+        \item Tipos simples
+              \begin{itemize}
+                  \item[$\blacktriangleright$] Tipo fixo a um termo
+                  \item[$\blacktriangleright$] $Int \rightarrow Int$
+              \end{itemize}
+        \item[]
+        \item Tipos polimórficos
+              \begin{itemize}
+                  \item[$\blacktriangleright$] Generalidade
+                  \item[$\blacktriangleright$] $a \rightarrow a$
+              \end{itemize}
+        \item[]
+        \item Tipos dependentes
+              \begin{itemize}
+                  \item[$\blacktriangleright$] Tipos dependem de valores
+                  \item[$\blacktriangleright$] $Vector(n) \rightarrow Vector(m) \rightarrow Vector(n+m)$
+              \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Teoria de Tipos}
+    \citeonline{PIERCE2002} define duas variedades de polimorfismo:
+    \begin{itemize}
+        \item Paramétrico
+              \begin{itemize}
+                  \item[$\blacktriangleright$] Única definição de função genérica
+                  \item[$\blacktriangleright$] Função identidade
+              \end{itemize}
+        \item[]
+        \item Com sobrecarga
+              \begin{itemize}
+                  \item[$\blacktriangleright$] Múltiplas implementações de uma função
+                  \item[$\blacktriangleright$] Sobrecarga de operadores
+              \end{itemize}
+    \end{itemize}
+\end{frame}
+
+% Se sobrar tempo adicionar exemplos dos polimorfismos ^
+
+\begin{frame}{Teoria de Tipos}
+    \textbf{Cálculo Lambda Simplesmente Tipado:}\\
+    \begin{itemize}
+        \item Variante do Cálculo-$\lambda$ que incorpora tipos~\cite{CHURCH1940}
+        \item Cada função recebe e retorna valores de tipos específicos
+    \end{itemize}
+    Sua sintaxe básica inclui:
+
+    \begin{itemize}
+        \item Variáveis: $x, y, z, \ldots$
+        \item Tipos: $T ::= \textbf{Int} \mid \textbf{Bool} \mid T \to T$
+        \item Termos: $\lambda x:T. \tau \mid \tau_1 \tau_2 \mid x$
+        \item[]
+    \end{itemize}
+
+    Regra de tipagem para abstrações lambda:
+    \[
+        \frac{\Gamma, x:T_1 \vdash \tau:T_2}{\Gamma \vdash (\lambda x:T_1. \tau): T_1 \to T_2}\nonumber
+    \]
+    % Se o termo $\tau$ possui o tipo $T_2$ sob o contexto onde $x$ possui o tipo $T_1$, então a abstração $\lambda x:T_1. \tau$ tem o tipo $T_1 \to T_2$\\
+\end{frame}
+
+% Se sobrar tempo adicionar explicação dos termos ^
+
+\begin{frame}{Teoria de Tipos}
+    \textbf{Correspondência Curry-Howard:}
+    \begin{itemize}
+        \item Correspondência entre proposições intuicionistas lógicas e tipos
+        \item Correspondência entre provas e programas
+        \item O tipo $A \to B$ neste cálculo pode ser visto como a implicação lógica: se $A$, então $B$
+        \item Método sistemático para raciocinar sobre sistemas de inferência de tipos
+              \begin{itemize}
+                  \item[$\blacktriangleright$] Linguagem ML por~\citeonline{DAMAS1982}, com o algoritmo W
+                  \item[$\blacktriangleright$] Linguagem Haskell com a extensão do sistema Damas-Milner
+              \end{itemize}
+    \end{itemize}
 \end{frame}
