@@ -17,6 +17,7 @@
 \newcommand{\False}{\ensuremath{\texttt{Falso}}}
 \newcommand{\Whitespace}{\ensuremath{\texttt{ }}}
 \newcommand{\TODO}[1]{\textcolor{red}{\textbf{TODO:} #1}}
+
 \section{Sistema Damas-Milner}\label{sec:damas-milner}
 
 O sistema Damas-Milner, introduzido por Robin Milner e posteriormente formalizado em maior detalhe por Luis Damas~\cite{MILNER1978, DAMAS1982}, é um dos sistemas de tipos mais influentes para linguagens funcionais.
@@ -162,26 +163,26 @@ Ele verifica se os tipos são idênticos, se uma variável de tipo pode ser subs
   \caption{Algoritmo de unificação no formato de função.}
   \centering
   \begin{align*}
-    & \texttt{\Unify($\alpha, \Whitespace \alpha$) = }   \\
-    & \qquad{}\texttt{\Return \Whitespace $[\Whitespace]$}            \\
-    & \texttt{\Unify($\alpha, \Whitespace \tau)$ = }              \\
-    & \qquad{}\texttt{\If \Whitespace \Occurs($\alpha, \Whitespace \tau$), \Then}     \\
-    & \qquad{}\qquad{}\texttt{\Fail}     \\
-    & \qquad{}\texttt{\Else}     \\
-    & \qquad{}\qquad{}\texttt{\Return \Whitespace [$\alpha\mapsto\tau$]}     \\
-    & \texttt{\Unify($\tau, \Whitespace \alpha$) = }                \\
-    & \qquad{}\texttt{\If \Whitespace \Occurs($\alpha, \Whitespace \tau$), \Then}     \\
-    & \qquad{}\qquad{}\texttt{\Fail}     \\
-    & \qquad{}\texttt{\Else}     \\
-    & \qquad{}\qquad{}\texttt{\Return \Whitespace [$\alpha\mapsto\tau$]}     \\
-    & \texttt{\Unify($\tau_1 \to \tau_2, \Whitespace \tau_1' \to \tau_2'$) = }                \\
-    & \qquad{}\texttt{\Return \Whitespace $\Unify(\tau_1, \Whitespace \tau_1') \circ \Unify(\tau_2, \Whitespace \tau_2')$}
+     & \texttt{\Unify($\alpha, \Whitespace \alpha$) = }                                                                     \\
+     & \qquad{}\texttt{\Return \Whitespace $[\Whitespace]$}                                                                 \\
+     & \texttt{\Unify($\alpha, \Whitespace \tau)$ = }                                                                       \\
+     & \qquad{}\texttt{\If \Whitespace \Occurs($\alpha, \Whitespace \tau$), \Then}                                          \\
+     & \qquad{}\qquad{}\texttt{\Fail}                                                                                       \\
+     & \qquad{}\texttt{\Else}                                                                                               \\
+     & \qquad{}\qquad{}\texttt{\Return \Whitespace [$\alpha\mapsto\tau$]}                                                   \\
+     & \texttt{\Unify($\tau, \Whitespace \alpha$) = }                                                                       \\
+     & \qquad{}\texttt{\If \Whitespace \Occurs($\alpha, \Whitespace \tau$), \Then}                                          \\
+     & \qquad{}\qquad{}\texttt{\Fail}                                                                                       \\
+     & \qquad{}\texttt{\Else}                                                                                               \\
+     & \qquad{}\qquad{}\texttt{\Return \Whitespace [$\alpha\mapsto\tau$]}                                                   \\
+     & \texttt{\Unify($\tau_1 \to \tau_2, \Whitespace \tau_1' \to \tau_2'$) = }                                             \\
+     & \qquad{}\texttt{\Return \Whitespace $\Unify(\tau_1, \Whitespace \tau_1') \circ \Unify(\tau_2, \Whitespace \tau_2')$}
   \end{align*}
   \small{Fonte: autor. Adaptado de~\cite{RIBEIRO2016}}\label{algo:unify}
 \end{figure}
 
 O algoritmo \Unify\ utiliza a função de verificação de
-ocorrência \Occurs\ apresentado na Figura~\ref{algo:occurs}, utilizada 
+ocorrência \Occurs\ apresentado na Figura~\ref{algo:occurs}, utilizada
 para evitar substituições que introduzam ciclos, como $[\alpha\mapsto\alpha\to\alpha]$,
 que resultaria em inconsistência no sistema de tipos~\cite{RIBEIRO2016}.
 Esta função verifica recursivamente se uma variável de tipo $\alpha$ aparece em um tipo $\tau$.
@@ -190,12 +191,12 @@ Esta função verifica recursivamente se uma variável de tipo $\alpha$ aparece 
   \caption{Algoritmo de verificação de ocorrência no formato de função.}
   \centering
   \begin{align*}
-    & \texttt{\Occurs($\alpha, \Whitespace \tau_1 \to \tau_2$) = }   \\
-    & \qquad{}\texttt{\Return \Whitespace $\Occurs(\alpha, \Whitespace \tau_1) \lor \Occurs(\alpha, \Whitespace\tau_2)$}            \\
-    & \texttt{\Occurs($\alpha, \Whitespace \alpha$) = }              \\
-    & \qquad{}\texttt{\Return \Whitespace \True}     \\
-    & \texttt{\Occurs($\alpha, \Whitespace \tau$) = }                \\
-    & \qquad{}\texttt{\Return \Whitespace \False}
+     & \texttt{\Occurs($\alpha, \Whitespace \tau_1 \to \tau_2$) = }                                                       \\
+     & \qquad{}\texttt{\Return \Whitespace $\Occurs(\alpha, \Whitespace \tau_1) \lor \Occurs(\alpha, \Whitespace\tau_2)$} \\
+     & \texttt{\Occurs($\alpha, \Whitespace \alpha$) = }                                                                  \\
+     & \qquad{}\texttt{\Return \Whitespace \True}                                                                         \\
+     & \texttt{\Occurs($\alpha, \Whitespace \tau$) = }                                                                    \\
+     & \qquad{}\texttt{\Return \Whitespace \False}
   \end{align*}
   \small{Fonte: autor. Adaptado de~\cite{RIBEIRO2016}}\label{algo:occurs}
 \end{figure}
