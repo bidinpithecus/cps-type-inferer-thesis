@@ -20,13 +20,13 @@
 
 \section{Sistema Damas-Milner}\label{sec:damas-milner}
 
-O sistema Damas-Milner, introduzido por Robin Milner e posteriormente formalizado em maior detalhe por Luis Damas~\cite{MILNER1978, DAMAS1982}, é um dos sistemas de tipos mais influentes para linguagens funcionais.
+O sistema Damas-Milner, introduzido por Robin Milner e posteriormente formalizado em maior detalhe por Luis Damas~\cite{milner1978polymorphism,damas1982principal}, é um dos sistemas de tipos mais influentes para linguagens funcionais.
 Este sistema tem como principal característica a inferência automática de tipos polimórficos, sem a necessidade de anotações explícitas por parte do programador, como ocorre em linguagens como ML, Haskell e OCaml.
 A sua base é o cálculo lambda com polimorfismo paramétrico, introduzido via \texttt{let}, permitindo que funções possam operar sobre múltiplos tipos de maneira genérica.
 
-A introdução do sistema Damas-Milner trouxe duas contribuições principais: a definição de um sistema de tipos robusto e a criação de um algoritmo, o Algoritmo W, capaz de inferir o tipo mais geral (também chamado de \textit{principal type-scheme}), conforme demonstrado em~\citeonline{DAMAS1984}.
+A introdução do sistema Damas-Milner trouxe duas contribuições principais: a definição de um sistema de tipos robusto e a criação de um algoritmo, o Algoritmo W, capaz de inferir o tipo mais geral (também chamado de \textit{principal type-scheme}), conforme demonstrado em~\citeonline{damas1984assignment}.
 O algoritmo é consistente e completo em relação ao sistema de tipos: a consistência assegura que todo tipo inferido é correto, ou seja, pode ser derivado pelo sistema de tipos; já a completude garante que qualquer tipo derivado pelo sistema será uma instância do tipo inferido pelo algoritmo.
-Como resultado, a linguagem ML e suas derivadas se tornaram notórias por fornecer ao programador a capacidade de escrever programas sem erros de tipo detectáveis durante a compilação, permitindo um desenvolvimento mais seguro e robusto~\cite{MILNER1978, DAMAS1984}.
+Como resultado, a linguagem ML e suas derivadas se tornaram notórias por fornecer ao programador a capacidade de escrever programas sem erros de tipo detectáveis durante a compilação, permitindo um desenvolvimento mais seguro e robusto~\cite{milner1978polymorphism, damas1984assignment}.
 
 A sintaxe do sistema Damas-Milner define as expressões e os tipos usados no processo de inferência.
 Abaixo, segue a gramática das expressões e tipos:
@@ -82,14 +82,14 @@ A definição formal da aplicação de substituições é dada por:
       S(\forall \alpha.\sigma)     & \equiv & S' \sigma, \quad \text{onde } S' = S \setminus [\alpha \mapsto \_].
     \end{array}
   \]\label{fig:substituicao-tipos}
-  \small{Fonte:~\cite{CASTRO2019}}
+  \small{Fonte:~\cite{castro2019certificacao}}
 \end{figure}
 
 onde o símbolo de subtração ($\setminus$) indica que a substituição $S'$ é a substituição $S$ restrita ao conjunto de mapeamentos que não envolvem a variável $\alpha$.
 
 A instanciação de tipos é um processo em que um esquema de tipo $\sigma = \forall \alpha_1 \ldots \alpha_m. \tau$ é transformado em um tipo específico substituindo suas variáveis quantificadas por tipos concretos.
 Se $S$ é uma substituição, então $S\sigma$ é o esquema de tipo obtido substituindo cada ocorrência livre de $\alpha_i$ em $\sigma$ por $\tau_i$, renomeando as variáveis genéricas de $\sigma$, se necessário.
-O tipo resultante $S\sigma$ é chamado de uma instância de $\sigma$~\cite{DAMAS1982}.
+O tipo resultante $S\sigma$ é chamado de uma instância de $\sigma$~\cite{damas1982principal}.
 Esse processo é essencial para adaptar esquemas de tipos polimórficos a situações específicas em um programa, mantendo a flexibilidade e segurança do sistema de tipos.
 
 Um esquema de tipo também pode ter uma instância genérica $\sigma' = \forall \beta_1 \ldots \beta_n. \tau'$, se existir uma substituição $[ \tau_i / \alpha_i ]$ tal que $\tau' = [\tau_i / \alpha_i]\tau$, e as variáveis $\beta_j$ não aparecem livres em $\sigma$.
@@ -126,7 +126,7 @@ Essas regras são representadas por meio de julgamentos de tipos da forma $\Gamm
     \text{GEN:} \quad \frac{\Gamma \vdash e : \sigma}{\Gamma \vdash e : \forall \alpha \sigma} \quad \scriptstyle (\alpha \text{ não livre em } \Gamma)
   \]
 
-  \small{Fonte: o autor. Adaptado de~\cite{DAMAS1982}}\label{eq:type-inference}
+  \small{Fonte: o autor. Adaptado de~\cite{damas1982principal}}\label{eq:type-inference}
 \end{figure}
 
 As regras de inferência são interpretadas de baixo para cima.
@@ -147,7 +147,7 @@ A seguir, será discutido em detalhes o funcionamento do Algoritmo W.
 
 \subsection{Algoritmo W}\label{subsec:w-algo}
 
-O Algoritmo W, introduzido em~\citeonline{DAMAS1982}, é um algoritmo eficiente\footnote{Embora seja eficiente na grande maioria dos casos, há situações em que o Algoritmo W apresenta desempenho exponencial, como ocorre em expressões com recursão polimórfica, conforme discutido em~\cite{CRISTIANO2004}.} para inferência de tipos em linguagens de programação funcional.
+O Algoritmo W, introduzido em~\citeonline{damas1982principal}, é um algoritmo eficiente\footnote{Embora seja eficiente na grande maioria dos casos, há situações em que o Algoritmo W apresenta desempenho exponencial, como ocorre em expressões com recursão polimórfica, conforme discutido em~\cite{vasconcellos2004inferencia}.} para inferência de tipos em linguagens de programação funcional.
 Ele se baseia no processo de unificação para solucionar equações de tipos geradas durante a análise de expressões, atribuindo os tipos mais gerais possíveis, ou seja, os tipos mais polimórficos que ainda garantem a consistência do sistema.
 
 A unificação é o processo de encontrar uma substituição de variáveis de tipo que torna dois tipos dados equivalentes.
@@ -178,13 +178,13 @@ Ele verifica se os tipos são idênticos, se uma variável de tipo pode ser subs
      & \texttt{\Unify($\tau_1 \to \tau_2, \Whitespace \tau_1' \to \tau_2'$) = }                                             \\
      & \qquad{}\texttt{\Return \Whitespace $\Unify(\tau_1, \Whitespace \tau_1') \circ \Unify(\tau_2, \Whitespace \tau_2')$}
   \end{align*}
-  \small{Fonte: autor. Adaptado de~\cite{RIBEIRO2016}}\label{algo:unify}
+  \small{Fonte: autor. Adaptado de~\cite{ribeiro2016mechanized}}\label{algo:unify}
 \end{figure}
 
 O algoritmo \Unify\ utiliza a função de verificação de
 ocorrência \Occurs\ apresentado na Figura~\ref{algo:occurs}, utilizada
 para evitar substituições que introduzam ciclos, como $[\alpha\mapsto\alpha\to\alpha]$,
-que resultaria em inconsistência no sistema de tipos~\cite{RIBEIRO2016}.
+que resultaria em inconsistência no sistema de tipos~\cite{ribeiro2016mechanized}.
 Esta função verifica recursivamente se uma variável de tipo $\alpha$ aparece em um tipo $\tau$.
 
 \begin{figure}[ht!]
@@ -198,7 +198,7 @@ Esta função verifica recursivamente se uma variável de tipo $\alpha$ aparece 
      & \texttt{\Occurs($\alpha, \Whitespace \tau$) = }                                                                    \\
      & \qquad{}\texttt{\Return \Whitespace \False}
   \end{align*}
-  \small{Fonte: autor. Adaptado de~\cite{RIBEIRO2016}}\label{algo:occurs}
+  \small{Fonte: autor. Adaptado de~\cite{ribeiro2016mechanized}}\label{algo:occurs}
 \end{figure}
 
 O Algoritmo W, descrito na Figura~\ref{algo:w} é um método utilizado para inferência de tipos em expressões de linguagens funcionais.
@@ -229,7 +229,7 @@ O algoritmo combina a unificação com regras de inferência de tipos para deduz
      & \qquad{}\texttt{($\tau'$, $S_2$) $\leftarrow$ $W$($S_1$ $\Gamma$[$x$ $:$ gen($S_1\Gamma$, $\tau$)], $e'$)} \\
      & \qquad{}\texttt{retorna ($\tau'$, $S_2$ $\circ$ $S_1$)}                                                    \\
   \end{align*}
-  \small{Fonte:~\cite{CASTRO2019}}\label{algo:w}
+  \small{Fonte:~\cite{castro2019certificacao}}\label{algo:w}
 \end{figure}
 
 O funcionamento deste pode ser analisado para os diferentes tipos de expressões a seguir.
