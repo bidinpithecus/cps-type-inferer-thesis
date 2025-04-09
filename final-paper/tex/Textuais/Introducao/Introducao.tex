@@ -19,7 +19,8 @@ Isso elimina a dependência da pilha de chamadas, simplificando o modelo de exec
 Além disso, a adoção do CPS como representação intermediária vai além da tradução de linguagens de alto nível para código de máquina.
 O CPS facilita a aplicação de otimizações avançadas, como a eliminação de chamadas de cauda e a fusão de funções, além de permitir uma correspondência mais direta com o código gerado em linguagens de montagem~\cite{flanagan1993essence}.
 
-Por outro lado, um ponto importante a ser considerado é que muitas implementações do CPS optam por uma representação não tipada~\cite{morrisett1999systemF}. Embora essa abordagem simplifique a implementação inicial, ele pode comprometer a segurança e a correção do código.
+Por outro lado, um ponto importante a ser considerado é que, apesar de existirem sistemas de tipos para CPS, como o proposto por~\citeonline{thielecke1997categorical} - um sistema de tipos monomórfico, muitas implementações deste, optam por uma representação não tipada~\cite{morrisett1999systemF}.
+Embora essa abordagem simplifique a implementação inicial, ele pode comprometer a segurança e a correção do código.
 Um sistema de tipos robusto pode não apenas garantir a correção de certas transformações e otimizações, mas também identificar uma classe inteira de erros antes da execução, proporcionando assim maior confiabilidade ao processo de compilação.
 
 Diante dessas considerações, este trabalho propõe apresentar e desenvolver uma formalização de um sistema de tipos para CPS, bem como um algoritmo de inferência de tipos para o mesmo.
@@ -29,12 +30,12 @@ Dessa forma, a escolha de Haskell não apenas facilita o desenvolvimento de uma 
 
 \section{Objetivo Geral}\label{sec:objetivo-geral}
 
-Este trabalho tem como objetivo formalizar um sistema de tipos para CPS e investigar a possibilidade de propor um algoritmo de inferência, de maneira similar ao algoritmo W, para esta representação intermediária.
+Este trabalho tem como objetivo formalizar uma extensão para o sistema de tipos para CPS proposto por~\citeonline{thielecke1997categorical}, adicionando polimorfismo e investigar a possibilidade de propor um algoritmo de inferência, para esta representação intermediária.
 
 \section{Objetivos específicos}\label{sec:objetivos-especificos}
 
 \begin{itemize}
-  \item Formalizar um sistema de tipos para CPS;\@
+  \item Formalizar um sistema de tipos para CPS com suporte a polimorfismo;\@
   \item Propor e implementar em Haskell um algoritmo de inferência de tipos para CPS;\@
   \item Validar a implementação do algoritmo por meio do teste de inferência para expressões. Se possível, realizar a geração de programas para verificação de que o algoritmo infere corretamente os tipos a eles.
 \end{itemize}
@@ -46,13 +47,13 @@ A primeira etapa envolve uma extensa revisão de literatura sobre continuações
 A segunda etapa trata da formulação do algoritmo de inferência para o cálculo de continuações, junto com sua implementação.
 
 No escopo deste trabalho, a validação do algoritmo se dará por meio de testes de implementação.
-Em etapa posterior, será necessário a prova de consistência e completude do algoritmo em relação ao sistema de tipos proposto.
+Em etapa posterior, serão necessárias as provas de consistência e de completude do algoritmo em relação ao sistema de tipos proposto.
 
 \section{Estrutura do Trabalho}\label{sec:estrutura-trabalho}
 
 Esta primeira etapa consistiu principalmente na fundamentação teórica e revisão bibliográfica no estudo de CPS e sistemas de tipos.
 Em razão disto, o Capítulo~\ref{ch:fundamentacao-teorica} contém os conceitos e definições necessários para entendimento do tema.
-Este é separado em seções, tal que a Seção~\ref{sec:IR}, aborda representação intermediária, com um aprofundamento em CPS na Subseção~\ref{subsec:cps}.
+Este é separado em seções, tal que a Seção~\ref{sec:IR} aborda representação intermediária, com um aprofundamento em CPS na Subseção~\ref{subsec:cps}.
 Teoria de tipos é então apresentada na Seção~\ref{sec:type-theory}.
 Um aprofundamento no sistema Damas-Hindley-Milner na Seção~\ref{sec:damas-milner}, discutindo de maneira mais específica o algoritmo W na Subseção~\ref{subsec:w-algo}.
 O Capítulo~\ref{ch:proposta} descreve a proposta e apresenta o cronograma do trabalho.
