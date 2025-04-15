@@ -5,7 +5,7 @@ Durante esse processo, é fundamental que o mínimo de informações seja perdid
 Uma abordagem comum utilizada para manter a integridade semântica e possibilitar otimizações, são as representações intermediárias (IR, do inglês \textit{intermediate representation})~\cite{cooper2014construindo}.
 
 Compiladores modernos, amplamente utilizados na indústria, empregam mais de uma IR para tirar proveito das vantagens de cada uma, uma vez que essas representações são projetadas para diferentes objetivos, como otimizações específicas.
-As IRs podem ser classificadas de acordo com o nível de abstração e são comumente aplicados em sequência.
+As IRs podem ser classificadas de acordo com o nível de abstração e são comumente aplicadas em sequência.
 Representações com um nível maior de abstração são usadas próximas ao código-fonte, enquanto aquelas de nível mais baixo estão mais próximas do código de máquina~\cite{aho2008compilers}, como ilustrado na Figura~\ref{fig:abstraction-level-irs}.
 
 \begin{figure}
@@ -15,9 +15,9 @@ Representações com um nível maior de abstração são usadas próximas ao có
   \small{Fonte:~\cite{aho2008compilers}}
 \end{figure}
 
-Uma das principais informações que deve ser preservada em uma IR, é o fluxo de controle, isto é, a ordem em que as instruções do programa são executadas, como chamadas de função, \textit{loops} e condições.
+Uma das principais informações que deve ser preservada em uma IR é o fluxo de controle, isto é, a ordem em que as instruções do programa são executadas, como chamadas de função, \textit{loops} e condições.
 Para garantir que o compilador mantenha a semântica correta do programa, o fluxo de controle deve ser repassado de alguma maneira durante o processo de tradução~\cite{cooper2014construindo}.
-Uma das maneiras disso ser feito explicitamente, é com o uso de continuações, que são funções que descrevem o próximo passo de uma computação em um ponto particular da execução do programa.
+Uma das maneiras disso ser feito explicitamente é com o uso de continuações, que são funções que descrevem o próximo passo de uma computação em um ponto particular da execução do programa.
 
 \subsection{CPS}\label{subsec:cps}
 
@@ -64,18 +64,24 @@ Para avaliar expressões no cálculo lambda, usamos três tipos de redução: $\
 \begin{description}
   \item[$\alpha$-redução:] Renomeação de variáveis ligadas.
         \begin{align}
-          \lambda x . e[x] & \rightarrow \lambda y . e[y]\label{eq:alpha-reduction}
+          \lambda x . e & \rightarrow \lambda y . e[y/x]\label{eq:alpha-reduction}
         \end{align}
+        Note que, $e[y/x]$ indica a substituição de todas as ocorrências ligadas de $x$ por $y$ em $e$, desde que $y$ não ocorra livre em $e$. Por exemplo, $\lambda x. x + z \rightarrow_\alpha \lambda y. y + z$.
 
   \item[$\beta$-redução:] Aplicação de função.
         \begin{align}
           (\lambda x . e_1) e_2 & \rightarrow e_1 [e_2 / x]\label{eq:beta-reduction}
         \end{align}
+        Aqui, $e_1[e_2/x]$ denota a substituição de todas as ocorrências ligadas de $x$ em $e_1$ por $e_2$. Para evitar conflitos com variáveis livres em $e_2$, aplica-se $\alpha$-redução prévia. Por exemplo, em $(\lambda x. \lambda y. x + y)(y + 1)$, renomeia-se $y$ para $z$ na abstração interna:
+        \[
+          (\lambda x. \lambda z. x + z)(y + 1) \rightarrow_\beta \lambda z. (y + 1) + z.
+        \]
 
   \item[$\eta$-redução:] Expansão de função.
         \begin{align}
-          \lambda x . (e \, x) & \rightarrow e \quad \text{se } x \text{ não ocorre livre em } e\label{eq:eta-reduction}
+          \lambda x . (e \, x) & \rightarrow_\eta e \quad \text{se } x \notin \text{FV}(e)\label{eq:eta-reduction}
         \end{align}
+        Tal que $\text{FV}(e)$ denota as variáveis livres em $e$. Por exemplo, $\lambda x. (\lambda y. y + 1) \, x \rightarrow_\eta \lambda y. y + 1$.
 \end{description}
 
 As reduções são responsáveis pela semântica operacional do cálculo lambda.
@@ -143,7 +149,7 @@ A primeira continuação guarda o resultado da operação $n - 1$, enquanto a se
 
 Outro fato importante a ser observado nos códigos apresentados é a tipagem das funções.
 Na função de soma, definida na Figura~\ref{code:add}, a função tem tipo $Int \rightarrow Int \rightarrow Int$, ou seja, ela recebe dois inteiros e retorna um inteiro.
-Já a função de soma em CPS, definido na Figura~\ref{code:add_cps}, possui o tipo $Int \rightarrow Int \rightarrow (Int \rightarrow r) \rightarrow r$. Isso significa que a função recebe dois inteiros e uma continuação, que é uma função de tipo $Int \rightarrow r$, onde \texttt{r} pode ser qualquer tipo, e retorna esse mesmo tipo \texttt{r}.
+Já a função de soma em CPS, definida na Figura~\ref{code:add_cps}, possui o tipo $Int \rightarrow Int \rightarrow (Int \rightarrow r) \rightarrow r$. Isso significa que a função recebe dois inteiros e uma continuação, que é uma função de tipo $Int \rightarrow r$, onde \texttt{r} pode ser qualquer tipo, e retorna esse mesmo tipo \texttt{r}.
 
 Essa transformação de tipo reflete a diferença fundamental entre o estilo direto e o CPS\@: em vez de retornar um valor diretamente, a função em CPS recebe uma continuação que especifica o próximo passo da computação.
 O mesmo padrão pode ser observado nas funções para o cálculo do fatorial nas Figuras~\ref{code:factorial} e~\ref{code:factorial_cps}.
