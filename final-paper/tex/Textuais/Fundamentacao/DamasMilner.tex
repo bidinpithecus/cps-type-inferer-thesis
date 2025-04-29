@@ -21,7 +21,7 @@
 \section{Sistema Damas-Milner}\label{sec:damas-milner}
 
 O sistema Damas-Milner, introduzido por Robin Milner e posteriormente formalizado em maior detalhe por Luis Damas~\cite{milner1978polymorphism,damas1982principal}, é um dos sistemas de tipos mais influentes para linguagens funcionais.
-Este sistema tem como principal característica a inferência automática de tipos polimórficos, sem a necessidade de anotações explícitas por parte do programador, como ocorre em linguagens como ML, Haskell e OCaml.
+Este sistema tem como principal característica a inferência automática de tipos polimórficos, sem a necessidade de anotações explícitas por parte do programador, ocorrendo em linguagens como ML, Haskell e OCaml.
 A sua base é o cálculo lambda com polimorfismo paramétrico, introduzido via \texttt{let}, permitindo que funções possam operar sobre múltiplos tipos de maneira genérica.
 
 A introdução do sistema Damas-Milner trouxe duas contribuições principais: a definição de um sistema de tipos robusto e a criação de um algoritmo, o Algoritmo W, capaz de inferir o tipo mais geral (também chamado de \textit{principal type-scheme}), conforme demonstrado em~\citeonline{damas1984assignment}.
@@ -31,7 +31,7 @@ Como resultado, a linguagem ML e suas derivadas se tornaram notórias por fornec
 A sintaxe do sistema Damas-Milner define as expressões e os tipos usados no processo de inferência.
 Abaixo, segue a gramática das expressões e tipos:
 
-\begin{equation}\label{eq:dm-syntax}
+\begin{equation}\label{eq:dm-syntax}\nonumber
   \begin{array}{ll}
     \text{Variáveis}         & x                                                                                 \\
     \text{Expressões}        & e ::= x \mid e \ e' \mid \lambda x.e \mid \texttt{let} \ x = e \ \texttt{in} \ e' \\
@@ -58,7 +58,6 @@ A inferência de tipos envolve dois processos principais: generalização e inst
 A generalização ocorre quando o sistema identifica que uma expressão pode ser tipada com um tipo mais geral, permitindo que seja reutilizada de maneira polimórfica.
 Já a instanciação ocorre quando um tipo polimórfico é aplicado a um tipo concreto, especializando-o para um uso específico.
 Esse mecanismo garante a flexibilidade do sistema, ao mesmo tempo que mantém a segurança garantida pela inferência de tipos.
-
 Por exemplo, considere a expressão $\texttt{let id} \ = \lambda x.x \ \texttt{in} \ (\texttt{id} \ \texttt{1}, \ \texttt{id} \ \texttt{`a'})$.
 O sistema generaliza o tipo de $\texttt{id}$ para $\forall \alpha. \alpha \rightarrow \alpha$, e instancia este tipo tanto para inteiros quanto para caracteres nas duas aplicações subsequentes.
 
@@ -72,7 +71,6 @@ Esse conceito de substituição é fundamental para o processo de instanciação
 A definição formal da aplicação de substituições é dada por:
 
 \begin{figure}[ht!]
-  \caption{Regras de aplicação da substituição de tipos}
   \centering
   \[
     \begin{array}{rcl}
@@ -81,11 +79,11 @@ A definição formal da aplicação de substituições é dada por:
       S(\tau_1 \rightarrow \tau_2) & \equiv & S\tau_1 \rightarrow S\tau_2,                                                     \\[8pt]
       S(\forall \alpha.\sigma)     & \equiv & S' \sigma, \quad \text{onde } S' = S \setminus [\alpha \mapsto \_].
     \end{array}
-  \]\label{fig:substituicao-tipos}
-  \small{Fonte:~\cite{castro2019certificacao}}
+    \]\label{fig:substituicao-tipos}
+    \caption{Regras de aplicação da substituição de tipos}
+    \small{Fonte:~\cite{castro2019certificacao}}
 \end{figure}
-
-onde o símbolo de subtração ($\setminus$) indica que a substituição $S'$ é a substituição $S$ restrita ao conjunto de mapeamentos que não envolvem a variável $\alpha$.
+\noindent onde o símbolo de subtração de conjuntos ($\setminus$) indica que a substituição $S'$ é a substituição $S$ restrita ao conjunto de mapeamentos que não envolvem a variável $\alpha$.
 
 A instanciação de tipos é um processo em que um esquema de tipo $\sigma = \forall \alpha_1 \ldots \alpha_m. \tau$ é transformado em um tipo específico substituindo suas variáveis quantificadas por tipos concretos.
 Se $S$ é uma substituição, então $S\sigma$ é o esquema de tipo obtido substituindo cada ocorrência livre de $\alpha_i$ em $\sigma$ por $\tau_i$, renomeando as variáveis genéricas de $\sigma$, se necessário.
@@ -100,7 +98,6 @@ O sistema de tipos de Damas e Milner é definido por um conjunto de regras de in
 Essas regras são representadas por meio de julgamentos de tipos da forma $\Gamma \vdash e: \sigma$, onde $\Gamma$ é o contexto, um conjunto de suposições com pares de variáveis e seus tipos: $(e, \sigma)$, $e$ é a expressão sendo tipada, e $\sigma$ ou $\tau$ são o tipo inferido no contexto.
 
 \begin{figure}[ht!]
-  \caption{Regras de Inferência do sistema Damas-Milner}
   \centering
   \[
     \text{TAUT:} \quad \frac{x : \sigma \in \Gamma}{\Gamma \vdash x : \sigma}
@@ -126,6 +123,7 @@ Essas regras são representadas por meio de julgamentos de tipos da forma $\Gamm
     \text{GEN:} \quad \frac{\Gamma \vdash e : \sigma}{\Gamma \vdash e : \forall \alpha \sigma} \quad \scriptstyle (\alpha \text{ não livre em } \Gamma)
   \]
 
+  \caption{Regras de Inferência do sistema Damas-Milner}
   \small{Fonte: o autor. Adaptado de~\cite{damas1982principal}}\label{eq:type-inference}
 \end{figure}
 
@@ -155,8 +153,7 @@ Formalmente, dados dois tipos $\tau_1$ e $\tau_2$, a unificação procura uma su
 Se tal substituição existe, os tipos são considerados unificáveis e $S$ é chamada de solução unificadora.
 Caso contrário, os tipos são incompatíveis.
 
-O algoritmo de unificação, \Unify, descrito na Figura~\ref{algo:unify}, gera a unificação mais geral possível.
-Ele opera recursivamente sobre a estrutura dos tipos.
+O algoritmo de unificação, \Unify, descrito na Figura~\ref{algo:unify}, gera a unificação mais geral possível, operando recursivamente sobre a estrutura dos tipos.
 Ele verifica se os tipos são idênticos, se uma variável de tipo pode ser substituída por outro tipo, ou, no caso de tipos compostos, se suas partes podem ser unificadas independentemente.
 
 \begin{figure}[ht!]
@@ -181,10 +178,7 @@ Ele verifica se os tipos são idênticos, se uma variável de tipo pode ser subs
   \small{Fonte: autor. Adaptado de~\cite{ribeiro2016mechanized}}\label{algo:unify}
 \end{figure}
 
-O algoritmo \Unify\ utiliza a função de verificação de
-ocorrência \Occurs\ apresentado na Figura~\ref{algo:occurs}, utilizada
-para evitar substituições que introduzam ciclos, como $[\alpha\mapsto\alpha\to\alpha]$,
-que resultaria em inconsistência no sistema de tipos~\cite{ribeiro2016mechanized}.
+O algoritmo \Unify\ faz uso da função de verificação de ocorrência \Occurs\ apresentado na Figura~\ref{algo:occurs}, que por sua vez, tem como propósito evitar substituições que introduzam ciclos, como $[\alpha\mapsto\alpha\to\alpha]$, que resultaria em inconsistência no sistema de tipos~\cite{ribeiro2016mechanized}.
 Esta função verifica recursivamente se uma variável de tipo $\alpha$ aparece em um tipo $\tau$.
 
 \begin{figure}[ht!]
@@ -232,7 +226,7 @@ O algoritmo combina a unificação com regras de inferência de tipos para deduz
   \small{Fonte:~\cite{castro2019certificacao}}\label{algo:w}
 \end{figure}
 
-O funcionamento deste pode ser analisado para os diferentes tipos de expressões a seguir.
+O funcionamento pode ser analisado para os diferentes tipos de expressões a seguir.
 Para uma variável $x$, o algoritmo verifica se existe uma atribuição de tipo para $x$ no contexto $\Gamma$.
 Se $x$ estiver associada a um tipo polimórfico da forma $\forall \alpha_1 \ldots \alpha_n . \tau$, realiza-se a substituição das variáveis ligadas $\alpha_i$ por novos tipos frescos, que não aparecem em outros lugares do contexto, e retorna-se o tipo resultante, juntamente com a substituição identidade.
 Caso $x$ não esteja no contexto, a inferência falha.
