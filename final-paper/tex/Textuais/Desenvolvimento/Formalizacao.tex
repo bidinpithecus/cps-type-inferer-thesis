@@ -1,1 +1,74 @@
 \section{Formalização}\label{sec:formalizacao}
+
+Em razão da natureza mais prática deste trabalho, a notação utilizada para representar o cálculo de continuações será a mesma utilizada por~\cite{appel1997shrinking}, a sintaxe do `let'.
+O sistema de tipos formalizado aqui foi fortemente inspirado no sistema de Damas e Milner, explicado na Seção~\ref{sec:damas-milner}, tendo as regras adaptadas de modo que elas se enquadrem no sistema polimórfico baseado em continuações.
+
+A sintaxe do sistema conta com expressões e tipos usados no processo de tipagem e de inferência de tipos.
+Abaixo\footnote{Vale destacar que, todas as formalizações presentes aqui nesta seção, foram feitas pelo coorientador em reunião juntamente do autor, onde esse explicava suas motivações para atingir o resultado. Ainda, no momento da produção deste trabalho, não foi feita uma publicação contendo estas formalizações para que haja refências o apontando.}, segue a gramática das expressões e tipos presentes:
+
+\phantom{Newline}
+
+\begin{tabular}{lccl}\label{cps-type-system}
+  Átomos & $a$ & $\Coloneqq$ & $x \enspace|\enspace n$ \\
+  Comandos & $b$ & $\Coloneqq$ & $x(\vv{a}) \enspace|\enspace \mathtt{let}\ x(\vv{x}) = b\ \mathtt{in}\ b$ \\
+  \\
+  Monotipo & $\tau$ & $\Coloneqq$ & $\alpha \enspace|\enspace \mathtt{int} \enspace|\enspace \neg\vv{\tau}$ \\
+  Politipo & $\sigma$ & $\Coloneqq$ & $\forall\vv{\alpha}.\tau$ \\
+  Contexto & $\Gamma$ & $\Coloneqq$ & $\cdot \enspace|\enspace \Gamma, x{:}\ \sigma$ \\
+\end{tabular}
+
+\phantom{Newline}
+
+Na sintaxe apresentada, $a$ representa os átomos. Isto é, variáveis ($x$) literais inteiros ($n$) formam os elementos primitivos do sistema.
+Os comandos $b$, por sua vez, são as expressões, explicadas com mais detalhes na Seção~\ref{subsec:cps}, sendo a primeira o \textit{jump}, e a segunda o \textit{binding}.
+Três elementos distintos compõem os tipos presentes neste sistema.
+Os monotipos ($\tau$), são os tipos que não possuem quantificação, ou seja, são monomórficos, podendo ser variáveis de tipo ($\alpha$), tipos numéricos inteiros ($\mathtt{int}$), ou ainda, tipos negados ($\neg\vv{\tau}$).
+Já os politipos ($\sigma$), são responsáveis por garantir a quantificação universal de variáveis de tipos, ou seja, os tipos polimórficos.
+Por fim, o contexto ($\Gamma$) contém o mapeamento de cada variável para um politipo ($\sigma$).
+
+As regras sintáticas de tipagem do sistema de tipos, contando com elementos também presentes no Sistema Damas-Milner são ilustrados a seguir:
+
+\phantom{Newline}
+
+\fbox{$\Gamma\vdash a : \tau$}
+
+\begin{prooftree}
+    \RightLabel{$\mathtt{[Var]}$}
+    \AxiomC{$x : \sigma \in \Gamma$}
+    \AxiomC{$\sigma \sqsubseteq \tau$}
+    \BinaryInfC{$\Gamma\vdash x : \tau$}
+\end{prooftree}
+\begin{prooftree}
+    \RightLabel{$\mathtt{[Int]}$}
+    \AxiomC{}
+    \UnaryInfC{$\Gamma\vdash n : \mathtt{int}$}
+\end{prooftree}
+
+Aqui, para os átomos do sistema, a partir da regra $\mathtt{[Var]}$ é esperado que as variáveis, como vêm do contexto, tenham um tipo polimórfico $\sigma$.
+Existe ainda um tipo monomórfico $\tau$ que, a partir da relação de ordem $\sqsubseteq$, será originado a partir do $\sigma$.
+Assim, em um contexto $\Gamma$, uma variável $x$ terá tipo $\tau$ caso esta tenha um tipo $sigma$ neste contexto.
+
+A regra $\mathtt{[Int]}$, é bem direta ao ponto.
+Em um contexto $Gamma$, um literal inteiro terá um tipo $\mathtt{int}$.
+
+\phantom{Newline}
+
+\fbox{$\Gamma\vdash b$}
+
+\begin{prooftree}
+    \RightLabel{$\mathtt{[Jump]}$}
+    \AxiomC{$\Gamma\vdash k : \neg\vv\tau$}
+    \AxiomC{$\Gamma\vdash \vv{a} : \vv{\tau}$}
+    \BinaryInfC{$\Gamma\vdash k(\vv{a})$}
+\end{prooftree}
+
+\begin{prooftree}
+    \RightLabel{$\mathtt{[Bind]}$}
+    \AxiomC{$\Gamma, \vv{x}{:}\ \vv{\tau}\vdash c$}
+    \AxiomC{$\Gamma,\ k{:}\ \overline{\Gamma}(\neg\vv\tau)\vdash b$}
+    \BinaryInfC{$\mathtt{let}\ k(\vv{x}) = c\ \mathtt{in}\ b$}
+\end{prooftree}
+
+% Explicar aqui regra do jump e regra do bind.
+
+\phantom{Newline}
