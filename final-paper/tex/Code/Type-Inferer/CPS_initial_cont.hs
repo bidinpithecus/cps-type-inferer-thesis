@@ -1,0 +1,2 @@
+initialCont :: Id
+initialCont = "k"

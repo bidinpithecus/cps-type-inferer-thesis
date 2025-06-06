@@ -1,0 +1,21 @@
+\subsection{Fluxo Principal}\label{subsec:cps-main-program}
+O fluxo completo de execução do programa principal contempla todas as funções apresentadas nesta seção, com a adição de funções auxiliares.
+Essas são aplicadas em sequência, de modo a realizar uma série de ações.
+
+Inicialmente, é passado o caminho de um arquivo contendo um programa em cálculo-$\lambda$ com adição do `let'.
+O conteúdo então é processado pelo \textit{parser} e representado pelos tipos de dados algébricos para o cálculo lambda.
+Uma vez que o programa já está sendo representado pelos ADTs, e ainda tem seu tipo inferido, é possível iniciar o processamento descrito pelas funções apresentadas.
+A primeira delas é a tradução para CPS tanto em \textit{call-by-name} quanto em \textit{call-by-value}, as exibindo logo em seguida.
+Com as traduções da expressão feitas o código Haskell já pode ser gerado, salvando assim no diretório \texttt{output} com mesmo nome do arquivo de entrada.
+Como passo posterior, tem-se a tradução dos tipos para ambas as estratégias de avaliação.
+Os passos finais envolvem a inferência de ambas as traduções, juntamente da verificação de subtipagem, onde esta informará se o tipo traduzido é um subtipo do inferido.
+
+\lstset{extendedchars=false, escapeinside=''}
+\lstinputlisting[style=output, label=cps:main-execution, caption={Execução do programa principal}]{Code/Type-Inferer/CPS_main_execution.cps}
+Ao executar o programa com o comando \texttt{cabal run}, passando também o arquivo de entrada \texttt{input/church-zero.in}, é processado e exibida todas as informações que foi citada anteriormente, inclusive a geração do código Haskell em \texttt{output/church-zero.hs}.
+É possível perceber que na saída do programa, é mostrado o tipo traduzido (na sequência da mensagem ``\textit{Expected Continuation Type:}'') e o tipo inferido (que sucede a mensagem ``\textit{Inferred Continuation Type:}'').
+Logo em seguida, o questionamento ``\textit{Do the types match?}'' é o trecho da saída que compete à subtipagem, retornando ``\textit{Yes}'' caso esse seja um subtipo deste, o que indica uma inferência compatível com a tradução ou ``\textit{No}'' caso a verificação falhe, indicando uma inferência incorreta.
+
+\lstset{extendedchars=false, escapeinside=''}
+\lstinputlisting[style=output, label=cps:execution-generated, caption={Execução do programa gerado}]{Code/Type-Inferer/CPS_execution_generated.cps}
+Ainda, a compilação e execução do código Haskell gerado pode ser conferida no Listing~\ref{cps:execution-generated} acima, ilustrando exatamente o comportamento detalhado anteriormente.

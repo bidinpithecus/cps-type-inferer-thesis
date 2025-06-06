@@ -10,14 +10,14 @@ Abaixo, segue a gramática das expressões e tipos presentes\footnote{Vale desta
 
 \phantom{Newline}
 
-\begin{tabular}{lccl}\label{cps-type-system}
+\begin{tabular}{lccl}
   Átomos & $a$ & $\Coloneqq$ & $x \enspace|\enspace n$ \\
   Comandos & $b$ & $\Coloneqq$ & $x(\vv{a}) \enspace|\enspace \mathtt{let}\ x(\vv{x}) = b\ \mathtt{in}\ b$ \\
   \\
   Monotipo & $\tau$ & $\Coloneqq$ & $\alpha \enspace|\enspace \mathtt{int} \enspace|\enspace \neg\vv{\tau}$ \\
   Politipo & $\sigma$ & $\Coloneqq$ & $\forall\vv{\alpha}.\tau$ \\
   Contexto & $\Gamma$ & $\Coloneqq$ & $\cdot \enspace|\enspace \Gamma,\ x{:}\ \sigma$ \\
-\end{tabular}
+\end{tabular}\label{cps-type-system}
 
 \phantom{Newline}
 

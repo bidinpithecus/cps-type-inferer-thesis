@@ -1,4 +1,16 @@
 \subsection{Geração de Código}\label{subsec:cps-code-gen}
-% Explicar geração de código
-% \lstinputlisting[style=haskell, label=cps:typing, caption={Definição dos tipos de dados}]{Code/Type-Inferer/CPSTyping.hs}
-% Explicar o que faz
+Uma vez que nenhuma prova a respeito da validade do sistema de tipos proposto foi desenvolvida, uma quantidade considerável de testes foi feita.
+Ainda, afim de propor testes mais confiáveis para o código, especificamente para a tradução, com base no teorema de Plotkin que diz que \TODO{EXPLICAR TEOREMA QUE COMPUTA EM CPS}.
+Para aqueles programas que computem um número, seguindo a tipagem dos numerais de Church, este é, $\forall\alpha(\alpha \to \alpha) \to \alpha \to \alpha$, foi implementado um mecanismo de geração de código que gera código em CPS e faz essa computação a partir deste.
+
+\lstinputlisting[style=haskell, label=cps:code-gen, caption={Geração de código para computação de numerais de Church}]{Code/Type-Inferer/CPS_code_gen.hs}
+O código Haskell gerado pode ser dividido em três partes principais, o cabeçalho informativo, que explicita o programa em cálculo-$\lambda$ de entrada para ter gerado aquele programa em CPS.
+Em seguida, há a definição das funções $\mathtt{cbn}$ e $\mathtt{cbv}$, ou seja, os programas correspondente em CPS para as duas traduções daquela entrada.
+Por fim, a última parte é responsável pela computação do numeral de Church, as funções definidas irão calcular o número representado pelas expressões em CPS e retornar por fim uma tupla contendo o resultado do calculado pelo \textit{call-by-name} e \textit{call-by-value} respectivamente.
+
+Ao se traduzir o numeral de Church 0 representado em cálculo-$\lambda$ por $\lambda f.\lambda x.\ x$, para CBN e CBV, tem-se:
+\lstinputlisting[style=haskell, label=cps:church-zero-cps-cbn, caption={Tradução do numeral de Church ``0'' em CBN}]{Code/Type-Inferer/CPS/church-zero-cbn.cps}
+\lstinputlisting[style=haskell, label=cps:church-zero-cps-cbv, caption={Tradução do numeral de Church ``0'' em CBV}]{Code/Type-Inferer/CPS/church-zero-cbv.cps}
+Desta forma, o código gerado ao se traduzir esta função, é ilustrado a seguir:
+\lstinputlisting[style=haskell, label=cps:church-zero-output, caption={Código gerado ao traduzir o numeral de Church ``0''}]{Code/Type-Inferer/CPS/church-zero.hs}
+Ao executar o código e chamar a função $\mathtt{main}$ deste programa, o resultado obtido é justamente a computação do numeral para as duas traduções, ou seja, $\mathtt{(0,\ 0)}$.

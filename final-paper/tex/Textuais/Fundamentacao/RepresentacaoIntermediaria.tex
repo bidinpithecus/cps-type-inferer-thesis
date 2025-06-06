@@ -45,7 +45,7 @@ Ele é capaz de representar qualquer computação utilizando abstrações e apli
 Sua sintaxe consiste em três regras simples que definem os elementos principais do sistema: variável, abstração e aplicação, conforme apresentados a seguir:
 
 \begin{equation}\label{eq:lambda-calculus}
-  e ::= x \mid \lambda x. e \mid e e
+  e \Coloneqq x \mid \lambda x. e \mid e e
 \end{equation}
 
 A partir dessa sintaxe, um termo $e$ pode possuir apenas uma das três formas.
@@ -121,7 +121,7 @@ Enquanto o CPS é utilizado como uma IR em compiladores, o cálculo de continua�
 Os termos do cálculo de continuações, chamados de comandos, são descritos pelas seguintes regras:
 
 \begin{equation}
-  M ::= x\langle \vec{x} \rangle \mid M\{x\langle \vec{x} \rangle = M\}
+  M \Coloneqq x\langle \vec{x} \rangle \mid M\{x\langle \vec{x} \rangle = M\}
 \end{equation}
 
 Aqui, $x\langle \vec{x} \rangle$ representa um salto (do inglês \textit{jump}), isto é, uma chamada para a continuação $x$ com os parâmetros $\vec{x}$, sendo essencialmente uma chamada direta para a continuação, enquanto $M\{x\langle \vec{x} \rangle = M\}$ representa um vínculo (do inglês \textit{binding}), onde o corpo $M$ está vinculado à continuação $x$ com os parâmetros $\vec{x}$, isto é, uma chamada intermediária que, ao ser chamada, executará o próximo passo da computação.

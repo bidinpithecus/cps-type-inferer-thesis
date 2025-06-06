@@ -34,13 +34,13 @@ Abaixo, segue a gramática das expressões e tipos:
 \begin{equation}\label{eq:dm-syntax}\nonumber
   \begin{array}{ll}
     \text{Variáveis}         & x                                                                                 \\
-    \text{Expressões}        & e ::= x \mid e \ e' \mid \lambda x.e \mid \texttt{let} \ x = e \ \texttt{in} \ e' \\
+    \text{Expressões}        & e \Coloneqq x \mid e \ e' \mid \lambda x.e \mid \texttt{let} \ x = e \ \texttt{in} \ e' \\
     \\
     \text{Variáveis de tipo} & \alpha                                                                            \\
     \text{Tipos primitivos}  & \iota                                                                             \\
-    \text{Tipos}             & \tau ::= \alpha \mid \iota \mid \tau \rightarrow \tau
+    \text{Tipos}             & \tau \Coloneqq \alpha \mid \iota \mid \tau \rightarrow \tau
     \alpha                                                                                                       \\
-    \text{Schemes}           & \sigma ::= \forall \alpha. \sigma \mid \tau                                       \\
+    \text{Schemes}           & \sigma \Coloneqq \forall \alpha. \sigma \mid \tau                                       \\
   \end{array}
 \end{equation}
 

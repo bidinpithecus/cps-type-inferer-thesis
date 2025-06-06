@@ -2,7 +2,7 @@
 
 Para representar os comandos, bem como os tipos do sistema, foram utilizados tipos de dados algébricos (ADTs, do inglês \textit{algebraic data types}), disponíveis no Listing~\ref{code:cps-adt}.
 
-\lstinputlisting[style=haskell, label=code:cps-adt, caption={Definição dos tipos de dados}]{Code/Type-Inferer/CPSTyping.hs}
+\lstinputlisting[style=haskell, label=code:cps-adt, caption={Definição dos tipos de dados}]{Code/Type-Inferer/CPS_typing.hs}
 Para os comandos, dois construtores podem ser observados, o \texttt{Jump} e o \texttt{Bind}, sendo responsáveis por construir respectivamente os comandos de \textit{Jump}, onde há um salto \texttt{Id} com \texttt{[Id]} parâmetros.
 Sendo assim, o salto $k(x)$ seria representado por este ADT: $\mathtt{Jump\ k\ [x]}$.
 E o comando \textit{Bind}, onde há outro \texttt{Command} definido recursivamente, a função \texttt{Id} com argumentos \texttt{[Id]} e por fim outro \texttt{Command} também definido recursivamente.
