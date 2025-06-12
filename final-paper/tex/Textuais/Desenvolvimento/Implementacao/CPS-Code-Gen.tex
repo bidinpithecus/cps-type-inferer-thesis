@@ -1,10 +1,17 @@
 \subsection{Geração de Código}\label{subsec:cps-code-gen}
-Uma vez que nenhuma prova a respeito da validade do sistema de tipos proposto foi desenvolvida, uma quantidade considerável de testes foi feita.
-Ainda, afim de propor testes mais confiáveis para o código, especificamente para a tradução, com base no teorema de Plotkin que diz que \TODO{EXPLICAR TEOREMA QUE COMPUTA EM CPS}.
-Para aqueles programas que computem um número, seguindo a tipagem dos numerais de Church, este é, $\forall\alpha(\alpha \to \alpha) \to \alpha \to \alpha$, foi implementado um mecanismo de geração de código que gera código em CPS e faz essa computação a partir deste.
+Uma vez que nenhuma prova a respeito da validade do sistema de tipos proposto foi desenvolvida, testes consideráveis foram realizados para garantir que estava correto para um número grande de entradas.
+Para isolar os testes, ou seja, testar as funções de maneira independente para garantir que, se a inferência apresentasse algum erro, fosse certo que o erro estaria na inferência e não por conta de uma tradução incorreta, dois teoremas apresentados em~\cite{plotkin1975call} foram utilizados.
+
+Este teorema, chamado de Teorema da Simulação, válido tanto para \textit{call-by-name} quanto para \textit{call-by-value}, afirma que, dado um programa $M$ em cálculo-$\lambda$, o resultado de sua computação há de ser o mesmo que o resultado da computação da tradução para CPS com a função identidade.
+Ou seja, simulando a execução do programa feito em cálculo-$\lambda$ no cálculo de continuações.
+Ou então, formalmente, $Eval(M) = Eval([M] (\lambda x.\ x))$, onde a função $Eval$ é responsável por avaliar uma expressão, efetivamente a computando.
+
+Foi implementado a simulação do cálculo-$\lambda$ no cálculo de continuações a partir das funções de tradução para programas que computam os numerais de Church.
+Isto é feito computando a função $\lambda$ onde, é incrementado o valor que representa o número de aplicações feitas (essencialmente como um numeral de Church é computado), passando como continuação a função identidade.
+Fazendo com que assim, a função lambda que representa um numeral de church é simulada pelo cálculo de continuações.
 
 \lstinputlisting[style=haskell, label=cps:code-gen, caption={Geração de código para computação de numerais de Church}]{Code/Type-Inferer/CPS_code_gen.hs}
-O código Haskell gerado pode ser dividido em três partes principais, o cabeçalho informativo, que explicita o programa em cálculo-$\lambda$ de entrada para ter gerado aquele programa em CPS.
+O código Haskell gerado pode ser dividido em três partes principais, o cabeçalho de caráter informativo, que explicita o programa em cálculo-$\lambda$ de entrada para ter gerado aquele programa em CPS.
 Em seguida, há a definição das funções $\mathtt{cbn}$ e $\mathtt{cbv}$, ou seja, os programas correspondente em CPS para as duas traduções daquela entrada.
 Por fim, a última parte é responsável pela computação do numeral de Church, as funções definidas irão calcular o número representado pelas expressões em CPS e retornar por fim uma tupla contendo o resultado do calculado pelo \textit{call-by-name} e \textit{call-by-value} respectivamente.
 

@@ -28,7 +28,10 @@ Esta implementação da tradução foi feita seguindo a definição apresentada 
 \phantom{Newline}
 
 \noindent Note que, duas traduções distintas com base na estratégia de avaliação são apresentadas para o cálculo-$\lambda$, a chamada por nome (CBN, do inglês \textit{call-by-name}) representada por ${\llbracket - \rrbracket}_N$, que diz respeito ao cálculo-${\lambda}_n$ e a chamada por valor (CBV, do inglês \textit{call-by-value}) representada por ${\llbracket - \rrbracket}_V$, que diz respeito ao cálculo-${\lambda}_v$.
-Ainda, as variáveis $f$, $v$ e $k$ que não aparecem no termo de origem são consideradas frescas, onde as duas primeiras são imediatamente ligadas, enquanto que $k$ é esperada que seja livre e por ser vinculada às traduções dos subtermos, um único $k$ é necessário~\cite{torrens2024operational}.
+As variáveis $f$, $v$ e $k$ que não aparecem no termo de origem são consideradas frescas, onde as duas primeiras são imediatamente ligadas, enquanto que $k$ é esperada que seja livre e por ser vinculada às traduções dos subtermos, um único $k$ é necessário~\cite{torrens2024operational}.
+
+Ainda, a tradução do `let' não está presente no artigo. 
+Esta foi derivada, provada e providenciada pelos orientadores para que o trabalho em questão pudesse ser mais completo e mais próximo de algo utilizável em um caso real de implementação de compilador com uso desta IR.
 
 \lstinputlisting[style=haskell, label=cps:cbn-initial-cont, caption={Continuação inicial}]{Code/Type-Inferer/CPS_initial_cont.hs}
 Para todas as computações, um contexto inicial precisa conter a continuação inicial.
@@ -58,7 +61,6 @@ Neste caso, há somente uma abstração lambda com uma variável.
 A seguir, é exibido novamente o numeral de Church dois, porém para o CBV, onde mais diferenças podem ser observadas.
 O motivo disto é os elementos da função, que diferentemente da identidade, conta com mais construtores para representá-la:
 \lstinputlisting[style=haskell, label=cps:church-two-cps-cbv, caption={Tradução do numeral de Church ``2'' em CBV}]{Code/Type-Inferer/CPS/church-two-cbv.cps}
-\TODO{Citar aqui o problema do let no cbv.}
 
 Além da tradução de expressões, uma vez que o ambiente sendo trabalhado é tipado, é necessário que a tradução preserve a tipagem dos programas,~\citeonline{torrens2024operational} apresentam a tradução tipada do CPS, onde, para o tipo funcional $\mathtt{A \Coloneqq A \to A\ |\ X}$, as seguintes traduções são definidas.
 Note que aqui também as funções são definidas diferentemente de acordo com estratégia de avaliação adotada:

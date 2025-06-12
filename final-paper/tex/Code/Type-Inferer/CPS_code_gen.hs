@@ -8,7 +8,7 @@
 
 cbn k = -- {{ CBN Translated Expression }}
 
-cbv k = -- {{ CBV Translated Expressiond }}
+cbv k = -- {{ CBV Translated Expression }}
 
 -----------------------------------------------------------
 

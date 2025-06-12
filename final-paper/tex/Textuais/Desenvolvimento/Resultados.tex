@@ -4,6 +4,7 @@ Diversos testes foram executados onde, a partir da função de tradução de tip
 Para tal, estão disponibilizados no repositório do projeto, arquivos de entrada com funções contendo diferentes características.
 Afim de observar o comportamento do programa abrangendo uma maior gama de opções, algumas das funções testadas são extensas e contam com combinações de regras do cálculo-$\lambda$ simplesmente tipado.
 
+\subsection{Combinador S}
 Um desses, é o combinador S ($\lambda x.\lambda y.\lambda z.\ x\ z\ (y\ z)$), que apesar de não ser um termo extenso, este utiliza de uma combinação dos três construtores (variáveis, abstrações e aplicações) para que o termo seja optido.
 O tipo deste, é representado por $(\alpha \to \beta \to \gamma) \to (\alpha \to \beta) \to \alpha \to \gamma$ e suas traduções, tanto em CBN quanto em CBV são grandes demais para serem aqui colocadas, mas estas podem ser encontradas no código fonte do repositório mencionado.
 A tradução do seu tipo entretanto, para CBN, é apresentada a seguir.
@@ -26,3 +27,38 @@ Neste caso, a substituição $S$ que satisfaz a condição de subtipagem é tal 
 \begin{lstlisting}[style=output,caption={Inferência do tipo do combinador S traduzido em CBV}]
   '$\forall\alpha,\beta,\gamma.\ \neg\neg(\neg(\alpha,\ \neg\neg(\beta,\ \gamma)),\ \neg\neg(\neg(\alpha,\ \neg\beta),\ \neg\neg(\alpha,\ \gamma)))$'
 \end{lstlisting}
+
+\subsection{Soma}
+O próximo exemplo apresentado é a função de soma de 2 e 3 feita com os numerais de Church ($(\lambda n.\ \lambda m.\ \lambda f.\ \lambda x.\ n\ f\ (m\ f\ x))\ (\lambda a.\ \lambda b.\ a\ (a\ b))\ (\lambda c.\ \lambda d.\ c\ (c\ (c\ d)))$).
+Seu tipo, é representado por $((\alpha \to \alpha) \to \alpha \to \alpha)$.
+A tradução do tipo para CBN é dado por:
+\lstset{extendedchars=false, escapeinside=''}
+\begin{lstlisting}[style=output,caption={Tradução em CBN do tipo da função de soma}]
+  '$\forall\alpha.\ \neg\neg(\neg\neg\neg(\neg\neg\alpha,\ \neg\alpha),\ \neg\neg(\neg\neg\alpha,\ \neg\alpha))$'
+\end{lstlisting}
+E o inferido também para CBN, onde a substituição $S$ que satisfaz a subtipagem é tal que $S = \{\ \alpha \mapsto \neg\alpha\ \}$:
+\lstset{extendedchars=false, escapeinside=''}
+\begin{lstlisting}[style=output,caption={Inferência do tipo da função de soma traduzido em CBN}]
+  '$\forall\alpha.\ \neg\neg(\neg\neg\neg(\neg\alpha,\ \alpha),\ \neg\neg(\neg\alpha,\ \alpha))$'
+\end{lstlisting}
+Enquanto que para CBV, o tipo traduzido é:
+\lstset{extendedchars=false, escapeinside=''}
+\begin{lstlisting}[style=output,caption={Tradução em CBV do tipo da função de soma}]
+  '$\forall\alpha.\ \neg\neg(\neg(\alpha,\ \neg\alpha),\ \neg\neg(\alpha,\ \neg\alpha))$'
+\end{lstlisting}
+O inferido portanto, sendo que a substituição $S$ que satisfaz a subtipagem neste caso é a substituição trivial $S = \{\ \alpha \mapsto \alpha\ \}$:
+\lstset{extendedchars=false, escapeinside=''}
+\begin{lstlisting}[style=output,caption={Inferência do tipo da função de soma traduzido em CBV}]
+  '$\forall\alpha.\ \neg\neg(\neg(\alpha,\ \neg\alpha),\ \neg\neg(\alpha,\ \neg\alpha))$'
+\end{lstlisting}
+
+\TODO{Apresentar exemplo que computa (soma)}
+\subsection{Multiplicação}
+\TODO{Apresentar exemplo que computa (multiplicação)}
+\subsection{Exponenciação}
+\TODO{Apresentar exemplo que computa (exponenciação)}
+
+\subsection{Identidade com `Let'}
+\TODO{Apresentar exemplo que dá ruim}
+\TODO{Explicar o problema do let no cbv.}
+\TODO{Discutir brevemente a solução.}
