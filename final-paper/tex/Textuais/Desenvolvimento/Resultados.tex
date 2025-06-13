@@ -51,14 +51,66 @@ O inferido portanto, sendo que a substituição $S$ que satisfaz a subtipagem ne
 \begin{lstlisting}[style=output,caption={Inferência do tipo da função de soma traduzido em CBV}]
   '$\forall\alpha.\ \neg\neg(\neg(\alpha,\ \neg\alpha),\ \neg\neg(\alpha,\ \neg\alpha))$'
 \end{lstlisting}
+Por fim, ao executar o código gerado, obtém-se o resultado $(5,\ 5)$, indicando uma correta tradução da expressão de entrada.
 
-\TODO{Apresentar exemplo que computa (soma)}
 \subsection{Multiplicação}
-\TODO{Apresentar exemplo que computa (multiplicação)}
-\subsection{Exponenciação}
-\TODO{Apresentar exemplo que computa (exponenciação)}
+Outro exemplo é o da multiplicação de 6 e 8, que o termo lambda por si é grande demais para ser exibido aqui.
+A função lambda responsável pela multiplicação de dois argumentos, ($\lambda m.\ \lambda n.\ \lambda f.\ \lambda x.\ m\ (n\ f)\ x$) é extenso o bastante para seu sucesso dar uma noção boa de que o código está correto e que o algoritmo é capaz de inferir o tipo corretamente das mais diversas expressões.
+Assim como o exemplo da função de soma, o tipo desta expressão é: $((\alpha \to \alpha) \to \alpha \to \alpha)$.
+A tradução do tipo para CBN é dado por:
+\lstset{extendedchars=false, escapeinside=''}
+\begin{lstlisting}[style=output,caption={Tradução em CBN do tipo da função de soma}]
+  '$\forall\alpha.\ \neg\neg(\neg\neg\neg(\neg\neg\alpha,\ \neg\alpha),\ \neg\neg(\neg\neg\alpha,\ \neg\alpha))$'
+\end{lstlisting}
+E o inferido também para CBN, onde a substituição $S$ que satisfaz a subtipagem é tal que $S = \{\ \alpha \mapsto \neg\alpha\ \}$:
+\lstset{extendedchars=false, escapeinside=''}
+\begin{lstlisting}[style=output,caption={Inferência do tipo da função de soma traduzido em CBN}]
+  '$\forall\alpha.\ \neg\neg(\neg\neg\neg(\neg\alpha,\ \alpha),\ \neg\neg(\neg\alpha,\ \alpha))$'
+\end{lstlisting}
+Enquanto que para CBV, o tipo traduzido é:
+\lstset{extendedchars=false, escapeinside=''}
+\begin{lstlisting}[style=output,caption={Tradução em CBV do tipo da função de soma}]
+  '$\forall\alpha.\ \neg\neg(\neg(\alpha,\ \neg\alpha),\ \neg\neg(\alpha,\ \neg\alpha))$'
+\end{lstlisting}
+O inferido portanto, sendo que a substituição $S$ que satisfaz a subtipagem neste caso é a substituição trivial $S = \{\ \alpha \mapsto \alpha\ \}$:
+\lstset{extendedchars=false, escapeinside=''}
+\begin{lstlisting}[style=output,caption={Inferência do tipo da função de soma traduzido em CBV}]
+  '$\forall\alpha.\ \neg\neg(\neg(\alpha,\ \neg\alpha),\ \neg\neg(\alpha,\ \neg\alpha))$'
+\end{lstlisting}
+É possível perceber que, os resultados obtidos são os mesmos da função de soma.
+Isso se deve ao fato de que, por mais que a expressão seja diferente, as duas possuem o mesmo tipo.
+Então, o algoritmo infere que as duas possuem o mesmo tipo.
 
+Por fim, ao executar o código gerado, obtém-se o resultado $(48,\ 48)$, indicando uma correta tradução da expressão de entrada.
 \subsection{Identidade com `Let'}
-\TODO{Apresentar exemplo que dá ruim}
-\TODO{Explicar o problema do let no cbv.}
-\TODO{Discutir brevemente a solução.}
+Ainda que a tradução do `let' tenha sido apresentada e discutida, esta possui um problema relacionada à tipagem quanto ao \textit{call-by-value}.
+Para melhor compreender esta questão, é necessário entender fundamentalmente a diferença entre as estratégias de avaliação por nome e por valor.
+A por nome, também conhecida como avaliação preguiçosa, só irá avaliar a expressão no momento em que esta for necessária, desta forma, caso tenha alguma expressão que não seja utilizada, esta nem mesmo será computada.
+Enquanto que a por valor não, ao invés disso, ela avalia toda expressão no início, sem se importar se será utilizada ou não, desta forma, ainda que uma expressão não seja utilizada, ela será calculada.
+
+A função em questão é a identidade utilizando o `let', ($\mathtt{let\ id\ =\ \lambda x.\ x\ in\ id\ id}$).
+Seu tipo é $\alpha \to \alpha$, enquanto que sua tradução em CBN é dada por:
+\lstinputlisting[style=haskell, label=cps:let-id-cps-cbn, caption={Tradução em CBN da identidade com `let'}]{Code/Type-Inferer/CPS/let-id-cbn.cps}
+A tradução do tipo para CBN é dado por:
+\lstset{extendedchars=false, escapeinside=''}
+\begin{lstlisting}[style=output,caption={Tradução em CBN da identidade com `let'}]
+  '$\forall\alpha.\ \neg\neg(\neg\neg\alpha,\ \neg\alpha)$'
+\end{lstlisting}
+E o inferido também para CBN, onde a substituição $S$ que satisfaz a subtipagem é tal que $S = \{\ \alpha \mapsto \neg\alpha \ \}$:
+\lstset{extendedchars=false, escapeinside=''}
+\begin{lstlisting}[style=output,caption={Inferência da identidade com `let' traduzido em CBN}]
+  '$\forall\alpha.\ \neg\neg(\neg\alpha,\ \alpha)$'
+\end{lstlisting}
+Já ao olhar para o resultado em CBV, temos um problema de tipagem.
+A tradução da expressão, é dada por, que num primeiro momento não há nenhum problema aparente:
+\lstinputlisting[style=haskell, label=cps:let-id-cps-cbv, caption={Tradução em CBV da identidade com `let'}]{Code/Type-Inferer/CPS/let-id-cbv.cps}
+Ao investigar mais a fundo porém, é possível ser notado na linha 1 que, como o $\mathtt{id}$ é passado por parâmetro para a continuação $\mathtt{k}$, durante o processo de inferência, esta será inserida no contexto como sendo um politipo.
+Em momento posterior entretanto, na inferência da expressão $\mathtt{id\ id}$, a expressão $\mathtt{id}$ é assumida como sendo um tipo monomórfico.
+É neste instante então, que é feita a verificação do \textit{occurs check} para garantir que tipos cíclicos (ou seja, um tipo estar contido em outro, tornando assim impossível a unificação destes) não sejam permitidos, onde esta falha, retornando assim o erro.
+Desta forma, o algoritmo falha, identificando um erro de \textit{OccursCheck}, que será apresentado a seguir:
+\lstset{extendedchars=false, escapeinside=''}
+\begin{lstlisting}[style=output,caption={Erro de Inferência da identidade com `let' traduzido em CBV}]
+  '$OccursCheck{:}\ \beta\ in\ \neg(\beta,\ \alpha)$'
+\end{lstlisting}
+Este erro indica que, ao tentar encontrar uma unificação para as variáveis de tipo, foi encontrado que uma delas já estava presente na outra, neste caso, que o $\beta$ já ocorria em $\neg(\beta,\ \alpha)$.
+Como isto torna impossível que uma substituição seja suficiente, de modo a gerar um loop infinito caso seja tentado, um erro é retornado.
