@@ -114,3 +114,33 @@ Desta forma, o algoritmo falha, identificando um erro de \textit{OccursCheck}, q
 \end{lstlisting}
 Este erro indica que, ao tentar encontrar uma unificação para as variáveis de tipo, foi encontrado que uma delas já estava presente na outra, neste caso, que o $\beta$ já ocorria em $\neg(\beta,\ \alpha)$.
 Como isto torna impossível que uma substituição seja suficiente, de modo a gerar um loop infinito caso seja tentado, um erro é retornado.
+
+\subsection{Considerações finais}
+Uma vez que identificado ao menos um programa que não é capaz de inferir tipos para a tradução via `let' da expressão, o seguinte teorema pode ser definido.
+\begin{teorema}[A tradução para CBV não preserva tipos]\label{teo:cbv-does-not-preserve-types}
+  A tradução do cálculo-$\lambda$ para o cálculo de continuações em CBV não preserva tipos.
+\end{teorema}
+
+\begin{proof}[Prova do Teorema~\ref{teo:cbv-does-not-preserve-types}]
+  Seja o termo $\mathtt{let\ id\ =\ \lambda x.\ x\ in\ id\ id}$.
+  Este termo não é tipável no cálculo de CPS polimórfico proposto.
+  \qedhere
+\end{proof}
+\noindent Ainda, durante o desenvolvimento, ao se deparar com o erro de tipagem do `let' no CBV, o pensamento inicial foi de que alguma confusão quanto a implementação da tradução havia sido cometida.
+Somente depois de muita análise e raciocínio a respeito do ocorrido foi compreendido que não se tratava de um erro de implementação, e sim de uma prova de que a tradução para CBV não preserva a tipagem dos termos.
+
+Todos os testes realizados para CBN funcionaram, assim, é fortemente acreditado que a tradução para este preserva a tipagem das expressões lambda.
+Desta forma, é definida a seguinte conjectura.
+\begin{conjectura}[A tradução para CBN preserva tipos]\label{conj:cbn-preserve-types}
+  A tradução do cálculo-$\lambda$ para o cálculo de continuações em CBN preserva tipos.
+\end{conjectura}
+
+Por mais que a implementação em si não tenha sido complicada de modo geral, algumas dificuldades mais teóricas se mantiveram latentes durante boa parte do desenvolvimento.
+O mais incômodo deles, refere-se a falta de materiais de referência mais didáticos.
+A maioria deles, se não todos, apresenta as continuações utilizando conceitos sem previamente contextualizá-los.
+É esperado que o leitor tenha amplo conhecimento a respeito de Teoria de Tipos e Teoria das Categorias, o que dificulta o entendimento daqueles que não o tem.
+
+Ao chegar no resultado de uma inferência, seja executando o algoritmo via código ou no papel, tem-se a prova do absurdo de uma continuação.
+Um dos pontos mais iniciais de dúvidas era referente ao tipo desta continuação.
+Seja a função identidade traduzida em CBV, ou seja, com tipo $\forall\alpha.\ \neg\neg(\neg\alpha,\ \alpha)$, a dificuldade que perdurava era como raciocinar sobre ele.
+Mudar a maneira de pensar para compreender os resultados, que são duais dos tipos no cálculo-$\lambda$, ou seja, a conclusão deste tipo é que ele é falso e não verdadeiro, foi uma das maiores barreiras para entendimento.

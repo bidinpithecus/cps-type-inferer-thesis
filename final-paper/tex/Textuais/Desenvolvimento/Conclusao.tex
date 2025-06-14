@@ -1,37 +1,19 @@
 \section{Conclusão}\label{sec:conclusao}
-\TODO{Apresentar trabalhos relacionados}
-% https://dl.acm.org/doi/10.1145/319301.319345
-% chorar mais trabalhos relacinados pro torrens
+As IRs são muito importantes na compilação, elas permitem otimizar muitos processos para assim tornar mais eficiente o código.
+Os sistemas de tipos permitem provas de propriedades de um sistema, garantindo que programas tenham comportamento esperado.
+Por exemplo, uma função que opera sobre um conjunto numérico, utilizando um sistema de tipos, seria possível identificar um uso incorreto desta função ao passar um argumento de outro tipo, podendo assim impedir que a função compute para evitar um comportamento inesperado.
+Sendo assim, pode-se dizer que o sistema de tipos adiciona uma camada de segurança ao programa.
 
-\TODO{Conjecturar que, a tradução para CBN preserva tipos}
-% Conjectura 1. A tradução preserva tipos para CBN.
+Uma das maiores motivações de adicionar essa camada de segurança na representação intermediária, ou seja de desenvolver um sistema de tipos para o CPS, é extender a prova de programas para as etapas seguintes em que o sistema já não tem mais ciência dos tipos, ou seja, o ligador (do inglês \textit{linker}).
+Considerando o cenário onde um programa possua milhares de arquivos fonte, com IRs não tipadas, as provas das propriedades de funções definidas em um arquivo somente são passadas para outra caso estes sejam compilados juntos -- o que se torna inviável em programas tão grandes.
+Já com uma IR tipada, se uma função $f$ definida em um arquivo espera receber um inteiro for utilizada em outro módulo onde na verdade está sendo passado como argumento uma cadeia de caracteres, o erro seria facilmente identificado no momento da ligação (do inglês \textit{linking}), não havendo a necessidade de recompilar o arquivo que contém a função ou ainda todos os que o utilizam.
 
-\TODO{Teoremar que, a tradução para CBV não preserva tipos}
-\TODO{E que antes de ter ciência de que o exemplo do let era uma prova, achávamos que era um bug}
-% Prova.
-%   Considere o termo [...]. Esse termo não é tipável no cálculo de CPS polimórfico proposto.
-% Qed.
+Mesmo que o sistema não funcione para o `let' no CBV, a tradução está correta, onde isso significa respeitar o teorema da simulação.
+Isto é, no caso de uma implementação não tipada da tradução, não haveria problemas em simular a expressão lambda no cálculo de continuações.
+Como a tradução para CBV não preserva tipos, um dos trabalhos futuros incluiria a correção deste.
+Para tal, seria necessário propor um outro sistema de tipos polimórfico para o cálculo de continuações onde, sejam distinguidos tipos e cotipos dentre os argumentos para que o algoritmo de inferência saiba quando utilizar um ou outro.
 
-\TODO{Destacar que, apesar do erro, a tradução em si está correta, pois respeita o teorema da simulação}
-% Ela não preserva os tipos
-
-\TODO{Falar que, quero remover o confia no pai do jogo}
-\TODO{NA INTRODUÇÃO TAMBÉM}
-% sistemas de tipos permitem provas de propriedades do sistema, tipo, "não vai crashar", ooou, no System F ou no sistema de Hindley-Milner, "todos os programas terminam"
-% mas se as IR não são tipadas, se eu compilar função f num arquivo, que espera string de argumento, quem prova pra mim que eu não chamei ela em outro (escrito na mão, ou compilando com uma versão alterada do arquivo fonte...) passando um inteiro como argumento? o linker não tá verificando isso porque não tem mais tipos, e então as provas sobre o sistema de tipos deixam de ser úteis exceto quando eu compilo TODO o programa numa paulada só, o que eh inviável em programas com centenas ou milhares de arquivos
-% então dá pra garantir que a propriedade eh verificada, mete tipagem na IR e fechou
-
-\TODO{Falar sobre dificuldades de raciocinar sobre os tipos do sistema}
-% Inferi o tipo do termo. tá, e daí? qq é esse ~~(A, ~A)
-
-\TODO{Falar sobre dificuldades de compreender as continuações em si}
-% Tipo o de cima mas mais relacionados às continuações em si. elas retornam? elas não retornam? tem tipo? não tem tipo? mto confuso
-
-\TODO{Falar sobre dificuldades em materiais de referência que requerem um phd em categorias}
-% quase todos os artigos esperam uma fundamentação teórica extensiva em teoria das categorias. isso dificulta mto o entendimento quando não o tem
-
-\TODO{Falar sobre trabalhos futuros, sendo estes:}
-\TODO{Corrigir o sistema (introduzindo tipos e cotipos para distinguir entre os argumentos)}
-\TODO{Formalizar provas sobre o sistema}
-\TODO{Fazer um compilador que utilize esta IR tipada}
-% Listar esses e justificá-los
+Outro trabalho futuro extremamente necessário é a formalização de provas a respeito do sistema.
+Neste trabalho, somente alguns casos de teste foram feitos, e isto apenas significa que para as entradas testadas, o algoritmo está correto.
+Desta forma, para raciocinar sobre o sistema, é importante que a completude e corretude deste seja verificado, bem como a verificação formal do desenvolvimento, de modo a garantir que tanto o sistema quanto sua implementação estejam corretos.
+Em conjunto, um avanço seria a criação de um compilador que faça uso desta IR tipada, colocando em prática toda a teoria aqui apresentada.
