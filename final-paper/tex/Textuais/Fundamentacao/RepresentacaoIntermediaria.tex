@@ -8,13 +8,12 @@ Compiladores modernos, amplamente utilizados na indústria, empregam mais de uma
 As IRs podem ser classificadas de acordo com o nível de abstração e são comumente aplicadas em sequência.
 Representações com um nível maior de abstração são usadas próximas ao código-fonte, enquanto aquelas de nível mais baixo estão mais próximas do código de máquina~\cite{aho2008compilers}, como ilustrado na Figura~\ref{fig:abstraction-level-irs}.
 
-\begin{figure}
+\begin{figure}[ht!]
   \centering
-  \includegraphics[width=.7\textwidth]{Imagens/abstraction-level-irs.eps}
+  \includegraphics[width=\textwidth]{Imagens/abstraction-level-irs.pdf}
   \caption{Sequência de representações intermediárias}\label{fig:abstraction-level-irs}
   \small{Fonte:~\cite{aho2008compilers}}
 \end{figure}
-
 Uma das principais informações que deve ser preservada em uma IR é o fluxo de controle, isto é, a ordem em que as instruções do programa são executadas, como chamadas de função, \textit{loops} e condições.
 Para garantir que o compilador mantenha a semântica correta do programa, o fluxo de controle deve ser repassado de alguma maneira durante o processo de tradução~\cite{cooper2014construindo}.
 Uma das maneiras disso ser feito explicitamente é com o uso de continuações, que são funções que descrevem o próximo passo de uma computação em um ponto particular da execução do programa.

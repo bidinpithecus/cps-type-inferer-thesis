@@ -32,10 +32,12 @@ Isso significa que, se a expressão $e$ possui o tipo $\tau_2$ sob o contexto em
 Essa verificação de tipo garante que, ao aplicar a função, o tipo do argumento corresponde ao tipo esperado pela função.
 
 O Cálculo Lambda Simplesmente Tipado está intimamente relacionado à lógica intuicionista proposicional.
-Esse vínculo é formalizado pela Correspondência Curry–Howard, que estabelece uma correspondência direta entre proposições lógicas e tipos, e entre provas e programas~\cite{pierce2002types}.
+Esse vínculo é formalizado pela Correspondência Curry-Howard, que estabelece uma correspondência direta entre proposições lógicas e tipos, e entre provas e programas~\cite{pierce2002types}.
 Em outras palavras, tipos podem ser interpretados como proposições lógicas, e termos tipados como provas dessas proposições.
-Por exemplo, o tipo $A \to B$ no Cálculo Lambda Simplesmente Tipado pode ser visto como a implicação lógica “se $A$, então $B$”.
+Por exemplo, o tipo $A \to B$ no Cálculo Lambda Simplesmente Tipado pode ser visto como a implicação lógica ``se $A$, então $B$''.
 Assim, uma função que aceita um argumento do tipo $A$ e retorna um valor do tipo $B$ é equivalente a uma prova de que $A$ implica $B$.
 Esse princípio permite usar ferramentas da teoria de tipos para construir provas formais de teoremas em lógica intuicionista, fornecendo uma base teórica robusta para assistentes de prova automatizados, como o Coq~\cite{coquand1988calculus}.
 
-Além disso, a Correspondência Curry–Howard não apenas conecta tipos e lógica, mas também oferece um método sistemático para projetar e raciocinar
+Além disso, a Correspondência Curry-Howard não apenas conecta tipos e lógica, mas também oferece um método sistemático para projetar e raciocinar sobre sistemas de inferência de tipos, garantindo que programas tipados sejam corretos em relação às especificações lógicas.
+A inferência de tipos desempenha um papel fundamental na programação funcional moderna, sendo inicialmente introduzida com a linguagem ML por~\citeonline{damas1982principal}, com o algoritmo W.
+A linguagem Haskell extende o sistema Damas-Milner, adicionando principalmente o suporte a sobrecarga de funções.
