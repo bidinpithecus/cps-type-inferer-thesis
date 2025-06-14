@@ -24,7 +24,7 @@ O sistema Damas-Milner, introduzido por Robin Milner e posteriormente formalizad
 Este sistema tem como principal característica a inferência automática de tipos polimórficos, sem a necessidade de anotações explícitas por parte do programador, ocorrendo em linguagens como ML, Haskell e OCaml.
 A sua base é o cálculo lambda com polimorfismo paramétrico, introduzido via \texttt{let}, permitindo que funções possam operar sobre múltiplos tipos de maneira genérica.
 
-A introdução do sistema Damas-Milner trouxe duas contribuições principais: a definição de um sistema de tipos robusto e a criação de um algoritmo, o Algoritmo W, capaz de inferir o tipo mais geral (também chamado de \textit{principal type-scheme}), conforme demonstrado em~\citeonline{damas1984assignment}.
+A introdução do sistema Damas-Milner trouxe duas contribuições principais: a definição de um sistema de tipos robusto e a criação de um algoritmo, o Algoritmo W, capaz de inferir o tipo mais geral (do inglês \textit{principal type-scheme}), conforme demonstrado em~\citeonline{damas1984assignment}.
 O algoritmo é consistente e completo em relação ao sistema de tipos: a consistência assegura que todo tipo inferido é correto, ou seja, pode ser derivado pelo sistema de tipos; já a completude garante que qualquer tipo derivado pelo sistema será uma instância do tipo inferido pelo algoritmo.
 Como resultado, a linguagem ML e suas derivadas se tornaram notórias por fornecer ao programador a capacidade de escrever programas sem erros de tipo detectáveis durante a compilação, permitindo um desenvolvimento mais seguro e robusto~\cite{milner1978polymorphism, damas1984assignment}.
 
@@ -40,7 +40,7 @@ Abaixo, segue a gramática das expressões e tipos:
     \text{Tipos primitivos}  & \iota                                                                             \\
     \text{Tipos}             & \tau \Coloneqq \alpha \mid \iota \mid \tau \rightarrow \tau
     \alpha                                                                                                       \\
-    \text{Schemes}           & \sigma \Coloneqq \forall \alpha. \sigma \mid \tau                                       \\
+    \text{Esquemas de tipo}           & \sigma \Coloneqq \forall \alpha. \sigma \mid \tau                                       \\
   \end{array}
 \end{equation}
 
@@ -48,7 +48,7 @@ Na sintaxe, $x$ representa variáveis que podem ser nomes de qualquer identifica
 $\alpha$ é usado para representar variáveis de tipos.
 Os tipos primitivos $\iota$ são usados para representar tipos constantes.
 Tipos $\tau$ podem ser tanto variáveis de tipo quanto funções entre tipos.
-Por fim, $\sigma$ denota \textit{schemes}, ou tipos polimórficos, que podem quantificar variáveis de tipo, permitindo reutilização de variáveis de tipos em diferentes contextos.
+Por fim, $\sigma$ denota os esquemas de tipo (do inglês \textit{schemes}), ou tipos polimórficos, que podem quantificar variáveis de tipo, permitindo reutilização de variáveis de tipos em diferentes contextos.
 
 O polimorfismo no sistema Damas-Milner é introduzido pelas expressões \texttt{let}, que permitem a generalização de tipos.
 Ao declarar uma variável ou função usando \texttt{let}, o tipo inferido é generalizado para ser utilizado de maneira polimórfica na expressão que ocorre após o \texttt{in}.
@@ -61,7 +61,7 @@ Esse mecanismo garante a flexibilidade do sistema, ao mesmo tempo que mantém a 
 Por exemplo, considere a expressão $\texttt{let id} \ = \lambda x.x \ \texttt{in} \ (\texttt{id} \ \texttt{1}, \ \texttt{id} \ \texttt{`a'})$.
 O sistema generaliza o tipo de $\texttt{id}$ para $\forall \alpha. \alpha \rightarrow \alpha$, e instancia este tipo tanto para inteiros quanto para caracteres nas duas aplicações subsequentes.
 
-Outro conceito presente no sistema Damas-Milner é a substituição de tipos, onde estes são mapeados para outros tipos ou para variáveis de tipo.
+Outro conceito importante para o processo de inferência de tipos no sistema é a substituição de tipos, onde estes são mapeados para outros tipos ou para variáveis de tipo.
 Formalmente, uma substituição de tipos é representada como um mapeamento finito de variáveis de tipo para tipos, denotado por $S$, e pode ser escrito na forma $[ \alpha_1 \mapsto \tau_1, \alpha_2 \mapsto \tau_2, \ldots, \alpha_n \mapsto \tau_n ]$.
 Aqui, $\alpha_i$ são variáveis de tipo distintas e $\tau_i$ são os tipos correspondentes.
 Em outras palavras, $S$ associa cada variável de tipo $\alpha_i$ a um tipo $\tau_i$ específico.
@@ -95,7 +95,7 @@ Nesse caso, escrevemos $\sigma > \sigma'$, indicando que $\sigma$ é mais geral 
 Vale notar que a instanciação atua sobre variáveis livres, enquanto a instanciação genérica lida com variáveis ligadas.
 
 O sistema de tipos de Damas e Milner é definido por um conjunto de regras de inferência de tipos, apresentadas na Figura~\ref{eq:type-inference}, que são usadas para determinar os tipos das expressões no sistema.
-Essas regras são representadas por meio de julgamentos de tipos da forma $\Gamma \vdash e: \sigma$, onde $\Gamma$ é o contexto, um conjunto de suposições com pares de variáveis e seus tipos: $(e, \sigma)$, $e$ é a expressão sendo tipada, e $\sigma$ ou $\tau$ são o tipo inferido no contexto.
+Essas regras são representadas por meio de julgamentos de tipos da forma $\Gamma \vdash e{:}\ \sigma$, onde $\Gamma$ é o contexto —- um conjunto de suposições na forma de pares $(x_i,\ \sigma_i)$, associando variáveis $x_i$ aos seus respectivos tipos $\sigma_i$ —, $e$ é a expressão sendo tipada, e $\sigma$ é o tipo inferido para essa expressão.
 
 \begin{figure}[ht!]
   \centering
@@ -145,7 +145,7 @@ A seguir, será discutido em detalhes o funcionamento do Algoritmo W.
 
 \subsection{Algoritmo W}\label{subsec:w-algo}
 
-O Algoritmo W, introduzido em~\citeonline{damas1982principal}, é um algoritmo eficiente\footnote{Embora seja eficiente na grande maioria dos casos, há situações em que o Algoritmo W apresenta desempenho exponencial, como ocorre em expressões com recursão polimórfica, conforme discutido em~\cite{vasconcellos2004inferencia}.} para inferência de tipos em linguagens de programação funcional.
+O Algoritmo W, introduzido em~\citeonline{damas1982principal}, é um algoritmo eficiente\footnote{Embora seja eficiente na grande maioria dos casos, há situações em que o Algoritmo W apresenta desempenho exponencial, conforme discutido em~\cite{vasconcellos2004inferencia}.} para inferência de tipos em linguagens de programação funcional.
 Ele se baseia no processo de unificação para solucionar equações de tipos geradas durante a análise de expressões, atribuindo os tipos mais gerais possíveis, ou seja, os tipos mais polimórficos que ainda garantem a consistência do sistema.
 
 A unificação é o processo de encontrar uma substituição de variáveis de tipo que torna dois tipos dados equivalentes.
@@ -153,7 +153,7 @@ Formalmente, dados dois tipos $\tau_1$ e $\tau_2$, a unificação procura uma su
 Se tal substituição existe, os tipos são considerados unificáveis e $S$ é chamada de solução unificadora.
 Caso contrário, os tipos são incompatíveis.
 
-O algoritmo de unificação, \Unify, descrito na Figura~\ref{algo:unify}, gera a unificação mais geral possível, operando recursivamente sobre a estrutura dos tipos.
+O algoritmo de unificação, \Unify, descrito na Figura~\ref{algo:unify}, retorna a substituição que representa o unificador mais geral, operando recursivamente sobre a estrutura dos tipos.
 Ele verifica se os tipos são idênticos, se uma variável de tipo pode ser substituída por outro tipo, ou, no caso de tipos compostos, se suas partes podem ser unificadas independentemente.
 
 \begin{figure}[ht!]

@@ -43,7 +43,6 @@ No contexto do polimorfismo,~\citeonline{pierce2002types} define duas principais
 No primeiro, uma única definição opera genericamente, mantendo o mesmo comportamento para todos os tipos. 
 Já no segundo, o comportamento varia conforme o tipo dos argumentos, permitindo múltiplas implementações — como na sobrecarga de operadores, onde a função selecionada depende dos tipos dos operandos.
 
-O polimorfismo desempenha um papel crucial na inferência de tipos. 
 Em linguagens como Haskell, o sistema de tipos deduz automaticamente tipos genéricos sempre que possível, permitindo que funções como a identidade ($\lambda x.x$, tipada como $\forall \alpha. \alpha \to \alpha$) sejam usadas de forma universal. 
 Por outro lado, funções com restrições específicas ilustram o polimorfismo com sobrecarga. 
 Por exemplo, a função de soma no Listing~\ref{code:add}, originalmente definida como $Int \rightarrow Int \rightarrow Int$, pode ser generalizada para operar sobre quaisquer tipos numéricos utilizando classes de tipos. 

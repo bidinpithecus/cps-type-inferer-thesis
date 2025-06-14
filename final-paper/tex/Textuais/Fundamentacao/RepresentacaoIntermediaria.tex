@@ -22,19 +22,19 @@ Uma das maneiras disso ser feito explicitamente é com o uso de continuações, 
 \subsection{CPS}\label{subsec:cps}
 
 O estilo de passagem de continuações (CPS, do inglês \textit{continuation passing style}) é uma técnica de transformação de código que torna o fluxo de controle de um programa explícito, ao converter o estilo convencional de chamadas de função em chamadas que passam explicitamente o controle para a próxima etapa, conhecida como continuação (do inglês, \textit{continuation})~\cite{appel1992compiling}.
-Em vez de retornar diretamente o resultado de uma função, o CPS transforma cada função para que, ao finalizar sua computação, ela invoque uma continuação, que representa o próximo passo a ser executado no programa.
+Em vez de retornar diretamente o resultado de uma função, o CPS transforma cada função para que, ao finalizar sua computação, ela invoque uma continuação que representa o próximo passo a ser executado no programa.
 Assim, toda chamada de função se torna uma chamada de cauda.
 
 Uma chamada de cauda (do inglês \textit{tail call}) ocorre quando a última instrução executada em uma função é uma chamada a outra função, sem que restem computações adicionais a serem feitas após essa chamada~\cite{muchnick1997advanced}.
 Isso permite que a função atual libere seu quadro de ativação, otimizando o uso de memória, já que o compilador não precisa manter o estado da função anterior na pilha.
 Em constraste, uma chamada que não é de cauda ocorre quando ainda restam operações após a chamada, como somas ou multiplicações, o que exige que o quadro de ativação da função atual permaneça na pilha até a conclusão dessas operações.
 
-Na Figura~\ref{code:factorial_non_tail_call}, o exemplo da função fatorial demonstra uma chamada que não é de cauda, pois a chamada recursiva \texttt{factorial(n - 1)} não é a última operação a ser realizada.
+No Listing~\ref{code:factorial_non_tail_call}, o exemplo da função fatorial demonstra uma chamada que não é de cauda, pois a chamada recursiva \texttt{factorial(n - 1)} não é a última operação a ser realizada.
 A função precisa aguardar o retorno desta chamada para, então, multiplicar o resultado por \texttt{n}, o que impede a liberação do quadro de ativação até o término da multiplicação.
 
-Em constrate, na Figura~\ref{code:factorial_tail_call} como exemplo, tem-se uma versão da função fatorial que utiliza chamada de cauda.
+Em constrate, no Listing~\ref{code:factorial_tail_call} como exemplo, tem-se uma versão da função fatorial que utiliza chamada de cauda.
 A função auxiliar \texttt{go} acumula o valor do cálculo diretamente em seu argumento \texttt{a}, e a chamada recursiva \texttt{go (n - 1) (a * n)} é a última instrução a ser executada.
-Como não há operações pendentes após a chamada recursiva, o compilador pode otimizar a função, reutilizando o quadro de ativação da função \texttt{go} para a chamada subsequente, tornando o cálculo mais eficiente.
+Como não há operações pendentes após a chamada recursiva, o compilador pode otimizar a função, reutilizando o espaço reservado para o quadro de ativação da função \texttt{go} para a chamada subsequente, tornando o cálculo mais eficiente.
 
 \lstinputlisting[style=haskell, label=code:factorial_non_tail_call, caption={Função fatorial em Haskell}]{Code/factorial_non_tail_call.hs}
 
@@ -132,31 +132,31 @@ A principal ideia por trás dessa transformação é modificar as funções para
 
 \lstinputlisting[style=haskell, label=code:add, caption={Função soma em Haskell em Estilo Direto}]{Code/add.hs}
 
-\lstinputlisting[style=haskell, label=code:add_cps, caption={Função soma em Haskell em Estilo Direto}]{Code/add_cps.hs}
+\lstinputlisting[style=haskell, label=code:add_cps, caption={Função soma em Haskell em CPS}]{Code/add_cps.hs}
 
-Por exemplo, a Figura~\ref{code:add} apresenta um programa na linguagem Haskell que soma dois números no estilo direto, retornando o valor após realizar o cálculo.
-Já a Figura~\ref{code:add_cps} mostra um programa equivalente em CPS\@.
+Por exemplo, o Listing~\ref{code:add} apresenta um programa na linguagem Haskell que soma dois números no estilo direto, retornando o valor após realizar o cálculo.
+Já o Listing~\ref{code:add_cps} mostra um programa equivalente em CPS\@.
 Nesta versão, o controle de fluxo do programa é explícito, pois a função $k$ é chamada para processar o resultado da soma dos argumentos.
 
 \lstinputlisting[style=haskell, label=code:factorial, caption={Função fatorial em Haskell em Estilo Direto}]{Code/factorial.hs}
 
 \lstinputlisting[style=haskell, label=code:factorial_cps, caption={Função fatorial em Haskell em CPS}]{Code/factorial_cps.hs}
 
-Para ilustrar melhor, a Figura~\ref{code:factorial} apresenta um programa em Haskell que calcula o fatorial no estilo direto, utilizando funções definidas para multiplicação e subtração.
-Na Figura~\ref{code:factorial_cps}, um programa similar em CPS é definido, com as funções auxiliares também transformadas para CPS\@.
+Para ilustrar melhor, o Listing~\ref{code:factorial} apresenta um programa em Haskell que calcula o fatorial no estilo direto, utilizando funções definidas para multiplicação e subtração.
+No Listing~\ref{code:factorial_cps}, um programa similar em CPS é definido, com as funções auxiliares também transformadas para CPS\@.
 Na função \texttt{factorialCps} é possível notar duas funções lambda (continuações), \texttt{nMinus1} e \texttt{factNMinus1}.
 A primeira continuação guarda o resultado da operação $n - 1$, enquanto a segunda recebe recursivamente o cálculo do fatorial de $n - 1$, multiplica por $n$ e finalmente passa o resultado para a continuação $k$.
 
 Outro fato importante a ser observado nos códigos apresentados é a tipagem das funções.
-Na função de soma, definida na Figura~\ref{code:add}, a função tem tipo $Int \rightarrow Int \rightarrow Int$, ou seja, ela recebe dois inteiros e retorna um inteiro.
-Já a função de soma em CPS, definida na Figura~\ref{code:add_cps}, possui o tipo $Int \rightarrow Int \rightarrow (Int \rightarrow r) \rightarrow r$. Isso significa que a função recebe dois inteiros e uma continuação, que é uma função de tipo $Int \rightarrow r$, onde \texttt{r} pode ser qualquer tipo, e retorna esse mesmo tipo \texttt{r}.
+Na função de soma, definida no Listing~\ref{code:add}, a função tem tipo $Int \rightarrow Int \rightarrow Int$, ou seja, ela recebe dois inteiros e retorna um inteiro.
+Já a função de soma em CPS, definida no Listing~\ref{code:add_cps}, possui o tipo $Int \rightarrow Int \rightarrow (Int \rightarrow r) \rightarrow r$. Isso significa que a função recebe dois inteiros e uma continuação, que é uma função de tipo $Int \rightarrow r$, onde \texttt{r} pode ser qualquer tipo, e retorna esse mesmo tipo \texttt{r}.
 
 Essa transformação de tipo reflete a diferença fundamental entre o estilo direto e o CPS\@: em vez de retornar um valor diretamente, a função em CPS recebe uma continuação que especifica o próximo passo da computação.
 O mesmo padrão pode ser observado nas funções para o cálculo do fatorial nas Figuras~\ref{code:factorial} e~\ref{code:factorial_cps}.
 No estilo direto, a função \texttt{factorial} tem o tipo $Int \rightarrow Int$, enquanto na versão CPS, a função \texttt{factorialCps} tem o tipo $Int \rightarrow (Int \rightarrow r) \rightarrow r$.
 
 Essa correspondência entre os tipos não é uma coincidência.
-Como discutido por~\cite{torrens2019calculo}, uma função em estilo direto com tipo $A \rightarrow B$ pode ser transformada em uma função em CPS com o tipo $A \rightarrow (B \rightarrow \perp) \rightarrow \perp$.
+Como discutido por~\citeonline{torrens2019calculo}, uma função em estilo direto com tipo $A \rightarrow B$ pode ser transformada em uma função em CPS com o tipo $A \rightarrow (B \rightarrow \perp) \rightarrow \perp$.
 Aqui, $\perp$ representa o tipo dos valores que nunca retornam, uma característica associada ao estilo de passagem de continuações, onde as funções são compostas de forma a encadear continuações até que a execução termine de maneira explícita.
 
 Este exemplo simples da função fatorial em CPS ilustra as dificuldades inerentes ao uso de continuações explícitas, como a verbosidade do código, complexidade de compreensão e a propensão a erros.

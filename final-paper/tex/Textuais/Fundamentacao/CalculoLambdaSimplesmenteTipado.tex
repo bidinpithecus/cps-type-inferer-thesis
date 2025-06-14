@@ -1,4 +1,4 @@
-\section{Cálculo Lambda Simplesmente Tipado}\label{sec:simply-typed-lambda-calulus}
+\section{Cálculo Lambda Simplesmente Tipado}\label{sec:simply-typed-lambda-calculus}
 
 O Cálculo Lambda Simplesmente Tipado é uma das primeiras e mais simples variantes do Cálculo Lambda que incorpora tipos em sua estrutura~\cite{church1940formulation}.
 Enquanto o cálculo lambda original não faz distinção entre diferentes tipos de dados, no Cálculo Lambda Simplesmente Tipado os termos são anotados com tipos.
@@ -10,34 +10,32 @@ A sintaxe básica do Cálculo Lambda Simplesmente Tipado inclui:
 
 \begin{itemize}
   \item Variáveis: $x, y, z, \ldots$
-  \item Tipos: $T \Coloneqq \mathbf{Int} \mid \mathbf{Bool} \mid T \to T$
-  \item Termos: $\lambda x:T. \tau \mid \tau_1 \tau_2 \mid x$
+  \item Tipos: $\tau \Coloneqq \mathbf{Int} \mid \mathbf{Bool} \mid \tau \to \tau$
+  \item Termos: $e \Coloneqq \lambda x{:}\ \tau.\ e \mid e_1\ e_2 \mid x$
 \end{itemize}
 
-No Cálculo Lambda Simplesmente Tipado, cada variável possui um tipo atribuído e os termos são construídos com base nesses tipos.
-Por exemplo, a abstração de função $\lambda x:T. \tau$ define uma função onde a variável $x$ é de tipo $T$ e o corpo da função, $\tau$, é um termo.
-A aplicação de função $\tau_1 \tau_2$ indica que $\tau_1$ é uma função que é aplicada ao argumento $\tau_2$, o qual deve ter um tipo compatível com o tipo esperado por $\tau_1$.
+No Cálculo Lambda Simplesmente Tipado, cada variável possui um tipo atribuído, e os termos são construídos com base nesses tipos.
+Por exemplo, a abstração de função $\lambda x{:}\ \tau.\ e$ define uma função onde a variável $x$ é de tipo $\tau$ e o corpo da função é a expressão $e$.
+A aplicação de função $e_1\ e_2$ indica que a expressão $e_1$ é uma função aplicada ao argumento $e_2$, o qual deve ter um tipo compatível com o esperado por $e_1$.
 Essa formalização facilita a composição de funções e o raciocínio sobre a estrutura dos programas, pois cada termo pode ser avaliado dentro de um contexto de tipagem.
-A sintaxe dos tipos, como $T \to T$, define uma função que aceita um argumento do tipo $T$ e retorna um valor também do tipo $T$.
+A sintaxe dos tipos, como $\tau \to \tau$, define uma função que aceita um argumento de tipo $\tau$ e retorna um valor também do tipo $\tau$.
 
-A inferência de tipos no Cálculo Lambda Simplesmente Tipado assegura que cada expressão tenha um tipo bem-definido, baseado nas regras de tipagem.
-A tipagem de termos é feita através de um conjunto de regras formais que garantem a consistência dos tipos no programa.
+A inferência de tipos no Cálculo Lambda Simplesmente Tipado assegura que cada expressão tenha um tipo bem definido, com base nas regras de tipagem.
+A tipagem de termos é feita por meio de um conjunto de regras formais que garantem a consistência dos tipos no programa.
 Por exemplo, a regra de tipagem para abstrações lambda é a seguinte:
 
 \[
-  \frac{\Gamma, x:T_1 \vdash \tau:T_2}{\Gamma \vdash (\lambda x:T_1. \tau): T_1 \to T_2}
+  \frac{\Gamma,\ x{:}\ \tau_1 \vdash e{:}\ \tau_2}{\Gamma \vdash (\lambda x{:}\ \tau_1.\ e){:}\ \tau_1 \to \tau_2}
 \]
 
-Isso significa que, se o termo $\tau$ possui o tipo $T_2$ sob o contexto onde $x$ possui o tipo $T_1$, então a abstração $\lambda x:T_1. \tau$ tem o tipo $T_1 \to T_2$.
+Isso significa que, se a expressão $e$ possui o tipo $\tau_2$ sob o contexto em que $x$ possui o tipo $\tau_1$, então a abstração $\lambda x{:}\ \tau_1.\ e$ tem o tipo $\tau_1 \to \tau_2$.
 Essa verificação de tipo garante que, ao aplicar a função, o tipo do argumento corresponde ao tipo esperado pela função.
 
-O Cálculo Lambda Simplesmente Tipado está intimamente relacionado com a lógica intuicionista proposicional.
-Esse vínculo é formalizado pela Correspondência Curry-Howard, que estabelece uma correspondência direta entre proposições lógicas e tipos, e entre provas e programas.
-Em outras palavras, tipos podem ser interpretados como proposições lógicas, e termos tipados como provas dessas proposições~\cite{pierce2002types}.
-Por exemplo, o tipo $A \to B$ no Cálculo Lambda Simplesmente Tipado pode ser visto como a implicação lógica ``se $A$, então $B$''.
-Assim, uma função que aceita um argumento do tipo $A$ e retorna um valor do tipo $B$ é equivalente a uma prova de que $A$ implica em $B$.
+O Cálculo Lambda Simplesmente Tipado está intimamente relacionado à lógica intuicionista proposicional.
+Esse vínculo é formalizado pela Correspondência Curry–Howard, que estabelece uma correspondência direta entre proposições lógicas e tipos, e entre provas e programas~\cite{pierce2002types}.
+Em outras palavras, tipos podem ser interpretados como proposições lógicas, e termos tipados como provas dessas proposições.
+Por exemplo, o tipo $A \to B$ no Cálculo Lambda Simplesmente Tipado pode ser visto como a implicação lógica “se $A$, então $B$”.
+Assim, uma função que aceita um argumento do tipo $A$ e retorna um valor do tipo $B$ é equivalente a uma prova de que $A$ implica $B$.
 Esse princípio permite usar ferramentas da teoria de tipos para construir provas formais de teoremas em lógica intuicionista, fornecendo uma base teórica robusta para assistentes de prova automatizados, como o Coq~\cite{coquand1988calculus}.
 
-Além disso, a Correspondência Curry-Howard não apenas conecta tipos e lógica, mas também oferece um método sistemático para projetar e raciocinar sobre sistemas de inferência de tipos, garantindo que programas tipados sejam corretos em relação às especificações lógicas.
-A inferência de tipos desempenha um papel fundamental na programação funcional moderna, sendo inicialmente introduzida com a linguagem ML por~\citeonline{damas1982principal}, com o algoritmo W.
-A linguagem Haskell extende o sistema Damas-Milner, adicionando principalmente o suporte a sobrecarga de funções.
+Além disso, a Correspondência Curry–Howard não apenas conecta tipos e lógica, mas também oferece um método sistemático para projetar e raciocinar

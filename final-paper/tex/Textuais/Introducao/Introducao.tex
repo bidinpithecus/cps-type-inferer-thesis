@@ -6,13 +6,16 @@ Essas representações atuam como ponte entre o código fonte e o código de má
 
 As representações intermediárias variam conforme o paradigma da linguagem de programação.
 Para linguagens imperativas, a Representação em Atribuição Única Estática (SSA) é amplamente adotada.
-Já em linguagens funcionais, a Forma Normal Administrativa (ANF) e o Estilo de Passagem de Continuação (CPS) se destacam.
+Já em linguagens funcionais, a Forma Normal A (ANF) e o Estilo de Passagem de Continuação (CPS) se destacam.
 Este trabalho foca especificamente no CPS, uma IR que oferece vantagens particulares em termos de otimização e simplicidade na geração de código.
 
-Essas características do CPS se tornam ainda mais evidentes quando comparamos como diferentes linguagens de lidam com o fluxo de execução. Em linguagens de alto nível, por exemplo, a pilha de chamadas atua como uma abstração fundamental para gerenciar o controle de retorno das funções. No entanto, em linguagens de baixo nível, como \textit{assembly}, não há tal abstração, exigindo que o controle do fluxo seja manualmente tratado por meio de endereços de retorno.
+Essas características do CPS se tornam ainda mais evidentes quando comparamos como diferentes linguagens lidam com o fluxo de execução. Em linguagens de alto nível, por exemplo, a pilha de chamadas atua como uma abstração fundamental para gerenciar o controle de retorno das funções. No entanto, em linguagens de baixo nível, como \textit{assembly}, não há tal abstração, exigindo que o controle do fluxo seja manualmente tratado por meio de endereços de retorno.
 
-Nesse contexto, o CPS se destaca ao tornar as continuações explícitas no código.
-Ao invés de confiar na pilha de chamadas para gerenciar retornos, o CPS introduz um parâmetro adicional em cada função, representando a continuação — isto é, o que deve ser feito com o resultado da função~\cite{kennedy2007continuations}.
+Essas características do CPS se tornam ainda mais evidentes quando é comparado como diferentes linguagens lidam com o fluxo de execução.
+Em linguagens de alto nível, por exemplo, a pilha de chamadas atua como uma abstração fundamental para gerenciar o controle de retorno das funções.
+No entanto, em linguagens de baixo nível, como \textit{assembly}, o controle de fluxo é mais explícito e depende do uso direto de instruções, que operam sobre a pilha de chamadas para empilhar e desempilhar os endereços de retorno.
+Nesse contexto, o CPS se destaca ao tornar as continuações explicitamente representadas no código.
+Em vez de confiar na pilha de chamadas para gerenciar retornos, o CPS introduz um parâmetro adicional em cada função, representando a continuação — isto é, o que deve ser feito com o resultado da função~\cite{kennedy2007continuations}.
 Desta forma, em vez de simplesmente retornar um valor diretamente, a função invoca essa continuação, transferindo explicitamente o controle à próxima etapa da computação.
 Isso elimina a dependência da pilha de chamadas, simplificando o modelo de execução e tornando-o mais alinhado com as necessidades de linguagens de baixo nível.
 
@@ -30,7 +33,7 @@ Dessa forma, a escolha de Haskell não apenas facilita o desenvolvimento de uma 
 
 \section{Objetivo Geral}\label{sec:objetivo-geral}
 
-Este trabalho tem como objetivo formalizar uma extensão para o sistema de tipos para CPS proposto por~\citeonline{thielecke1997categorical}, adicionando polimorfismo e investigar a possibilidade de propor um algoritmo de inferência, para esta representação intermediária.
+Este trabalho tem como objetivo formalizar uma extensão para o sistema de tipos para CPS proposto por~\citeonline{thielecke1997categorical}, adicionando polimorfismo juntamente de um algoritmo de inferência, para esta representação intermediária.
 
 \section{Objetivos específicos}\label{sec:objetivos-especificos}
 
@@ -42,11 +45,11 @@ Este trabalho tem como objetivo formalizar uma extensão para o sistema de tipos
 
 \section{Metodologia}\label{sec:metodologia}
 
-A metodologia deste trabalho consistirá em duas principais etapas: pesquisa bibliográfica e implementação.
-A primeira etapa envolve uma extensa revisão de literatura sobre continuações e seu cálculo, bem como um aprofundamento no estudo de sistemas de tipos, com o objetivo de proporcionar uma compreensão completa ao autor.
-A segunda etapa trata da formulação do algoritmo de inferência para o cálculo de continuações, junto com sua implementação.
+A metodologia deste trabalho consistiu em duas principais etapas: pesquisa bibliográfica e implementação.
+A primeira envolveu uma extensa revisão de literatura sobre continuações e seu cálculo, bem como um aprofundamento no estudo de sistemas de tipos, com o objetivo de proporcionar uma compreensão completa.
+A segunda contemplou a formalização do sistema de tipos e do algoritmo de inferência para o cálculo de continuações, junto da implementação destes .
 
-No escopo deste trabalho, a validação do algoritmo se dará por meio de testes de implementação.
+No escopo deste trabalho, a validação do algoritmo ocorreu por meio de testes de implementação, analisando os tipos inferidos das expressões.
 Em etapa posterior, serão necessárias as provas de consistência e de completude do algoritmo em relação ao sistema de tipos proposto.
 
 \section{Estrutura do Trabalho}\label{sec:estrutura-trabalho}
