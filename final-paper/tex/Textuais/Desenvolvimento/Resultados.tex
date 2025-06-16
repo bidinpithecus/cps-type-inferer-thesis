@@ -5,7 +5,7 @@ Para tal, estão disponibilizados no repositório do projeto, arquivos de entrad
 Afim de observar o comportamento do programa abrangendo uma maior gama de opções, algumas das funções testadas são extensas e contam com combinações de regras do cálculo-$\lambda$ simplesmente tipado.
 
 \subsection{Combinador S}
-Um desses, é o combinador S ($\lambda x.\lambda y.\lambda z.\ x\ z\ (y\ z)$), que apesar de não ser um termo extenso, este utiliza de uma combinação dos três construtores (variáveis, abstrações e aplicações) para que o termo seja optido.
+Um desses é o combinador S ($\lambda x.\lambda y.\lambda z.\ x\ z\ (y\ z)$), que apesar de não ser um termo extenso, este utiliza de uma combinação dos três construtores (variáveis, abstrações e aplicações) para que o termo seja optido.
 O tipo deste, é representado por $(\alpha \to \beta \to \gamma) \to (\alpha \to \beta) \to \alpha \to \gamma$ e suas traduções, tanto em CBN quanto em CBV são grandes demais para serem aqui colocadas, mas estas podem ser encontradas no código fonte do repositório mencionado.
 A tradução do seu tipo entretanto, para CBN, é apresentada a seguir.
 \lstset{extendedchars=false, escapeinside=''}
@@ -106,7 +106,7 @@ A tradução da expressão, é dada por, que num primeiro momento não há nenhu
 \lstinputlisting[style=haskell, label=cps:let-id-cps-cbv, caption={Tradução em CBV da identidade com `let'}]{Code/Type-Inferer/CPS/let-id-cbv.cps}
 Ao investigar mais a fundo porém, é possível ser notado na linha 1 que, como o $\mathtt{id}$ é passado por parâmetro para a continuação $\mathtt{k}$, durante o processo de inferência, esta será inserida no contexto como sendo um tipo polimórfico.
 Em momento posterior entretanto, na inferência da expressão $\mathtt{id\ id}$, a expressão $\mathtt{id}$ é assumida como sendo um tipo monomórfico.
-É neste instante então, que é feita a verificação do \textit{occurs check} para garantir que tipos cíclicos (ou seja, um tipo estar contido em outro, tornando assim impossível a unificação destes) não sejam permitidos, onde esta falha, retornando assim o erro.
+É neste instante então que é feita a verificação do \textit{occurs check} para garantir que tipos cíclicos (ou seja, um tipo estar contido em outro, tornando assim impossível a unificação destes) não sejam permitidos, onde esta falha, retornando assim o erro.
 Desta forma, o algoritmo falha, identificando um erro de \textit{OccursCheck}, que será apresentado a seguir:
 \lstset{extendedchars=false, escapeinside=''}
 \begin{lstlisting}[style=output,caption={Erro de Inferência da identidade com `let' traduzido em CBV}]

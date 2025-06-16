@@ -43,6 +43,14 @@ Este trabalho tem como objetivo formalizar uma extensão para o sistema de tipos
   \item Validar a implementação do algoritmo por meio do teste de inferência para expressões. Se possível, realizar a geração de programas para verificação de que o algoritmo infere corretamente os tipos a eles.
 \end{itemize}
 
+\section{Trabalhos Relacionados}
+Após um estudo na literatura a acerca da tipagem de linguagens de mais baixo nível em relação ao código fonte, alguns trabalhos correlatos foram encontrados.
+
+Em~\cite{morrisett1999systemF}, os autores propõem uma linguagem de montagem tipada (TAL do inglês \textit{Typed Assembly Language}) e um compilador que traduz programas do System F para TAL de forma preservadora de tipos.
+A linguagem TAL é baseada em uma arquitetura reduzida (RISC do inglês \textit{Reduced Instruction Set Computer}) e possui um sistema de tipos capaz de representar abstrações de linguagens de alto nível, como fechamentos, tuplas e tipos existenciais.
+A tradução é dividida em etapas como conversão para CPS e conversão de fechamentos, mantendo correção tipada em cada fase.
+O trabalho também apresenta uma abordagem simplificada para conversão de fechamentos polimórficos e discute o uso de TAL para geração de código seguro em ambientes com código não confiável.
+
 \section{Metodologia}\label{sec:metodologia}
 
 A metodologia deste trabalho consistiu em duas principais etapas: pesquisa bibliográfica e implementação.

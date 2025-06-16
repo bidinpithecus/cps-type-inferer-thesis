@@ -6,7 +6,7 @@ Este teorema, chamado de Teorema da Simulação, válido tanto para \textit{call
 Ou seja, simulando a execução do programa feito em cálculo-$\lambda$ no cálculo de continuações.
 Ou então, formalmente, $Eval(M) = Eval([M] (\lambda x.\ x))$, onde a função $Eval$ é responsável por avaliar uma expressão, efetivamente a computando.
 
-Foi implementado a simulação do cálculo-$\lambda$ no cálculo de continuações a partir das funções de tradução para programas que computam os numerais de Church.
+Foi implementada a simulação do cálculo-$\lambda$ no cálculo de continuações a partir das funções de tradução para programas que computam os numerais de Church.
 Isto é feito computando a função $\lambda$ onde, é incrementado o valor que representa o número de aplicações feitas (essencialmente como um numeral de Church é computado), passando como continuação a função identidade.
 Fazendo com que assim, a função lambda que representa um numeral de church é simulada pelo cálculo de continuações.
 
