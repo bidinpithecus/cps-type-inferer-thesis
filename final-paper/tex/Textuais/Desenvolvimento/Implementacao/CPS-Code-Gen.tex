@@ -1,5 +1,5 @@
 \subsection{Geração de Código}\label{subsec:cps-code-gen}
-Uma vez que nenhuma prova a respeito da validade do sistema de tipos proposto foi desenvolvida, testes consideráveis foram realizados para garantir que estava correto para um número grande de entradas.
+Uma vez que as provas de completude e consistência não estavam no escopo deste trabalho e a validação do algoritmo se deu por meio de testes, um conjunto considerável de testes foi construído.
 Para isolar os testes, ou seja, testar as funções de maneira independente para garantir que, se a inferência apresentasse algum erro, fosse certo que o erro estaria na inferência e não por conta de uma tradução incorreta, dois teoremas apresentados em~\cite{plotkin1975call} foram utilizados.
 
 Este teorema, chamado de Teorema da Simulação, válido tanto para \textit{call-by-name} quanto para \textit{call-by-value}, afirma que, dado um programa $M$ em cálculo-$\lambda$, o resultado de sua computação há de ser o mesmo que o resultado da computação da tradução para CPS com a função identidade.

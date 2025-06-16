@@ -8,7 +8,7 @@ Sendo assim, o salto $k(x)$ seria representado por este ADT: $\mathtt{Jump\ k\ [
 E o comando \textit{Bind}, onde há outro \texttt{Command} definido recursivamente, a função \texttt{Id} com argumentos \texttt{[Id]} e por fim outro \texttt{Command} também definido recursivamente.
 O \textit{bind} $\mathtt{let}\ k(x) = k(x)\ \mathtt{in}\ k(x)$, portanto seria definido pelo seguinte ADT: $\mathtt{Bind\ (Jump\ k\ [x])\ k\ [x]\ (Jump\ k\ [x])}$.
 
-Os tipos, foram representados com dois tipos algébricos diferentes, um para os monotipos $\mathtt{CPSMonoType}$, e uma para os politipos $\mathtt{CPSPolyType}$.
-As variáveis do monotipo são construídas a partir dos construtores $\mathtt{TVar\ Id}$ e $\mathtt{TInt}$, onde no primeiro, o $\mathtt{Id}$ serve para obter a variável de tipo atribuída àquela variável, enquanto que as funções que não retornam são representadas as partir do construtor de negação $\mathtt{TNeg\ [CPSMonoType]}$ sendo os argumentos dela definidos recursivamente sobre si.
+Os tipos, foram representados com dois tipos algébricos diferentes, um para os tipos monomórficos $\mathtt{CPSMonoType}$, e uma para os tipos polimórficos $\mathtt{CPSPolyType}$.
+As variáveis do tipo monomórfico são construídas a partir dos construtores $\mathtt{TVar\ Id}$ e $\mathtt{TInt}$, onde no primeiro, o $\mathtt{Id}$ serve para obter a variável de tipo atribuída àquela variável, enquanto que as funções que não retornam são representadas as partir do construtor de negação $\mathtt{TNeg\ [CPSMonoType]}$ sendo os argumentos dela definidos recursivamente.
 O contexto por sua vez, é um tipo que utiliza o $\mathtt{Data.Map}$ disponível no pacote \textit{containers} para mapear uma variável para um tipo polimórfico.
-As substituições são representadas utilizando o mesmo $\mathtt{Data.Map}$, onde desta vez é mapeado uma variável de tipo para um monotipo.
+As substituições são representadas utilizando o mesmo $\mathtt{Data.Map}$, onde desta vez é mapeado uma variável de tipo para um tipo monomórfico.

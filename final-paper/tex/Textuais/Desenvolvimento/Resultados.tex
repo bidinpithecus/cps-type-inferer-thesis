@@ -104,7 +104,7 @@ E o inferido também para CBN, onde a substituição $S$ que satisfaz a subtipag
 Já ao olhar para o resultado em CBV, temos um problema de tipagem.
 A tradução da expressão, é dada por, que num primeiro momento não há nenhum problema aparente:
 \lstinputlisting[style=haskell, label=cps:let-id-cps-cbv, caption={Tradução em CBV da identidade com `let'}]{Code/Type-Inferer/CPS/let-id-cbv.cps}
-Ao investigar mais a fundo porém, é possível ser notado na linha 1 que, como o $\mathtt{id}$ é passado por parâmetro para a continuação $\mathtt{k}$, durante o processo de inferência, esta será inserida no contexto como sendo um politipo.
+Ao investigar mais a fundo porém, é possível ser notado na linha 1 que, como o $\mathtt{id}$ é passado por parâmetro para a continuação $\mathtt{k}$, durante o processo de inferência, esta será inserida no contexto como sendo um tipo polimórfico.
 Em momento posterior entretanto, na inferência da expressão $\mathtt{id\ id}$, a expressão $\mathtt{id}$ é assumida como sendo um tipo monomórfico.
 É neste instante então, que é feita a verificação do \textit{occurs check} para garantir que tipos cíclicos (ou seja, um tipo estar contido em outro, tornando assim impossível a unificação destes) não sejam permitidos, onde esta falha, retornando assim o erro.
 Desta forma, o algoritmo falha, identificando um erro de \textit{OccursCheck}, que será apresentado a seguir:
@@ -122,14 +122,14 @@ Uma vez que identificado ao menos um programa que não é capaz de inferir tipos
 \end{teorema}
 
 \begin{proof}[Prova do Teorema~\ref{teo:cbv-does-not-preserve-types}]
-  Seja o termo $\mathtt{let\ id\ =\ \lambda x.\ x\ in\ id\ id}$.
+  Podemos observar pelo contra exemplo: $\mathtt{let\ id\ =\ \lambda x.\ x\ in\ id\ id}$.
   Este termo não é tipável no cálculo de CPS polimórfico proposto.
   \qedhere
 \end{proof}
 \noindent Ainda, durante o desenvolvimento, ao se deparar com o erro de tipagem do `let' no CBV, o pensamento inicial foi de que alguma confusão quanto a implementação da tradução havia sido cometida.
 Somente depois de muita análise e raciocínio a respeito do ocorrido foi compreendido que não se tratava de um erro de implementação, e sim de uma prova de que a tradução para CBV não preserva a tipagem dos termos.
 
-Todos os testes realizados para CBN funcionaram, assim, é fortemente acreditado que a tradução para este preserva a tipagem das expressões lambda.
+Todos os testes realizados para CBN funcionaram, assim, é um forte indício que a tradução para este preserva a tipagem das expressões lambda.
 Desta forma, é definida a seguinte conjectura.
 \begin{conjectura}[A tradução para CBN preserva tipos]\label{conj:cbn-preserve-types}
   A tradução do cálculo-$\lambda$ para o cálculo de continuações em CBN preserva tipos.

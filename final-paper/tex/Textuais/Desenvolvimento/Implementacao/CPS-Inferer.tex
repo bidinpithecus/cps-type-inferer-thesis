@@ -11,7 +11,7 @@ Por não ser o foco deste trabalho, explicações sobre estas serão omitidos.
 Desta forma, o processamento para se inferir o tipo das continuações foi dividido em três principais funções.
 
 A função $\mathtt{inferAtom \dblcolon Context \to Id \to TI\ CPSMonoType}$, como seu nome e assinatura indica, é a função responsável por inferir os átomos do termo, isto é, buscar as variáveis do contexto e retorná-las caso sejam literais, instanciá-las se forem variáveis polimórficas, ou então retornar erro caso esta não esteja presente.
-Ao executar a função passando o contexto $\{\ x{:}\ \forall\alpha.\alpha \ \}$ e a variável $x$, a função irá instanciar uma nova variável de tipo $\beta$ (se esta for a próxima ainda não utilizada) e retornar este monotipo.
+Ao executar a função passando o contexto $\{\ x{:}\ \forall\alpha.\alpha \ \}$ e a variável $x$, a função irá instanciar uma nova variável de tipo $\beta$ (se esta for a próxima ainda não utilizada) e retornar este tipo monomórfico.
 Ou ainda, caso a função seja chamada com o contexto $\{\ x{:}\ \forall\alpha.\alpha \ \}$ e a variável $k$, um erro $\mathtt{UnboundVariable\ ``k"\ \{\ x{:}\ \forall\alpha.\alpha \ \}}$ será exibido.
 
 Já a função $\mathtt{inferCommand \dblcolon Context \to Command \to TI\ Substitution}$, é quem, a partir do contexto e comando, irá retornar a substituição que indica o tipo da continuação.
@@ -21,8 +21,8 @@ Já para o \textit{binding}, algumas funções auxiliares foram necessárias pri
 Além destas, funções para a generalização e por fim para a composição das subsituições também foram precisas.
 
 O ponto de partida da inferência, $\mathtt{inferWithCtx \dblcolon Command \to TI\ CPSPolyType}$, além de definir o contexto inicial com a continuação inicial $k$, recebendo um tipo $\alpha$ qualquer, esta função aplicará a substituição obtida na inferência e a aplicará no contexto, de modo que o contexto final esteja atualizado com o tipo inferido da continuacão $k$.
-Após isto, é feita a normalização do politipo da substituição, isto é, limpar as variáveis de tipo utilizadas durante o processo que não são mais ncessárias, afim de promover consistência e facilitar o entendimento.
-Por exemplo, no caso onde o politipo final seja $\forall\delta.\delta$, o retornado seria $\forall\alpha.\alpha$.
+Após isto, é feita a normalização do tipo polimórfico da substituição, isto é, limpar as variáveis de tipo utilizadas durante o processo que não são mais ncessárias, afim de promover consistência e facilitar o entendimento.
+Por exemplo, no caso onde o tipo polimórfico final seja $\forall\delta.\delta$, o retornado seria $\forall\alpha.\alpha$.
 
 Uma etapa que não está diretamente relacionada com a inferência, e sim com os tipos em si, é a verificação da subtipagem do tipo traduzido e do tipo inferido.
 Isto é, uma verificação se o tipo traduzido é um subtipo do tipo inferido, indicando diretamente se o algoritmo de inferência foi implementado corretamente.
