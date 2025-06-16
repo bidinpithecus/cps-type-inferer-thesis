@@ -1,8 +1,16 @@
+\newcommand{\Mgu}{\ensuremath{\textit{mgu}}}
+\newcommand{\MguList}{\ensuremath{\textit{mguList}}}
+\newcommand{\UnifyVar}{\ensuremath{\textit{varBind}}}
+\newcommand{\HeadSep}{\ensuremath{\textit{:}}}
+\newcommand{\Length}{\ensuremath{\textit{length}}}
+\newcommand{\List}{\ensuremath{\textit{list}}}
+
+
 \section{Formalização}\label{sec:formalizacao}
 
 Em razão da natureza mais prática deste trabalho, a notação utilizada para representar o cálculo de continuações será a mesma utilizada por~\cite{appel1997shrinking}, a sintaxe do `let'.
 O sistema de tipos formalizado aqui foi fortemente inspirado no sistema de Damas e Milner, explicado na Seção~\ref{sec:damas-milner}, onde suas regras foram adaptadas de modo que elas se enquadrem no sistema polimórfico baseado em continuações.
-Em particular, o contexto $\Gamma$ associa variáveis a politipos e define julgamentos distintos para representar átomos e comandos.
+Em particular, o contexto $\Gamma$ associa variáveis a tipos polimórfico e define julgamentos distintos para representar átomos e comandos.
 A distinção destes se mostra necessária uma vez que é levado em consideração o comportamento não retornável das continuações. 
 
 A sintaxe do sistema conta com expressões e tipos usados no processo de tipagem e de inferência de tipos.
@@ -14,8 +22,8 @@ Abaixo, segue a gramática das expressões e tipos presentes\footnote{Vale desta
   Átomos & $a$ & $\Coloneqq$ & $x \enspace|\enspace n$ \\
   Comandos & $b$ & $\Coloneqq$ & $x(\vv{a}) \enspace|\enspace \mathtt{let}\ x(\vv{x}) = b\ \mathtt{in}\ b$ \\
   \\
-  Monotipo & $\tau$ & $\Coloneqq$ & $\alpha \enspace|\enspace \mathtt{int} \enspace|\enspace \neg\vv{\tau}$ \\
-  Politipo & $\sigma$ & $\Coloneqq$ & $\forall\vv{\alpha}.\tau$ \\
+  Tipos monomórficos & $\tau$ & $\Coloneqq$ & $\alpha \enspace|\enspace \mathtt{int} \enspace|\enspace \neg\vv{\tau}$ \\
+  Tipos polimórficos & $\sigma$ & $\Coloneqq$ & $\forall\vv{\alpha}.\tau$ \\
   Contexto & $\Gamma$ & $\Coloneqq$ & $\cdot \enspace|\enspace \Gamma,\ x{:}\ \sigma$ \\
 \end{tabular}\label{cps-type-system}
 
@@ -24,11 +32,11 @@ Abaixo, segue a gramática das expressões e tipos presentes\footnote{Vale desta
 \noindent Na sintaxe apresentada, $a$ representa os átomos. Isto é, variáveis do programa ($x$) e literais inteiros ($n$) formam os elementos primitivos do sistema.
 Os comandos $b$, por sua vez, são as expressões, explicadas com mais detalhes na Seção~\ref{subsec:cps}, sendo a primeira o \textit{jump}, e a segunda o \textit{bind}.
 Três elementos distintos compõem os tipos presentes neste sistema.
-Os monotipos ($\tau$), são os tipos que não possuem quantificação (monomórficos), podendo ser variáveis de tipo ($\alpha$), tipos numéricos inteiros ($\mathtt{int}$), ou ainda, tipos negados ($\neg\vv{\tau}$), usados para representar funções que retornam absurdos.
-Já os politipos ($\sigma$), são responsáveis por garantir a quantificação universal de variáveis de tipos (polimórficos).
-Por fim, o contexto ($\Gamma$) contém o mapeamento de cada variável para um politipo ($\sigma$).
+Os tipos monomórficos ($\tau$), são os tipos que não possuem quantificação (monomórficos), podendo ser variáveis de tipo ($\alpha$), tipos numéricos inteiros ($\mathtt{int}$), ou ainda, tipos negados ($\neg\vv{\tau}$), usados para representar funções que retornam absurdos.
+Já os tipos polimórfico ($\sigma$), são responsáveis por garantir a quantificação universal de variáveis de tipos (polimórficos).
+Por fim, o contexto ($\Gamma$) contém o mapeamento de cada variável para um tipo polimórfico ($\sigma$).
 
-As regras sintáticas de tipagem do sistema de tipos, contando com elementos também presentes no Sistema Damas-Milner são ilustrados a seguir:
+As regras sintáticas de tipagem do sistema de tipos, inspiradas no Sistema Damas-Milner são ilustradas a seguir:
 
 \phantom{Newline}
 
@@ -63,22 +71,23 @@ As regras sintáticas de tipagem do sistema de tipos, contando com elementos tam
     \AxiomC{$\Gamma,\ k{:}\ \overline{\Gamma}(\neg\vv\tau)\vdash b$}
     \BinaryInfC{$\Gamma\vdash\mathtt{let}\ k(\vv{x}) = c\ \mathtt{in}\ b$}
 \end{prooftree}
-Aqui, para os átomos do sistema, a partir da regra $\mathtt{[Var]}$ é esperado que as variáveis, como vêm do contexto, possuam um tipo polimórfico $\sigma$.
-Existe ainda um tipo monomórfico $\tau$ que a relação de ordem $\sqsubseteq$ diz ser menos geral do que $\sigma$.
-Assim, em um contexto $\Gamma$, uma variável $x$ terá tipo $\tau$ caso esta esteja presente no contexto.
-A regra $\mathtt{[Int]}$, é bem direta ao ponto.
-Em um contexto $\Gamma$, um literal inteiro terá um tipo $\mathtt{int}$.
-Por exemplo, se $x{:}\ \forall\vv\alpha.\tau\in\Gamma$, então $\Gamma\vdash x{:}\ \tau$ (após renomeação adequada das variáveis de tipo).
 
-As continuações, como discutido anteriormente na Seção~\ref{subsec:cps}, representam fluxos de controle que não retornam valores.
+Aqui, a regra $\mathtt{[Var]}$ define como tipo de uma variável uma instância do tipo (possivelmente polimórfico) que está associado a variável no contexto de tipos.
+O símbolo $\sqsubseteq$ denota essa relação de ordem, indicando que o tipo $\tau$ é menos geral que $\sigma$.
+Assim, em um contexto $\Gamma$, uma variável $x$ terá tipo $\tau$ caso esta esteja presente no contexto.
+A regra $\mathtt{[Int]}$, é direta.
+Em um contexto $\Gamma$, um literal inteiro terá um tipo $\mathtt{int}$.
+Por exemplo, se $x{:}\ \forall\vv\alpha.\tau\in\Gamma$, então $\Gamma\vdash x{:}\ \tau$ (após instanciação adequada das variáveis de tipo).
+
+As continuações, como discutido na Seção~\ref{subsec:cps}, representam fluxos de controle que não retornam valores.
 Uma vez que a continuação pode ser interpretada como o próximo passo de uma computação, e a computação se dá por contradições, a continuação em si não possui um tipo, ela representa um absurdo.
 Então, pode se dizer que a continuação é uma testemunha de que aquilo é um absurdo.
 
 A regra $[\mathtt{Jump}]$ portanto, diz que sob um contexto $\Gamma$, se $k{:}\ \neg(\tau_1,\dots,\tau_n)$ com $n$ argumentos e cada argumento $a_i$ tiver um tipo correspondente $\tau_i$, então $k(\vv{a})$ é válido, ou seja, o salto $k$ com os argumentos $\vv{a}$ é testemunha de uma contradição.
 De modo semelhante para o $\mathtt{[Bind]}$, as premissas $c$ e $b$ onde $c$ está sob o contexto $\{\ \Gamma\ \cup\ \{\ \vv{x}{:}\ \vv{\tau}\ \}\ \}$, e $b$ sob o contexto $\{\ \Gamma\ \cup\ \{\ k{:}\ \overline{\Gamma}(\neg\vv\tau)\ \}\ \}$, são testemunhas de que o comando $\mathtt{let}\ k(\vv{x}) = c\ \mathtt{in}\ b$ é uma contradição.
-Assim como o `let' introduz o polimorfismo no sistema Hindley-Milner, melhor detalhado na Seção~\ref{sec:damas-milner}, a generalização $\overline{\Gamma}(\neg\vv{\tau})$ presente na premissa do $\mathtt{[Bind]}$ quantifica as variáveis livres de $\vv{\tau}$ em $\Gamma$, estendendo o polimorfismo também ao CPS.
+Assim como o `let' introduz o polimorfismo no sistema Damas-Milner, a generalização $\overline{\Gamma}(\neg\vv{\tau})$ presente na premissa do $\mathtt{[Bind]}$ quantifica as variáveis livres de $\vv{\tau}$ em $\Gamma$, estendendo o polimorfismo também ao CPS.
 
-O algoritmo de inferência de tipos segue o mesmo esquema de Hindley-Milner (algoritmo W) adaptado ao CPS.
+O algoritmo de inferência de tipos segue o mesmo esquema de Damas-Milner (algoritmo W) adaptado ao CPS.
 Assim como o W, este faz uso do unificador mais geral, retornando sempre que existir o tipo mais genérico das expressões pertencentes a este sistema.
 Abaixo, tem-se sua definição:
 
@@ -115,7 +124,7 @@ Abaixo, tem-se sua definição:
     \AxiomC{$S_1\Gamma, k{:}\ \sigma\vdash_W b \Rightarrow S_2$}
     \QuaternaryInfC{$\Gamma \vdash_W \mathtt{let}\ k(\vv{x}) = c\ \mathtt{in}\ b \Rightarrow S_2 \circ S_1$}
 \end{prooftree}
-Para as regras de inferência dos átomos, tal qual o sistema de tipos definido anteriormente, o algoritmo com uma variável $x$ de politipo $\sigma$ pertencente ao contexto $\Gamma$ retornará um monotipo $\tau$ sob o mesmo contexto onde $\tau$ será a instanciação deste tipo $\sigma$.
+Para as regras de inferência dos átomos, tal qual o sistema de tipos definido anteriormente, o algoritmo com uma variável $x$ de tipo polimórfico $\sigma$ pertencente ao contexto $\Gamma$ retornará um tipo monomórfico $\tau$ sob o mesmo contexto onde $\tau$ será a instanciação deste tipo $\sigma$.
 Para o tipo numérico, não são necessárias premissas, algoritmo simplesmente devolve o tipo $\mathtt{int}$.
 \begin{prooftree}
     \AxiomC{$a{:}\ \forall\alpha.\alpha \in \Gamma$}
@@ -126,7 +135,7 @@ Por exemplo, esteja a variável $a$ com tipo $\forall\alpha.\alpha$ no contexto,
 O algoritmo então inferirá, que a variável $a$ terá tipo $\alpha$, após as devidas normalizações (redução-$\alpha$).
 
 Os comandos serão inferidos a partir de substituições, onde o algoritmo as retornará representando o absurdo para qual esses testemunham.
-Para o $\mathtt{[Jump]}$, partindo das premissas onde sob um contexto $\Gamma$, a chamada $k$ terá monotipo $\tau_1$, os $n$ argumentos em $\vv{a}$ terão $n$ monotipos $\tau_2$, e ainda, $S$ é a unificação mais geral entre $\tau_1$ e $\neg\vv{\tau_2}$, o algoritmo irá então retornar esta substituição $S$ para o salto $k(\vv{a})$.
+Para o $\mathtt{[Jump]}$, partindo das premissas onde sob um contexto $\Gamma$, a chamada $k$ terá um tipo monomórfico $\tau_1$, os $n$ argumentos em $\vv{a}$ terão $n$ tipos monomórficos $\tau_2$, e ainda, $S$ é a unificação mais geral entre $\tau_1$ e $\neg\vv{\tau_2}$, o algoritmo irá então retornar esta substituição $S$ para o salto $k(\vv{a})$.
 
 \begin{prooftree}
     \AxiomC{$\Gamma \vdash_W k{:}\ \alpha$}
@@ -137,6 +146,44 @@ Para o $\mathtt{[Jump]}$, partindo das premissas onde sob um contexto $\Gamma$, 
 Por exemplo, em determinado contexto $\Gamma$, seja a chamada $k$ com tipo $\alpha$, ou seja, $\Gamma \vdash_W k{:}\ \alpha$, e ainda sob o mesmo contexto, o argumento $x$ com tipo $\beta$, ou seja, $\Gamma \vdash_W x{:}\ \beta$.
 A partir da unificação mais geral entre $\alpha$ e $\neg\beta$ é obtida a substituição $S$, ou seja, $S = \mathit{mgu}(\alpha, \neg\beta)$.
 O algoritmo então, irá inferir que a substituição para que o salto represente uma contradição é $\{\alpha \mapsto \neg\beta\}$.
+
+Vale destacar que o algoritmo de unificação apresentado na Figura~\ref{algo:unify}, ainda que retorne a substituição que representa a unificação mais geral, não é o mesmo que o $\mathit{mgu}$ utilizado na regra $[\mathtt{Jump}]$.
+Suas definições variam conforme os sistemas de tipos que elas atendem.
+Enquanto que a função \Unify\ é definida para os tipos do Sistema Damas-Milner, a \Mgu, apresentada na Figura~\ref{algo:mgu-cps} é definida para os tipos do Sistema baseado em continuações.
+
+\begin{figure}[ht!]
+  \caption{Algoritmo de unificação para o Sistema baseado em continuações no formato de função.}
+  \centering
+  \begin{align*}
+    & \texttt{\Mgu($\alpha,\Whitespace\tau$) = } \\
+    & \qquad{} \texttt{\Return\Whitespace\UnifyVar($\alpha,\Whitespace\tau$)} \\
+    & \texttt{\Mgu($\tau,\Whitespace\alpha$) = } \\
+    & \qquad{} \texttt{\Return\Whitespace\UnifyVar($\alpha,\Whitespace\tau$)} \\
+    & \texttt{\Mgu(\texttt{Int},\Whitespace\texttt{Int}) = } \\
+    & \qquad{} \texttt{\Return\Whitespace[$\Whitespace$]} \\
+    & \texttt{\Mgu(\texttt{Neg}\Whitespace ${list}_{1}$,\Whitespace\texttt{Neg} ${list}_{2}$) = } \\
+    & \qquad{} \texttt{\If \Whitespace \Length\Whitespace${list}_{1}$ $\neq$ \Length\Whitespace${list}_{2}$, \Then \Whitespace \Fail} \\
+    & \qquad{} \texttt{\Else\Whitespace\Return\Whitespace\MguList(${list}_{1},\Whitespace{list}_{2}$)} \\
+    & \texttt{\Mgu($\tau_1,\Whitespace\tau_2$) = } \\
+    & \qquad{} \texttt{\Fail} \\
+    \\
+    & \texttt{\MguList($[\Whitespace],\Whitespace[\Whitespace]$) = } \\
+    & \qquad{} \texttt{\Return\Whitespace[$\Whitespace$]} \\
+    & \texttt{\MguList($[\tau\HeadSep\Whitespace\tau_s],\Whitespace[\tau'\HeadSep\Whitespace\tau_s']$) = } \\
+    & \qquad{} \texttt{$S_1$\Whitespace:=\Whitespace\Mgu($\tau,\Whitespace\tau'$)} \\
+    & \qquad{} \texttt{$S_2$\Whitespace:=\Whitespace\MguList($S_1(\tau_s),\Whitespace S_1(\tau_s')$)} \\
+    & \qquad{} \texttt{\Return\Whitespace$S_2\Whitespace \circ\Whitespace S_1$} \\
+    & \texttt{\MguList($\_,\Whitespace\_$) = } \\
+    & \qquad{} \texttt{\Fail}
+  \end{align*}
+  \small{Fonte: autor.}
+  \label{algo:mgu-cps}
+\end{figure}
+
+A principal diferença deste algoritmo em relação ao anterior é que, neste sistema de tipos, há listas de tipos que também precisam ser unificadas.
+Para realizar essa unificação, verifica-se inicialmente se as duas listas possuem o mesmo tamanho, ou seja, se $\texttt{\Length}\ list_1 = \texttt{\Length}\ list_2$.
+Caso essa condição seja satisfeita, o algoritmo \Mgu\ é aplicado recursivamente a cada par de tipos correspondentes nos mesmos índices das listas, acumulando as substituições parciais ao longo do processo.
+A função \texttt{\UnifyVar} é responsável por realizar a unificação entre variáveis de tipo e outros tipos, retornando a substituição correspondente ou um erro, caso a verificação de ocorrência via \texttt{\Occurs} falhe.
 
 Para a regra que garante o polimorfismo do sistema, o $[\mathtt{Bind}]$, a chamada $k$ recebe $\vv{x}$ argumentos, onde estes terão $\vv{\tau}$ tipos como sendo variáveis de tipo, ou seja, $\vv{\tau} = \vv{\mathit{newvar}}$.
 O $c$, por se tratar de um comando, será uma substituição $S_1$, onde recursivamente será inferida com o contexto inicial $\Gamma$ unido com os $\vv{x}$ argumentos tipados com suas $\vv{\tau}$ variáveis de tipo frescas, ou seja, $\{\ \Gamma\ \cup\ \{\ \vv{x}{:}\ \vv{\tau}\ \}\ \} \vdash_W c \Rightarrow S_1$.

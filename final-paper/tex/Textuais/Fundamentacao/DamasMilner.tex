@@ -157,7 +157,7 @@ O algoritmo de unificação, \Unify, descrito na Figura~\ref{algo:unify}, retorn
 Ele verifica se os tipos são idênticos, se uma variável de tipo pode ser substituída por outro tipo, ou, no caso de tipos compostos, se suas partes podem ser unificadas independentemente.
 
 \begin{figure}[ht!]
-  \caption{Algoritmo de unificação no formato de função.}
+  \caption{Algoritmo de unificação para o Sistema Damas-Milner no formato de função.}
   \centering
   \begin{align*}
      & \texttt{\Unify($\alpha, \Whitespace \alpha$) = }                                                                     \\
@@ -182,7 +182,7 @@ O algoritmo \Unify\ faz uso da função de verificação de ocorrência \Occurs\
 Esta função verifica recursivamente se uma variável de tipo $\alpha$ aparece em um tipo $\tau$.
 
 \begin{figure}[ht!]
-  \caption{Algoritmo de verificação de ocorrência no formato de função.}
+  \caption{Algoritmo de verificação de ocorrência para o Sistema Damas-Milner no formato de função.}
   \centering
   \begin{align*}
      & \texttt{\Occurs($\alpha, \Whitespace \tau_1 \to \tau_2$) = }                                                       \\

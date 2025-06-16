@@ -6,7 +6,8 @@ O algoritmo de inferência proposto para este sistema de tipos é capaz de infer
 Seu desenvolvimento foi bem direto ao ponto como pode ser visto abaixo no Listing~\ref{cps:infer-command}.
 
 \lstinputlisting[style=haskell, label=cps:infer-command, caption={Função principal de Inferência}]{Code/Type-Inferer/CPS_infer_command.hs}
-Muitas das funções necessárias para a inferência do CPS são iguais as do Hindley-Milner, por não ser o foco deste trabalho, explicações sobre estas serão omitidos.
+Muitas das funções necessárias para a inferência do CPS são iguais as do Damas-Milner.
+Por não ser o foco deste trabalho, explicações sobre estas serão omitidos.
 Desta forma, o processamento para se inferir o tipo das continuações foi dividido em três principais funções.
 
 A função $\mathtt{inferAtom \dblcolon Context \to Id \to TI\ CPSMonoType}$, como seu nome e assinatura indica, é a função responsável por inferir os átomos do termo, isto é, buscar as variáveis do contexto e retorná-las caso sejam literais, instanciá-las se forem variáveis polimórficas, ou então retornar erro caso esta não esteja presente.

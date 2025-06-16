@@ -13,7 +13,6 @@ Isto é, no caso de uma implementação não tipada da tradução, não haveria 
 Como a tradução para CBV não preserva tipos, um dos trabalhos futuros incluiria a correção deste.
 Para tal, seria necessário propor um outro sistema de tipos polimórfico para o cálculo de continuações onde, sejam distinguidos tipos e cotipos dentre os argumentos para que o algoritmo de inferência saiba quando utilizar um ou outro.
 
-Outro trabalho futuro extremamente necessário é a formalização de provas a respeito do sistema.
-Neste trabalho, somente alguns casos de teste foram feitos, e isto apenas significa que para as entradas testadas, o algoritmo está correto.
-Desta forma, para raciocinar sobre o sistema, é importante que a completude e consistência deste seja verificado, bem como a verificação formal do desenvolvimento, de modo a garantir que tanto o sistema quanto sua implementação estejam corretos.
+Outro trabalho futuro são as provas de consistência e completude do sistema de tipos proposto em relação ao algoritmo de inferência.
+Neste trabalho foram executados alguns casos de testes que demostraram empiricamente que o algoritmo está correto.
 Em conjunto, um avanço seria a criação de um compilador que faça uso desta IR tipada, colocando em prática toda a teoria aqui apresentada.
