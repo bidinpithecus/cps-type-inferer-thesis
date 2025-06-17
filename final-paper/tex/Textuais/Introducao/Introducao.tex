@@ -9,8 +9,6 @@ Para linguagens imperativas, a Representação em Atribuição Única Estática 
 Já em linguagens funcionais, a Forma Normal A (ANF) e o Estilo de Passagem de Continuação (CPS) se destacam.
 Este trabalho foca especificamente no CPS, uma IR que oferece vantagens particulares em termos de otimização e simplicidade na geração de código.
 
-Essas características do CPS se tornam ainda mais evidentes quando comparamos como diferentes linguagens lidam com o fluxo de execução. Em linguagens de alto nível, por exemplo, a pilha de chamadas atua como uma abstração fundamental para gerenciar o controle de retorno das funções. No entanto, em linguagens de baixo nível, como \textit{assembly}, não há tal abstração, exigindo que o controle do fluxo seja manualmente tratado por meio de endereços de retorno.
-
 Essas características do CPS se tornam ainda mais evidentes quando é comparado como diferentes linguagens lidam com o fluxo de execução.
 Em linguagens de alto nível, por exemplo, a pilha de chamadas atua como uma abstração fundamental para gerenciar o controle de retorno das funções.
 No entanto, em linguagens de baixo nível, como \textit{assembly}, o controle de fluxo é mais explícito e depende do uso direto de instruções, que operam sobre a pilha de chamadas para empilhar e desempilhar os endereços de retorno.
@@ -44,12 +42,26 @@ Este trabalho tem como objetivo formalizar uma extensão para o sistema de tipos
 \end{itemize}
 
 \section{Trabalhos Relacionados}
-Após um estudo na literatura a acerca da tipagem de linguagens de mais baixo nível em relação ao código fonte, alguns trabalhos correlatos foram encontrados.
+Após um estudo na literatura a respeito da tipagem de linguagens de mais baixo nível em relação ao código fonte, alguns trabalhos correlatos foram encontrados.
 
-Em~\cite{morrisett1999systemF}, os autores propõem uma linguagem de montagem tipada (TAL do inglês \textit{Typed Assembly Language}) e um compilador que traduz programas do System F para TAL de forma preservadora de tipos.
-A linguagem TAL é baseada em uma arquitetura reduzida (RISC do inglês \textit{Reduced Instruction Set Computer}) e possui um sistema de tipos capaz de representar abstrações de linguagens de alto nível, como fechamentos, tuplas e tipos existenciais.
-A tradução é dividida em etapas como conversão para CPS e conversão de fechamentos, mantendo correção tipada em cada fase.
+Em~\cite{necula1997pcc}, os autores introduzem o conceito de um código que carrega provas (PCC do inglês \textit{Proof-Carrying Code}), um paradigma em que programas de código de máquina carregam junto a si provas formais de que obedecem a certas propriedades de segurança.
+O sistema de verificação do consumidor do código pode então validar essas provas de forma automática, sem necessidade de confiar no produtor.
+O modelo proposto utiliza uma linguagem de políticas de segurança, uma lógica para especificações e provas, e uma máquina abstrata como base formal.
+O trabalho demonstra a viabilidade prática do modelo com a implementação de um verificador rápido para código de baixo nível, destacando a aplicabilidade do PCC em ambientes com execução de código não confiável, como acontece em sistemas distribuídos.
+
+Em~\cite{morrisett1999systemF}, os autores propõem uma linguagem de montagem tipada (TAL do inglês \textit{Typed Assembly Language}) e um compilador que traduz programas do Sistema F (do inglês \textit{System F}) para TAL de forma preservadora de tipos.
+A linguagem TAL é baseada em uma arquitetura reduzida (RISC do inglês \textit{Reduced Instruction Set Computer}) e possui um sistema de tipos capaz de representar abstrações de linguagens de alto nível, como fechamentos e tuplas.
+A tradução é dividida em etapas como conversão para CPS e conversão de fechamentos, mantendo a tipagem correta em cada fase.
 O trabalho também apresenta uma abordagem simplificada para conversão de fechamentos polimórficos e discute o uso de TAL para geração de código seguro em ambientes com código não confiável.
+
+Em~\cite{shao1998implementing}, os autores descrevem a implementação da linguagem intermediária tipada FLINT no compilador SML/NJ, com foco na eficiência e escalabilidade de compiladores que preservam tipos.
+O trabalho defende que um compilador que mantém informações de tipo não será escalável a menos que todas as suas fases também preservem a complexidade assintótica de tempo e espaço ao representar e manipular tipos.
+Para isso, são combinadas técnicas como \textit{hash-consing}, memoização e codificação lambda com suspensões, garantindo representações compactas em forma de grafos acíclicos direcionados (DAGs do inglês \textit{Directed Acyclic Graphs}).
+Os autores mostram que, com essas técnicas, é possível realizar operações como substituição, igualdade e redução de tipos de forma eficiente, o que viabiliza o uso prático de linguagens intermediárias fortemente tipadas.
+
+Em~\cite{bowman2018cps}, os autores demonstram que a tradução CPS preservadora de tipos para linguagens dependentemente tipadas com tipos $\Sigma$ e $\Pi$ não é impossível, como sugerido por resultados anteriores.
+Utilizando \textit{answer-type polymorphism}, eles propõem novas traduções CPS \textit{call-by-name} e \textit{call-by-value} a partir do Cálculo de Construções, provando preservação de tipos e correção da compilação.
+Para isso, estendem a linguagem alvo com regras adicionais justificadas por um teorema livre, e provam a consistência desse sistema por meio de um modelo no Cálculo das Construções extensional.
 
 \section{Metodologia}\label{sec:metodologia}
 
