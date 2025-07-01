@@ -5,7 +5,6 @@
 \newcommand{\Length}{\ensuremath{\textit{length}}}
 \newcommand{\List}{\ensuremath{\textit{list}}}
 
-
 \section{Formalização}\label{sec:formalizacao}
 
 Em razão da natureza mais prática deste trabalho, a notação utilizada para representar o cálculo de continuações será a mesma utilizada por~\citeonline{appel1997shrinking}, a sintaxe do `let'.
@@ -152,7 +151,6 @@ Suas definições variam conforme os sistemas de tipos que elas atendem.
 Enquanto que a função \Unify\ é definida para os tipos do Sistema Damas-Milner, a \Mgu, apresentada na Figura~\ref{algo:mgu-cps} é definida para os tipos do Sistema baseado em continuações.
 
 \begin{figure}[ht!]
-  \caption{Algoritmo de unificação para o Sistema baseado em continuações no formato de função.}
   \centering
   \begin{align*}
     & \texttt{\Mgu($\alpha,\Whitespace\tau$) = } \\
@@ -176,6 +174,7 @@ Enquanto que a função \Unify\ é definida para os tipos do Sistema Damas-Milne
     & \texttt{\MguList($\_,\Whitespace\_$) = } \\
     & \qquad{} \texttt{\Fail}
   \end{align*}
+  \caption{Algoritmo de unificação para o Sistema baseado em continuações no formato de função.}
   \small{Fonte: autor.}
   \label{algo:mgu-cps}
 \end{figure}

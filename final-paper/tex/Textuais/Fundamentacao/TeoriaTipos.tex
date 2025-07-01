@@ -45,11 +45,11 @@ Já no segundo, o comportamento varia conforme o tipo dos argumentos, permitindo
 
 Em linguagens como Haskell, o sistema de tipos deduz automaticamente tipos genéricos sempre que possível, permitindo que funções como a identidade ($\lambda x.x$, tipada como $\forall \alpha. \alpha \to \alpha$) sejam usadas de forma universal. 
 Por outro lado, funções com restrições específicas ilustram o polimorfismo com sobrecarga. 
-Por exemplo, a função de soma no Listing~\ref{code:add}, originalmente definida como $Int \rightarrow Int \rightarrow Int$, pode ser generalizada para operar sobre quaisquer tipos numéricos utilizando classes de tipos. 
+Por exemplo, a função de soma no Código~\ref{code:add}, originalmente definida como $Int \rightarrow Int \rightarrow Int$, pode ser generalizada para operar sobre quaisquer tipos numéricos utilizando classes de tipos. 
 Isso é alcançado ao substituir a tipagem explícita por uma restrição como \texttt{Num a => a -> a -> a}, onde \texttt{Num a} indica que \texttt{a} deve pertencer à classe de tipos numéricos.
 
 Em Haskell, classes de tipos são mecanismos que habilitam o polimorfismo de sobrecarga. 
-A função \texttt{sumList}, por exemplo, (Listing~\ref{code:sum_list}) é definida com a restrição \texttt{Num a}, permitindo que opere sobre listas de inteiros, \texttt{Float}, \texttt{Double} ou outros tipos numéricos. 
+A função \texttt{sumList}, por exemplo, (Código~\ref{code:sum_list}) é definida com a restrição \texttt{Num a}, permitindo que opere sobre listas de inteiros, \texttt{Float}, \texttt{Double} ou outros tipos numéricos. 
 Essa abordagem combina flexibilidade e segurança: o polimorfismo com sobrecarga garante que a função generalize seu comportamento apenas dentro de um domínio específico (\textit{e.g.}, números), evitando inconsistências. 
 
 \lstinputlisting[style=haskell, label=code:sum_list, caption={Função somatório de elementos de lista em Haskell}]{Code/sum_list.hs}

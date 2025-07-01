@@ -38,9 +38,8 @@ Abaixo, segue a gramática das expressões e tipos:
     \\
     \text{Variáveis de tipo} & \alpha                                                                            \\
     \text{Tipos primitivos}  & \iota                                                                             \\
-    \text{Tipos}             & \tau \Coloneqq \alpha \mid \iota \mid \tau \rightarrow \tau
-    \alpha                                                                                                       \\
-    \text{Esquemas de tipo}           & \sigma \Coloneqq \forall \alpha. \sigma \mid \tau                                       \\
+    \text{Tipos}             & \tau \Coloneqq \alpha \mid \iota \mid \tau \rightarrow \tau'                       \\
+    \text{Esquemas de tipo}           & \sigma \Coloneqq \forall \alpha. \sigma \mid \tau                        \\
   \end{array}
 \end{equation}
 
@@ -98,45 +97,60 @@ O sistema de tipos de Damas e Milner é definido por um conjunto de regras de in
 Essas regras são representadas por meio de julgamentos de tipos da forma $\Gamma \vdash e{:}\ \sigma$, onde $\Gamma$ é o contexto -- um conjunto de suposições na forma de pares $(x_i,\ \sigma_i)$, associando variáveis $x_i$ aos seus respectivos tipos $\sigma_i$ --, $e$ é a expressão sendo tipada, e $\sigma$ é o tipo inferido para essa expressão.
 
 \begin{figure}[ht!]
+  \fbox{$\Gamma\vdash x{:}\ \tau$}
+
   \centering
-  \[
-    \text{TAUT:} \quad \frac{x : \sigma \in \Gamma}{\Gamma \vdash x : \sigma}
-  \]
 
-  \[
-    \text{ABS:} \quad \frac{\Gamma, x : \tau \vdash e : \tau'}{\Gamma \vdash (\lambda x. e) : \tau \to \tau'}
-  \]
+  \begin{prooftree}
+      \LeftLabel{$\mathtt{[Taut]{:}\quad}$}
+      \AxiomC{$x{:}\ \sigma \in \Gamma$}
+      \UnaryInfC{$\Gamma \vdash x{:}\ \sigma$}
+  \end{prooftree}
 
-  \[
-    \text{APP:} \quad \frac{\Gamma \vdash e : \tau' \to \tau \quad \Gamma \vdash e' : \tau'}{\Gamma \vdash (e \ e') : \tau}
-  \]
+  \begin{prooftree}
+      \LeftLabel{$\mathtt{[Abs]{:}\quad}$}
+      \AxiomC{$\Gamma,\ x{:}\ \tau \vdash e{:}\ \tau'$}
+      \UnaryInfC{$\Gamma \vdash (\lambda x.\ e){:}\ \tau \to \tau'$}
+  \end{prooftree}
 
-  \[
-    \text{LET:} \quad \frac{\Gamma \vdash e : \sigma \quad \Gamma, x : \sigma \vdash e' : \tau}{\Gamma \vdash (\texttt{let } x = e \ \texttt{in} \ e') : \tau}
-  \]
+  \begin{prooftree}
+      \LeftLabel{$\mathtt{[App]{:}\quad}$}
+      \AxiomC{$\Gamma \vdash e{:}\ \tau' \to \tau$}
+      \AxiomC{$\Gamma \vdash e'{:}\ \tau'$}
+      \BinaryInfC{$\Gamma \vdash (e\ e'){:}\ \tau$}
+  \end{prooftree}
 
-  \[
-    \text{INST:} \quad \frac{\Gamma \vdash e : \sigma}{\Gamma \vdash e : \sigma'} \quad \scriptstyle (\sigma\ >\ \sigma')
-  \]
+  \begin{prooftree}
+      \LeftLabel{$\mathtt{[Let]{:}\quad}$}
+      \AxiomC{$\Gamma \vdash e{:}\ \sigma$}
+      \AxiomC{$\Gamma, x{:}\ \sigma \vdash e'{:}\ \tau$}
+      \BinaryInfC{$\Gamma \vdash (\texttt{let } x = e \ \texttt{in} \ e'){:}\ \tau$}
+  \end{prooftree}
 
-  \[
-    \text{GEN:} \quad \frac{\Gamma \vdash e : \sigma}{\Gamma \vdash e : \forall \alpha \sigma} \quad \scriptstyle (\alpha \text{ não livre em } \Gamma)
-  \]
+  \begin{prooftree}
+      \LeftLabel{$\mathtt{[Inst]{:}\quad}$}
+      \RightLabel{\scriptsize{$\mathtt{(\sigma\ \succ \sigma')}$}}
+      \AxiomC{$\Gamma \vdash e{:}\ \sigma$}
+      \UnaryInfC{$\Gamma \vdash e{:}\ \sigma'$}
+  \end{prooftree}
+
+  \begin{prooftree}
+      \LeftLabel{$\mathtt{[Gen]{:}\quad}$}
+      \RightLabel{\scriptsize $\alpha \notin \text{FV}(\Gamma)$}
+      \AxiomC{$\Gamma \vdash e{:}\ \sigma$}
+      \UnaryInfC{$\Gamma \vdash e{:}\ \forall \alpha.\ \sigma$}
+  \end{prooftree}
 
   \caption{Regras de Inferência do sistema Damas-Milner}
   \small{Fonte: o autor. Adaptado de~\cite{damas1982principal}}\label{eq:type-inference}
 \end{figure}
 
 As regras de inferência são interpretadas de baixo para cima.
-Por exemplo, na regra da tautologia (TAUT):
-\[
-  \frac{x : \sigma \in \Gamma}{\Gamma \vdash x : \sigma}
-\]
-significa que, se em um contexto $\Gamma$, a variável $x$ possui o tipo $\sigma$, então podemos concluir que $x$ tem o tipo $\sigma$ no mesmo contexto.
+Por exemplo, na regra da tautologia \texttt{[Taut]} apresentada na Figura~\ref{eq:type-inference}, significa que, se em um contexto $\Gamma$, a variável $x$ possui o tipo $\sigma$, então podemos concluir que $x$ tem o tipo $\sigma$ no mesmo contexto.
 Isso reflete o fato de que a associação de tipos no contexto é preservada.
 
-Na regra de generalização (GEN), a condição de que $\alpha$ não seja livre em $\Gamma$ assegura que o tipo generalizado não dependa de nenhum tipo específico presente no contexto.
-Isso permite que o tipo $\forall \alpha. \sigma$ seja usado de forma polimórfica em diferentes partes do programa.
+Na regra de generalização \texttt{[Gen]} da Figura~\ref{eq:type-inference}, a condição de que $\alpha$ não seja livre em $\Gamma$ {---} formalmente escrita como $\alpha \notin \text{FV}(\Gamma)$ {---} assegura que o tipo generalizado não dependa de nenhum tipo específico presente no contexto.
+Isso permite que o tipo $\forall \alpha.\ \sigma$ seja usado de forma polimórfica em diferentes partes do programa.
 
 Essas regras garantem a solidez do sistema, preservando a segurança dos tipos ao inferir automaticamente os tipos mais gerais possíveis para as expressões.
 
@@ -146,7 +160,8 @@ A seguir, será discutido em detalhes o funcionamento do Algoritmo W.
 \subsection{Algoritmo W}\label{subsec:w-algo}
 
 O Algoritmo W, introduzido em~\citeonline{damas1982principal}, é um algoritmo eficiente\footnote{Embora seja eficiente na grande maioria dos casos, há situações em que o Algoritmo W apresenta desempenho exponencial, conforme discutido em~\cite{vasconcellos2004inferencia}.} para inferência de tipos em linguagens de programação funcional.
-Ele se baseia no processo de unificação para solucionar equações de tipos geradas durante a análise de expressões, atribuindo os tipos mais gerais possíveis, ou seja, os tipos mais polimórficos que ainda garantem a consistência do sistema.
+Ele se baseia no processo de unificação para resolver equações de tipos geradas durante a análise de expressões, atribuindo a cada expressão um tipo principal (do inglês \textit{principal type-scheme}) (isto é, o tipo mais geral possível, no sentido de que qualquer outro tipo atribuível à expressão pode ser obtido a partir deste por substituição).
+Formalmente, para uma expressão $e$, o Algoritmo W encontra um tipo $\tau$ tal que, para qualquer tipo $\tau'$ que também possa ser atribuído a $e$, existe uma substituição $S$ tal que $S(\tau) = \tau'$.
 
 A unificação é o processo de encontrar uma substituição de variáveis de tipo que torna dois tipos dados equivalentes.
 Formalmente, dados dois tipos $\tau_1$ e $\tau_2$, a unificação procura uma substituição $S$ tal que $S\tau_1 = S\tau_2$.
@@ -157,7 +172,6 @@ O algoritmo de unificação, \Unify, descrito na Figura~\ref{algo:unify}, retorn
 Ele verifica se os tipos são idênticos, se uma variável de tipo pode ser substituída por outro tipo, ou, no caso de tipos compostos, se suas partes podem ser unificadas independentemente.
 
 \begin{figure}[ht!]
-  \caption{Algoritmo de unificação para o Sistema Damas-Milner no formato de função.}
   \centering
   \begin{align*}
      & \texttt{\Unify($\alpha, \Whitespace \alpha$) = }                                                                     \\
@@ -175,14 +189,16 @@ Ele verifica se os tipos são idênticos, se uma variável de tipo pode ser subs
      & \texttt{\Unify($\tau_1 \to \tau_2, \Whitespace \tau_1' \to \tau_2'$) = }                                             \\
      & \qquad{}\texttt{\Return \Whitespace $\Unify(\tau_1, \Whitespace \tau_1') \circ \Unify(\tau_2, \Whitespace \tau_2')$}
   \end{align*}
+  \caption{Algoritmo de unificação para o Sistema Damas-Milner no formato de função.}
   \small{Fonte: autor. Adaptado de~\cite{ribeiro2016mechanized}}\label{algo:unify}
 \end{figure}
 
 O algoritmo \Unify\ faz uso da função de verificação de ocorrência \Occurs\ apresentado na Figura~\ref{algo:occurs}, que por sua vez, tem como propósito evitar substituições que introduzam ciclos, como $[\alpha\mapsto\alpha\to\alpha]$, que resultaria em inconsistência no sistema de tipos~\cite{ribeiro2016mechanized}.
 Esta função verifica recursivamente se uma variável de tipo $\alpha$ aparece em um tipo $\tau$.
-
+Na última regra do algoritmo \Unify, ao unificar dois tipos função (do inglês \textit{arrow type}) $\tau_1 \to \tau_2$ e $\tau_1' \to \tau_2'$, a substituição resultante é obtida pela composição $S_2 \circ S_1$, onde $S_1 = \Unify(\tau_1,\ \tau_1')$ e $S_2 = \Unify(\tau_2,\ \tau_2')$.
+Aqui, a composição $S_2 \circ S_1$ é definida como a substituição que aplica $S_1$ primeiro, seguida por $S_2$, ou seja, para qualquer variável de tipo $\alpha$, temos $(S_2 \circ S_1)(\alpha) = S_2(S_1(\alpha))$.
+Essa definição garante que as substituições sejam aplicadas corretamente em cascata durante o processo de unificação.
 \begin{figure}[ht!]
-  \caption{Algoritmo de verificação de ocorrência para o Sistema Damas-Milner no formato de função.}
   \centering
   \begin{align*}
      & \texttt{\Occurs($\alpha, \Whitespace \tau_1 \to \tau_2$) = }                                                       \\
@@ -192,6 +208,7 @@ Esta função verifica recursivamente se uma variável de tipo $\alpha$ aparece 
      & \texttt{\Occurs($\alpha, \Whitespace \tau$) = }                                                                    \\
      & \qquad{}\texttt{\Return \Whitespace \False}
   \end{align*}
+  \caption{Algoritmo de verificação de ocorrência para o Sistema Damas-Milner no formato de função.}
   \small{Fonte: autor. Adaptado de~\cite{ribeiro2016mechanized}}\label{algo:occurs}
 \end{figure}
 
@@ -200,46 +217,62 @@ Ele atribui os tipos mais gerais possíveis a cada subexpressão, garantindo a c
 O algoritmo combina a unificação com regras de inferência de tipos para deduzir o tipo de uma expressão, explorando o polimorfismo de forma eficiente.
 
 \begin{figure}[ht!]
-  \caption{Algoritmo W no formato de função.}
+  \fbox{$\Gamma \vdash_W e{:}\ \tau,\ S$}
+  
+  \begin{prooftree}
+      \LeftLabel{\texttt{[Var]}}
+      \AxiomC{$x{:}\ \sigma \in \Gamma$}
+      \AxiomC{$\tau = \mathit{inst}(\sigma)$}
+      \BinaryInfC{$\Gamma \vdash_W x{:}\ \tau,\ \emptyset$}
+  \end{prooftree}
+
+  \begin{prooftree}
+      \LeftLabel{\texttt{[App]}}
+      \AxiomC{$\Gamma \vdash_W e_0{:}\ \tau_0,\ S_0$}
+      \AxiomC{$S_0\Gamma \vdash_W e_1{:}\ \tau_1,\ S_1$}
+      \AxiomC{$\tau' = \mathit{newvar}$}
+      \AxiomC{$S_2 = \mathtt{mgu}(S_1\tau_0,\ \tau_1 \rightarrow \tau')$}
+      \QuaternaryInfC{$\Gamma \vdash_W e_0\ e_1{:}\ S_2\tau',\ S_2 S_1 S_0$}
+  \end{prooftree}
+
+  \begin{prooftree}
+      \LeftLabel{\texttt{[Abs]}}
+      \AxiomC{$\tau = \mathit{newvar}$}
+      \AxiomC{$\Gamma,\ x{:}\ \tau \vdash_W e{:}\ \tau',\ S$}
+      \BinaryInfC{$\Gamma \vdash_W \lambda x.\ e{:}\ S\tau \rightarrow \tau',\ S$}
+  \end{prooftree}
+
+  \begin{prooftree}
+      \LeftLabel{\texttt{[Let]}}
+      \AxiomC{$\Gamma \vdash_W e_0{:}\ \tau,\ S_0$}
+      \AxiomC{$S_0\Gamma,\ x{:}\ \overline{S_0\Gamma}(\tau) \vdash_W e_1{:}\ \tau',\ S_1$}
+      \BinaryInfC{$\Gamma \vdash_W \mathtt{let}\ x = e_0\ \mathtt{in}\ e_1{:}\ \tau',\ S_1 S_0$}
+  \end{prooftree}
+
   \centering
-  \begin{align*}
-     & \texttt{$W$($\Gamma$, $x$) = }                                                                             \\
-     & \qquad{}\texttt{se $\Gamma(x) = \forall$ $\alpha_1 \ldots \alpha_n$ $.$ $\tau$, então}                     \\
-     & \qquad{}\qquad{}\texttt{retorna ([$\alpha_i$ $\mapsto$ $\tau_i$]$\tau$, Id), onde $\alpha_i'$ fresh}       \\
-     & \qquad{}\texttt{senão}                                                                                     \\
-     & \qquad{}\qquad{}\texttt{falha}                                                                             \\
-    \\
-     & \texttt{$W$($\Gamma$, $e$ $e'$) = }                                                                        \\
-     & \qquad{}\texttt{($\tau$, $S_1$) $\leftarrow$ $W$($\Gamma$, $e$)}                                           \\
-     & \qquad{}\texttt{($\tau'$, $S_2$) $\leftarrow$ $W$($S_1\Gamma$, $e'$)}                                      \\
-     & \qquad{}\texttt{S $\leftarrow$ unify($S_2\tau$, $\tau'$ $\to$ $\alpha$), onde $\alpha$ fresh}              \\
-     & \qquad{}\texttt{retorna (S$\alpha$, S $\circ$ $S_2$ $\circ$ $S_1$)}                                        \\
-    \\
-     & \texttt{$W$($\Gamma$, $\lambda x.e$) = }                                                                   \\
-     & \qquad{}\texttt{($\tau$, $S$) $\leftarrow$ $W$($\Gamma$[$x$ $:$ $\alpha$], $e$), onde $\alpha$ fresh}      \\
-     & \qquad{}\texttt{retorna ($S$($\alpha$ $\to$ $\tau$), $S$)}                                                 \\
-    \\
-     & \qquad{}\texttt{($\tau$, $S_1$) $\leftarrow$ $W$($\Gamma$, $e$)}                                           \\
-     & \qquad{}\texttt{($\tau'$, $S_2$) $\leftarrow$ $W$($S_1$ $\Gamma$[$x$ $:$ gen($S_1\Gamma$, $\tau$)], $e'$)} \\
-     & \qquad{}\texttt{retorna ($\tau'$, $S_2$ $\circ$ $S_1$)}                                                    \\
-  \end{align*}
-  \small{Fonte:~\cite{castro2019certificacao}}\label{algo:w}
+  \caption{Algoritmo W em formato de regras de inferência.}
+  \small{Fonte: o autor. Adaptado de~\cite{castro2019certificacao}}\label{algo:w}
 \end{figure}
 
 O funcionamento pode ser analisado para os diferentes tipos de expressões a seguir.
-Para uma variável $x$, o algoritmo verifica se existe uma atribuição de tipo para $x$ no contexto $\Gamma$.
-Se $x$ estiver associada a um tipo polimórfico da forma $\forall \alpha_1 \ldots \alpha_n . \tau$, realiza-se a substituição das variáveis ligadas $\alpha_i$ por novos tipos frescos, que não aparecem em outros lugares do contexto, e retorna-se o tipo resultante, juntamente com a substituição identidade.
-Caso $x$ não esteja no contexto, a inferência falha.
+Para uma variável $x$ (regra \texttt{[Var]}), o algoritmo verifica se existe um esquema de tipo $\sigma$ associado a $x$ no contexto $\Gamma$.
+Quando presente, realiza-se a instanciação de $\sigma$ substituindo suas variáveis quantificadas por tipos frescos (do inglês \textit{fresh types}) (variáveis novas sem colisões), obtendo o tipo concreto $\tau$.
+A substituição identidade ($\emptyset$) é retornada com o tipo inferido.
 
-Para uma aplicação de função $e\ e'$, o algoritmo infere recursivamente os tipos das subexpressões $e$ e $e'$.
-A partir desses tipos, unifica o tipo de $e$ com um tipo função $\tau' \to \alpha$, onde $\alpha$ é um novo tipo variável introduzido durante a unificação.
-A substituição resultante é então aplicada ao tipo inferido de $e$ e o algoritmo retorna o tipo correspondente à aplicação.
+Para aplicações de função $e_0\ e_1$ (regra \texttt{[App]}), o algoritmo primeiro infere recursivamente o tipo de $e_0$ em $\Gamma$, obtendo $\tau_0$ e a substituição $S_0$.
+Em seguida, no contexto atualizado $S_0\Gamma$, infere o tipo de $e_1$ obtendo $\tau_1$ e $S_1$.
+Um novo tipo variável fresco $\tau'$ é introduzido, e o unificador mais geral ($\mathtt{mgu}$) reconcilia $S_1\tau_0$ com $\tau_1 \rightarrow \tau'$, produzindo a substituição $S_2$.
+O tipo resultante $S_2\tau'$ e a composição de substituições $S_2 \circ S_1 \circ S_0$ são retornados.
 
-Quando a expressão é uma abstração $\lambda x . e$, o algoritmo atualiza o contexto adicionando uma nova variável de tipo para $x$ e procede inferindo o tipo de $e$.
-O tipo função resultante, $\alpha \to \tau$, é então retornado como o tipo inferido para a abstração.
+No caso de abstrações $\lambda x.e$ (regra \texttt{[Abs]}), um tipo fresco $\tau$ é gerado para $x$.
+O contexto é estendido para $\Gamma,\ x{:}\ \tau$, e o tipo de $e$ é inferido nesse novo contexto, produzindo $\tau'$ e a substituição $S$.
+O tipo da abstração é então determinado como $S\tau \rightarrow \tau'$, mantendo-se a substituição $S$.
 
-No caso de expressões do tipo \texttt{let}, onde uma variável é definida localmente, o algoritmo primeiro infere o tipo da expressão vinculada, seguido pelo tipo do corpo da expressão.
-O contexto é atualizado para incluir a variável definida com um tipo generalizado, permitindo polimorfismo na expressão resultante.
-A generalização é aplicada ao tipo inferido, de forma que as variáveis de tipo que não estão presentes no contexto sejam quantificadas, garantindo assim um nível adequado de polimorfismo na inferência de tipos.
-
-Essas etapas garantem que o Algoritmo W seja capaz de inferir tipos de forma eficiente, atribuindo os tipos mais polimórficos possíveis para expressões em linguagens funcionais e explorando as capacidades do sistema de tipos.
+Para expressões $\mathtt{let}\ x = e_0\ \mathtt{in}\ e_1$ (regra \texttt{[Let]}), o tipo de $e_0$ é inferido primeiro, resultando em $\tau$ e $S_0$.
+O tipo $\tau$ é generalizado no contexto $S_0\Gamma$ através da operação $\overline{S_0\Gamma}(\tau)$, definida formalmente como:
+\[
+\overline{S_0\Gamma}(\tau) = \forall\ \hat{\alpha}.\ \tau \quad \text{onde} \quad \hat{\alpha} = \text{free}(\tau) - \text{free}(S_0\Gamma)
+\]
+ou seja, as variáveis de tipo $\hat{\alpha}$ (que são livres em $\tau$ mas não no contexto $S_0\Gamma$) são quantificadas, gerando um esquema de tipo polimórfico.
+Este esquema é associado a $x$ ao inferir o tipo de $e_1$ no contexto $S_0\Gamma$, obtendo $\tau'$ e $S_1$.
+O tipo final $\tau'$ e a composição $S_1 \circ S_0$ são retornados.

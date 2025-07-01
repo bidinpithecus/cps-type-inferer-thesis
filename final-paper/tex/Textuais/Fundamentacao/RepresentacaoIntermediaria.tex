@@ -6,7 +6,7 @@ Uma abordagem comum utilizada para manter a integridade semântica e possibilita
 
 Compiladores modernos, amplamente utilizados na indústria, empregam mais de uma IR para tirar proveito das vantagens de cada uma, uma vez que essas representações são projetadas para diferentes objetivos, como otimizações específicas.
 As IRs podem ser classificadas de acordo com o nível de abstração e são comumente aplicadas em sequência.
-Representações com um nível maior de abstração são usadas próximas ao código-fonte, enquanto aquelas de nível mais baixo estão mais próximas do código de máquina~\cite{aho2008compilers}, como ilustrado na Figura~\ref{fig:abstraction-level-irs}.
+Representações com um nível maior de abstração são usadas próximas ao código-fonte, enquanto aquelas de nível mais baixo estão mais próximas do código de máquina~\cite{aho2008compilers}, como ilustrado no Figura~\ref{fig:abstraction-level-irs}.
 
 \begin{figure}[ht!]
   \centering
@@ -28,10 +28,10 @@ Uma chamada de cauda (do inglês \textit{tail call}) ocorre quando a última ins
 Isso permite que a função atual libere seu quadro de ativação, otimizando o uso de memória, já que o compilador não precisa manter o estado da função anterior na pilha.
 Em constraste, uma chamada que não é de cauda ocorre quando ainda restam operações após a chamada, como somas ou multiplicações, o que exige que o quadro de ativação da função atual permaneça na pilha até a conclusão dessas operações.
 
-No Listing~\ref{code:factorial_non_tail_call}, o exemplo da função fatorial demonstra uma chamada que não é de cauda, pois a chamada recursiva \texttt{factorial(n - 1)} não é a última operação a ser realizada.
+No Código~\ref{code:factorial_non_tail_call}, o exemplo da função fatorial demonstra uma chamada que não é de cauda, pois a chamada recursiva \texttt{factorial(n - 1)} não é a última operação a ser realizada.
 A função precisa aguardar o retorno desta chamada para, então, multiplicar o resultado por \texttt{n}, o que impede a liberação do quadro de ativação até o término da multiplicação.
 
-Em constrate, no Listing~\ref{code:factorial_tail_call} como exemplo, tem-se uma versão da função fatorial que utiliza chamada de cauda.
+Em constrate, no Código~\ref{code:factorial_tail_call} como exemplo, tem-se uma versão da função fatorial que utiliza chamada de cauda.
 A função auxiliar \texttt{go} acumula o valor do cálculo diretamente em seu argumento \texttt{a}, e a chamada recursiva \texttt{go (n - 1) (a * n)} é a última instrução a ser executada.
 Como não há operações pendentes após a chamada recursiva, o compilador pode otimizar a função, reutilizando o espaço reservado para o quadro de ativação da função \texttt{go} para a chamada subsequente, tornando o cálculo mais eficiente.
 
@@ -104,7 +104,8 @@ Essa otimização possibilita que chamadas recursivas sejam realizadas sem o ac�
 Além disso, a natureza explícita das chamadas em CPS favorece a expansão \textit{inline} de funções.
 Como cada chamada é clara e separada, o compilador pode substituir uma chamada de função por sua definição diretamente, reduzindo o \textit{overhead} de chamadas e potencialmente expondo outras oportunidades de otimização.
 
-Outro ponto importante é a representação de \textit{closures}.
+Outro ponto é a representação de \textit{closures}.
+Uma \textit{closure} é uma estrutura que encapsula uma função junto a seu \textit{ambiente léxico} {---} o conjunto de variáveis livres capturadas do escopo externo no momento de sua criação.
 Em CPS, como todo o contexto necessário à computação é passado de maneira explícita, o compilador consegue construir e manipular \textit{closures} com maior eficiência, uma vez que o ambiente da função está sempre disponível e bem definido.
 
 A transformação para CPS também facilita a alocação de registradores.
@@ -119,12 +120,15 @@ O cálculo de continuações (do inglês, \textit{CPS-calculus}), conforme defin
 Enquanto o CPS é utilizado como uma IR em compiladores, o cálculo de continuações oferece uma estrutura para raciocinar formalmente sobre computações onde o fluxo de controle é explicitamente representado.
 Os termos do cálculo de continuações, chamados de comandos, são descritos pelas seguintes regras:
 
-\begin{equation}
+\begin{equation*}
   M \Coloneqq x\langle \vec{x} \rangle \mid M\{x\langle \vec{x} \rangle = M\}
-\end{equation}
+\end{equation*}
 
-Aqui, $x\langle \vec{x} \rangle$ representa um salto (do inglês \textit{jump}), isto é, uma chamada para a continuação $x$ com os parâmetros $\vec{x}$, sendo essencialmente uma chamada direta para a continuação, enquanto $M\{x\langle \vec{x} \rangle = M\}$ representa um vínculo (do inglês \textit{binding}), onde o corpo $M$ está vinculado à continuação $x$ com os parâmetros $\vec{x}$, isto é, uma chamada intermediária que, ao ser chamada, executará o próximo passo da computação.
 Vale ressaltar que \citeonline{appel1997shrinking} possuem uma sintaxe diferente para o cálculo de continuações, onde os termos são respectivamente representados como $k(\vec{x})$ e $\texttt{let }k(\vec{x}) = c \texttt{ in } b$.
+Em razão da natureza prática e do público alvo deste trabalho, a notação adotada para o \textit{CPS-Calculus} será a do Appel.
+Aqui, $k(\vec{x})$ representa um salto (do inglês \textit{jump}), isto é, uma chamada direta para a continuação $k$ com os parâmetros $\vec{x}$, essencialmente passando o controle para essa $k$.
+Enquanto que $\texttt{let }k(\vec{y}) = c \texttt{ in } b$ representa um vínculo (do inglês \textit{binding}), onde a continuação $k$ com os parâmetros $\vec{y}$ é ligada dentro do comando $b$ com o corpo $c$.
+Isto modela uma construção intermediária em que se define uma nova continuação que poderá ser chamada dentro de $b$ para prosseguir com a computação.
 
 A tradução para CPS converte um código escrito em estilo direto (onde o controle de fluxo é implícito) para o estilo de passagem de continuações~\cite{flanagan1993essence}.
 A principal ideia por trás dessa transformação é modificar as funções para que elas não retornem um valor diretamente, mas, em vez disso, passem o resultado para uma continuação.
@@ -133,30 +137,33 @@ A principal ideia por trás dessa transformação é modificar as funções para
 
 \lstinputlisting[style=haskell, label=code:add_cps, caption={Função soma em Haskell em CPS}]{Code/add_cps.hs}
 
-Por exemplo, o Listing~\ref{code:add} apresenta um programa na linguagem Haskell que soma dois números no estilo direto, retornando o valor após realizar o cálculo.
-Já o Listing~\ref{code:add_cps} mostra um programa equivalente em CPS\@.
+Por exemplo, o Código~\ref{code:add} apresenta um programa na linguagem Haskell que soma dois números no estilo direto, retornando o valor após realizar o cálculo.
+Já o Código~\ref{code:add_cps} mostra um programa equivalente em CPS\@.
 Nesta versão, o controle de fluxo do programa é explícito, pois a função $k$ é chamada para processar o resultado da soma dos argumentos.
 
 \lstinputlisting[style=haskell, label=code:factorial, caption={Função fatorial em Haskell em Estilo Direto}]{Code/factorial.hs}
 
 \lstinputlisting[style=haskell, label=code:factorial_cps, caption={Função fatorial em Haskell em CPS}]{Code/factorial_cps.hs}
 
-Para ilustrar melhor, o Listing~\ref{code:factorial} apresenta um programa em Haskell que calcula o fatorial no estilo direto, utilizando funções definidas para multiplicação e subtração.
-No Listing~\ref{code:factorial_cps}, um programa similar em CPS é definido, com as funções auxiliares também transformadas para CPS\@.
-Na função \texttt{factorialCps} é possível notar duas funções lambda (continuações), \texttt{nMinus1} e \texttt{factNMinus1}.
+Para ilustrar melhor, o Código~\ref{code:factorial} apresenta um programa em Haskell que calcula o fatorial no estilo direto, utilizando funções definidas para multiplicação e subtração.
+No Código~\ref{code:factorial_cps}, um programa similar em CPS é definido, com as funções auxiliares também transformadas para CPS\@.
+Na função \texttt{factorialCps} é possível notar duas funções lambda (continuações anônimas): a primeira com parâmetro \texttt{nMinus1} e a segunda com parâmetro \texttt{factNMinus1}.
 A primeira continuação guarda o resultado da operação $n - 1$, enquanto a segunda recebe recursivamente o cálculo do fatorial de $n - 1$, multiplica por $n$ e finalmente passa o resultado para a continuação $k$.
+Note que aqui, quando \texttt{subCps} retorna, seu resultado é vinculado a \texttt{nMinus1}; quando \texttt{factorialCps} retorna, seu resultado é vinculado a \texttt{factNMinus1}.
+As variáveis $n$ e $k$ são capturadas do contexto externo pelas \textit{closures}, mantendo seu valor original.
 
 Outro fato importante a ser observado nos códigos apresentados é a tipagem das funções.
-Na função de soma, definida no Listing~\ref{code:add}, a função tem tipo $Int \rightarrow Int \rightarrow Int$, ou seja, ela recebe dois inteiros e retorna um inteiro.
-Já a função de soma em CPS, definida no Listing~\ref{code:add_cps}, possui o tipo $Int \rightarrow Int \rightarrow (Int \rightarrow r) \rightarrow r$. Isso significa que a função recebe dois inteiros e uma continuação, que é uma função de tipo $Int \rightarrow r$, onde \texttt{r} pode ser qualquer tipo, e retorna esse mesmo tipo \texttt{r}.
+Na função de soma, definida no Código~\ref{code:add}, a função tem tipo $Int \rightarrow Int \rightarrow Int$, ou seja, ela recebe dois inteiros e retorna um inteiro.
+Já a função de soma em CPS, definida no Código~\ref{code:add_cps}, possui o tipo $Int \rightarrow Int \rightarrow (Int \rightarrow r) \rightarrow r$. Isso significa que a função recebe dois inteiros e uma continuação, que é uma função de tipo $Int \rightarrow r$, onde \texttt{r} pode ser qualquer tipo, e retorna esse mesmo tipo \texttt{r}.
 
 Essa transformação de tipo reflete a diferença fundamental entre o estilo direto e o CPS\@: em vez de retornar um valor diretamente, a função em CPS recebe uma continuação que especifica o próximo passo da computação.
-O mesmo padrão pode ser observado nas funções para o cálculo do fatorial nas Figuras~\ref{code:factorial} e~\ref{code:factorial_cps}.
+O mesmo padrão pode ser observado nas funções para o cálculo do fatorial nos Códigos~\ref{code:factorial} e~\ref{code:factorial_cps}.
 No estilo direto, a função \texttt{factorial} tem o tipo $Int \rightarrow Int$, enquanto na versão CPS, a função \texttt{factorialCps} tem o tipo $Int \rightarrow (Int \rightarrow r) \rightarrow r$.
 
 Essa correspondência entre os tipos não é uma coincidência.
 Como discutido por~\citeonline{torrens2019calculo}, uma função em estilo direto com tipo $A \rightarrow B$ pode ser transformada em uma função em CPS com o tipo $A \rightarrow (B \rightarrow \perp) \rightarrow \perp$.
 Aqui, $\perp$ representa o tipo dos valores que nunca retornam, uma característica associada ao estilo de passagem de continuações, onde as funções são compostas de forma a encadear continuações até que a execução termine de maneira explícita.
 
-Este exemplo simples da função fatorial em CPS ilustra as dificuldades inerentes ao uso de continuações explícitas, como a verbosidade do código, complexidade de compreensão e a propensão a erros.
-No entanto, apesar desses desafios, o CPS se mostra extremamente adequado para a aplicação de otimizações, sendo uma escolha eficiente para representações intermediárias, especialmente em cenários onde o desempenho é essencial.
+Este exemplo simples da função fatorial em CPS ilustra as dificuldades inerentes ao uso de continuações explícitas, como a verbosidade do código e a complexidade de compreensão, mas não sua inadequação para compilação.
+Apesar desses desafios, o CPS se mostra extremamente adequado para a aplicação de otimizações, sendo uma escolha eficiente para representações intermediárias, especialmente em cenários onde o desempenho é essencial.
+

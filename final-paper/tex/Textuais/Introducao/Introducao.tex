@@ -13,25 +13,29 @@ Essas características do CPS se tornam ainda mais evidentes quando é comparado
 Em linguagens de alto nível, por exemplo, a pilha de chamadas atua como uma abstração fundamental para gerenciar o controle de retorno das funções.
 No entanto, em linguagens de baixo nível, como \textit{assembly}, o controle de fluxo é mais explícito e depende do uso direto de instruções, que operam sobre a pilha de chamadas para empilhar e desempilhar os endereços de retorno.
 Nesse contexto, o CPS se destaca ao tornar as continuações explicitamente representadas no código.
-Em vez de confiar na pilha de chamadas para gerenciar retornos, o CPS introduz um parâmetro adicional em cada função, representando a continuação — isto é, o que deve ser feito com o resultado da função~\cite{kennedy2007continuations}.
+Em vez de confiar na pilha de chamadas para gerenciar retornos, o CPS introduz um parâmetro adicional em cada função, representando a continuação {---} isto é, o que deve ser feito com o resultado da função~\cite{kennedy2007continuations}.
 Desta forma, em vez de simplesmente retornar um valor diretamente, a função invoca essa continuação, transferindo explicitamente o controle à próxima etapa da computação.
 Isso elimina a dependência da pilha de chamadas, simplificando o modelo de execução e tornando-o mais alinhado com as necessidades de linguagens de baixo nível.
 
 Além disso, a adoção do CPS como representação intermediária vai além da tradução de linguagens de alto nível para código de máquina.
 O CPS facilita a aplicação de otimizações avançadas, como a eliminação de chamadas de cauda e a fusão de funções, além de permitir uma correspondência mais direta com o código gerado em linguagens de montagem~\cite{flanagan1993essence}.
 
-Por outro lado, um ponto importante a ser considerado é que, apesar de existirem sistemas de tipos para CPS, como o proposto por~\citeonline{thielecke1997categorical} - um sistema de tipos monomórfico, muitas implementações deste, optam por uma representação não tipada~\cite{morrisett1999systemF}.
-Embora essa abordagem simplifique a implementação inicial, ele pode comprometer a segurança e a correção do código.
+Por outro lado, um ponto importante a ser considerado é que, apesar de existirem sistemas de tipos para CPS {---} como o sistema simplesmente tipado proposto por~\citeonline{thielecke1997categorical} {---} muitas implementações optam por representações não tipadas~\cite{morrisett1999systemF,torrens2024operational}.
+Apesar da predominância de linguagens intermediárias não tipadas, pode ser citado como exceção o projeto LLVM {---} uma infraestrutura amplamente utilizada para construção de compiladores {---} que adota uma IR com suporte a um sistema de tipos próprio.
+Esse suporte é ainda expandido com o uso do MLIR, uma extensão modular da LLVM voltada à construção de representações intermediárias com estruturas de tipos mais expressivas e flexíveis.
+Ainda assim, na prática, é comum que as IRs não estendam completamente os tipos até essa etapa da compilação.
+
+Embora essa abordagem simplifique a implementação inicial, ela pode comprometer a segurança e a correção do código.
 Um sistema de tipos robusto pode não apenas garantir a correção de certas transformações e otimizações, mas também identificar uma classe inteira de erros antes da execução, proporcionando assim maior confiabilidade ao processo de compilação.
 
 Diante dessas considerações, este trabalho propõe apresentar e desenvolver uma formalização de um sistema de tipos para CPS, bem como um algoritmo de inferência de tipos para o mesmo.
 A escolha da linguagem de programação para a solução proposta será Haskell.
-Por ser uma linguagem funcional pura fortemente tipada, possui características desejáveis, como transparência referencial~\cite{sondergaard1990transparency} e um sistema de tipos robusto para explorar as vantagens do CPS e aplicar o sistema de tipos de maneira rigorosa.
+Por ser uma linguagem funcional pura fortemente tipada, possui características desejáveis como transparência referencial~\cite{sondergaard1990transparency} e um sistema de tipos robusto para explorar as vantagens do CPS e aplicar o sistema de tipos de maneira rigorosa.
 Dessa forma, a escolha de Haskell não apenas facilita o desenvolvimento de uma implementação segura e eficiente do CPS, como também conta com garantias de seguranças que são fundamentais para o sucesso deste trabalho.
 
 \section{Objetivo Geral}\label{sec:objetivo-geral}
 
-Este trabalho tem como objetivo formalizar uma extensão para o sistema de tipos para CPS proposto por~\citeonline{thielecke1997categorical}, adicionando polimorfismo juntamente de um algoritmo de inferência, para esta representação intermediária.
+Este trabalho tem como objetivo formalizar uma extensão para o sistema de tipos para CPS proposto por~\citeonline{thielecke1997categorical}, adicionando polimorfismo com suporte a inferência para esta representação intermediária.
 
 \section{Objetivos específicos}\label{sec:objetivos-especificos}
 
@@ -44,7 +48,7 @@ Este trabalho tem como objetivo formalizar uma extensão para o sistema de tipos
 \section{Trabalhos Relacionados}
 Após um estudo na literatura a respeito da tipagem de linguagens de mais baixo nível em relação ao código fonte, alguns trabalhos correlatos foram encontrados.
 
-Em~\cite{necula1997pcc}, os autores introduzem o conceito de um código que carrega provas (PCC do inglês \textit{Proof-Carrying Code}), um paradigma em que programas de código de máquina carregam junto a si provas formais de que obedecem a certas propriedades de segurança.
+Em~\cite{necula1997pcc}, o autor introduz o conceito de um código que carrega provas (PCC do inglês \textit{Proof-Carrying Code}), um paradigma em que programas de código de máquina carregam junto a si provas formais de que obedecem a certas propriedades de segurança.
 O sistema de verificação do consumidor do código pode então validar essas provas de forma automática, sem necessidade de confiar no produtor.
 O modelo proposto utiliza uma linguagem de políticas de segurança, uma lógica para especificações e provas, e uma máquina abstrata como base formal.
 O trabalho demonstra a viabilidade prática do modelo com a implementação de um verificador rápido para código de baixo nível, destacando a aplicabilidade do PCC em ambientes com execução de código não confiável, como acontece em sistemas distribuídos.
@@ -74,9 +78,15 @@ Em etapa posterior, serão necessárias as provas de consistência e de completu
 
 \section{Estrutura do Trabalho}\label{sec:estrutura-trabalho}
 
-Esta primeira etapa consistiu principalmente na fundamentação teórica e revisão bibliográfica no estudo de CPS e sistemas de tipos.
+A primeira etapa do trabalho consistiu principalmente na fundamentação teórica e revisão bibliográfica no estudo de CPS e sistemas de tipos.
 Em razão disto, o Capítulo~\ref{ch:fundamentacao-teorica} contém os conceitos e definições necessários para entendimento do tema.
 Este é separado em seções, tal que a Seção~\ref{sec:IR} aborda representação intermediária, com um aprofundamento em CPS na Subseção~\ref{subsec:cps}.
 Teoria de tipos é então apresentada na Seção~\ref{sec:type-theory}, detalhando o Cálculo Lambda Simplesmente Tipado na Seção~\ref{sec:simply-typed-lambda-calculus}
 Um aprofundamento no sistema Damas-Hindley-Milner na Seção~\ref{sec:damas-milner}, discutindo de maneira mais específica o algoritmo W na Subseção~\ref{subsec:w-algo}.
-O Capítulo~\ref{ch:desenvolvimento} conta com o desenvolvimento do trabalho descrito e proposto.
+
+Já a segunda etapa do trabalho, consistiu da parte prática do trabalho, envolvendo a formalização do sistema de tipos bem como seu desenvolvimento e por fim a conclusão do trabalho.
+O Capítulo~\ref{ch:desenvolvimento} agrupa tanto a formalização do sistema proposto, presente na Seção~\ref{sec:formalizacao} quanto a implementação deste, apresentada em detalhes na Seção~\ref{sec:implementacao}.
+Os resultados obtidos são então apresentados e discutidos no Capítulo~\ref{ch:resultados}, dividindo-o em Seções referentes aos testes realizados.
+Por fim, o Capítulo~\ref{ch:conclusao} conta com considerações finais bem como as conclusões do autor.
+
+Falar que o torrens fez o sistema de tipos e basicamente toda a seção 3.1. e que o resto foi meu (separar as responsabilidades **importante**)

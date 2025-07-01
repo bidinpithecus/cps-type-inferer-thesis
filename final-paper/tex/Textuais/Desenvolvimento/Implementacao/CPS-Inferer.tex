@@ -3,7 +3,7 @@ A inferência de tipos é a etapa onde, em uma linguagem onde tipos são present
 Isto é, sem explicitar o tipo de um termo, este tem seu tipo deduzido.
 Em um ambiente tipado com polimorfismo, a maior utilidade do inferidor de tipos é que este seja sempre o mais geral possível, tal que possa ser especializado para cada uso.
 O algoritmo de inferência proposto para este sistema de tipos é capaz de inferir o tipo mais geral possível, conforme explicado mais detalhadamente na Seção~\ref{sec:formalizacao}.
-Seu desenvolvimento foi direto como pode ser visto abaixo no Listing~\ref{cps:infer-command}.
+Seu desenvolvimento foi direto como pode ser visto abaixo no Código~\ref{cps:infer-command}.
 
 \lstinputlisting[style=haskell, label=cps:infer-command, caption={Função principal de Inferência}]{Code/Type-Inferer/CPS_infer_command.hs}
 Muitas das funções necessárias para a inferência do CPS são iguais as do Damas-Milner.
