@@ -1,37 +1,5 @@
 \subsection{Traduções}\label{subsec:cps-translations}
-O processo de tradução, no contexto de linguagens é a etapa em que um código feito em uma linguagem é transcrito para outra, onde idealmente, semântica alguma deve ser perdida.
-Neste caso, afim de facilitar os testes, e ainda de se aproximar mais de um uso real, onde um código é escrito em cálculo lambda, este é traduzido para o cálculo de continuações.
-Esta implementação da tradução foi feita seguindo a definição apresentada em~\cite{torrens2024operational}.
-
-\phantom{Newline}
-
-\fbox{${\llbracket\ e\ \rrbracket}_N\ =\ b$} \textit{Plotkin's call-by-name translation}
-
-\begin{tabular}{lcl}
-     ${\llbracket\ x\ \rrbracket}_N$ & $=$ & $x \langle k \rangle$ \\ 
-     ${\llbracket\ \lambda x.\ e\ \rrbracket}_N$ & $=$ & $k \langle v \rangle\ \{\  v\langle x,\ k \rangle = {\llbracket\ e\ \rrbracket}_N \ \}$ \\
-     ${\llbracket\ f\ e\ \rrbracket}_N$ & $=$ & ${\llbracket\ f\ \rrbracket}_N\ \{\  k\langle f \rangle = f \langle v,\ k \rangle\ \{\  v\langle k \rangle = {\llbracket\ e\ \rrbracket}_N \ \}\ \}$ \\
-     ${\llbracket\ \mathtt{let}\ x = f\ \mathtt{in}\ e \rrbracket}_N$ & $=$ & ${\llbracket\ e\ \rrbracket}_N\ \{\  x\langle k \rangle =  {\llbracket\ f\ \rrbracket}_V \ \} $
-\end{tabular}
-
-\phantom{Newline}
-
-\fbox{${\llbracket\ e\ \rrbracket}_V\ =\ b$} \textit{Plotkin's call-by-value translation}
-
-\begin{tabular}{lcl}
-     ${\llbracket\ x\ \rrbracket}_V$ & $=$ & $k \langle x \rangle$ \\ 
-     ${\llbracket\ \lambda x.\ e\ \rrbracket}_V$ & $=$ & $k \langle v \rangle\ \{\  v\langle x,\ k \rangle = {\llbracket\ e\ \rrbracket}_V \ \}$ \\
-     ${\llbracket\ f\ e\ \rrbracket}_V$ & $=$ & ${\llbracket\ f\ \rrbracket}_V\ \{\  k\langle f \rangle = {\llbracket\ e\ \rrbracket}_V\ \{\  k\langle v \rangle = f \langle v,\ k \rangle\ \}\ \}$ \\
-     ${\llbracket\ \mathtt{let}\ x = f\ \mathtt{in}\ e \rrbracket}_V$ & $=$ & ${\llbracket\ f\ \rrbracket}_V\ \{\  k\langle x \rangle =  {\llbracket\ e\ \rrbracket}_N \ \} $
-\end{tabular}
-
-\phantom{Newline}
-
-\noindent Note que, duas traduções distintas com base na estratégia de avaliação são apresentadas para o cálculo-$\lambda$, a chamada por nome (CBN, do inglês \textit{call-by-name}) representada por ${\llbracket - \rrbracket}_N$, que diz respeito ao cálculo-${\lambda}_n$ e a chamada por valor (CBV, do inglês \textit{call-by-value}) representada por ${\llbracket - \rrbracket}_V$, que diz respeito ao cálculo-${\lambda}_v$.
-As variáveis $f$, $v$ e $k$ que não aparecem no termo de origem são consideradas frescas, onde as duas primeiras são imediatamente ligadas, enquanto que $k$ é esperada que seja livre e por ser vinculada às traduções dos subtermos, um único $k$ é necessário~\cite{torrens2024operational}.
-
-Ainda, a tradução do `let' não está presente no artigo. 
-Esta foi derivada, provada e providenciada pelos orientadores para que o trabalho em questão pudesse ser mais completo e mais próximo de algo utilizável em um caso real de implementação de compilador com uso desta IR.
+Para facilitar os testes efetuados e ainda tornar o fluxo de execução mais direto, foram implementas as funções de tradução de expressões e de tipos de acordo com as definições das Seções~\ref{subsec:cps-translation} e~\ref{subsec:typed-cps-translation}.
 
 \lstinputlisting[style=haskell, label=cps:cbn-initial-cont, caption={Continuação inicial}]{Code/Type-Inferer/CPS_initial_cont.hs}
 Para todas as computações, um contexto inicial precisa conter a continuação inicial.
@@ -62,32 +30,6 @@ A seguir, é exibido novamente o numeral de Church dois, porém para o CBV, onde
 O motivo disto é os elementos da função, que diferentemente da identidade, conta com mais construtores para representá-la:
 \lstinputlisting[style=haskell, label=cps:church-two-cps-cbv, caption={Tradução do numeral de Church ``2'' em CBV}]{Code/Type-Inferer/CPS/church-two-cbv.cps}
 
-Além da tradução de expressões, uma vez que o ambiente sendo trabalhado é tipado, é necessário que a tradução preserve a tipagem dos programas,~\citeonline{torrens2024operational} apresentam a tradução tipada do CPS, onde, para o tipo funcional $\mathtt{A \Coloneqq A \to A\ |\ X}$, as seguintes traduções são definidas.
-Note que aqui também as funções são definidas diferentemente de acordo com estratégia de avaliação adotada:
-
-\phantom{Newline}
-
-\begin{tabular}{lcl}
-     ${\llbracket\ X\ \rrbracket}_N$ & $=$ & $\neg X$ \\ 
-     ${\llbracket\ A \rightarrow B\ \rrbracket}_N$ & $=$ & $\neg\neg(\neg{\llbracket\ A\ \rrbracket}_N,\ {\llbracket\ B\ \rrbracket}_N)$ \\ 
-     ${\llbracket\ \vv{x}{:}\ \vv{A} \vdash e{:}\ B\ \rrbracket}_N$ & $=$ & $\vv{x}{:}\ \vv{\neg{\llbracket\ A\ \rrbracket}_N},\ k{:}\ {\llbracket\ B\ \rrbracket}_N \vdash {\llbracket\ e\ \rrbracket}_N$ \\ 
-\end{tabular}
-
-\phantom{Newline}
-
-\begin{tabular}{lcl}
-     ${\llbracket\ X\ \rrbracket}_V$ & $=$ & $X$ \\ 
-     ${\llbracket\ A \rightarrow B\ \rrbracket}_V$ & $=$ & $\neg({\llbracket\ A\ \rrbracket}_V,\ \neg{\llbracket\ B\ \rrbracket}_V)$ \\ 
-     ${\llbracket\ \vv{x}{:}\ \vv{A} \vdash e{:}\ B\ \rrbracket}_V$ & $=$ & $\vv{x}{:}\ \vv{{\llbracket\ A\ \rrbracket}_V},\ k{:}\ \neg{\llbracket\ B\ \rrbracket}_V \vdash {\llbracket\ e\ \rrbracket}_V$ \\ 
-\end{tabular}
-
-\phantom{Newline}
-
-\noindent Esta função de tradução tem como propósito, mostrar que se o termo lambda é tipado, então o termo traduzido para CPS também é tipado.
-É importante notar que isto se aplica somente para os tipos simples, como definido no tipo funcional a partir do tipo primitivo $\mathtt{X}$ e do \textit{arrow type} $\mathtt{A \to A}$.
-O sistema de tipos proposto neste trabalho, entretanto, é polimórfico, ou seja, aqui há a adição de variáveis de tipos quantificadas.
-Sendo assim, esta função de tradução, se aplicando neste caso de uso, não necessariamente retornará o tipo mais geral de uma expressão, mas sempre um subtipo deste.
-
 Mostrado anteriormente no Código~\ref{cps:id-cps-cbn}, a expressão CPS resultante da tradução da função identidade em CBN difere da mesma traduzida em CBV, presente no Código~\ref{cps:id-cps-cbv}.
 O mesmo pode ser observado ao traduzir a função identidade tipada.
 Por exemplo, ao executar a função para a identidade em CBN, o tipo obtido é $\neg\neg(\neg\neg\alpha,\ \neg\alpha)$.
@@ -98,10 +40,14 @@ Ao tomar como exemplo o tipo resultante da função identidade em CPS a partir d
 
 \lstinputlisting[style=haskell, label=cps:cbn-type-translation, caption={Tradução dos tipos para CBN}]{Code/Type-Inferer/CPS_CBN_type_translation.hs}
 Aqui, a função responsável por traduzir um tipo utilizando a estratégia \textit{call-by-name}, a função $\mathtt{cbvTypeTranslation \dblcolon LambdaMonoType \to CPSPolyType}$ irá receber um tipo simples no cálculo-$\lambda$ simplesmente tipado, e retornar um tipo polimórfico em CPS.
-Perceba que na definição, o retorno era um tipo simples em CPS, essa diferença é justificada ao se observar o corpo desta função, onde há a definição da função $\mathtt{cbvTrans}$.
+Perceba que na definição, o retorno era um tipo simples em CPS. 
+Essa diferença é justificada ao se observar o corpo desta função, onde há a definição da função $\mathtt{cbvTrans}$.
 Esta é quem efetivamente faz a computação, pois é nela que acontece o casamento de padrões para determinar o tipo sendo traduzido.
 Ainda, esta função retorna um tipo polimórfico pelo fato de que em momento posterior a essa tradução, a subtipagem do tipo traduzido e do tipo inferido precisa ser verificada.
 
 \lstinputlisting[style=haskell, label=cps:cbv-type-translation, caption={Tradução dos tipos para CBV}]{Code/Type-Inferer/CPS_CBV_type_translation.hs}
 Para que essas duas funções de tradução de tipos (CBN e CBV) sejam usadas do mesmo modo, elas seguem a messma assinatura. 
 Seus comportamentos são o mesmo, a diferir somente nas diferenças das definições da função, isto é, como é feita a tradução.
+
+O sistema de tipos proposto neste trabalho, entretanto, é polimórfico, ou seja, aqui há a adição de variáveis de tipos quantificadas.
+Sendo assim, esta função de tradução, se aplicando neste caso de uso, não necessariamente retornará o tipo mais geral de uma expressão, mas sempre um subtipo deste.

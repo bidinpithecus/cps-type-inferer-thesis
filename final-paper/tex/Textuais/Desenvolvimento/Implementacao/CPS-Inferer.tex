@@ -3,7 +3,7 @@ A inferência de tipos é a etapa onde, em uma linguagem onde tipos são present
 Isto é, sem explicitar o tipo de um termo, este tem seu tipo deduzido.
 Em um ambiente tipado com polimorfismo, a maior utilidade do inferidor de tipos é que este seja sempre o mais geral possível, tal que possa ser especializado para cada uso.
 O algoritmo de inferência proposto para este sistema de tipos é capaz de inferir o tipo mais geral possível, conforme explicado mais detalhadamente na Seção~\ref{sec:formalizacao}.
-Seu desenvolvimento foi direto como pode ser visto abaixo no Código~\ref{cps:infer-command}.
+Seu desenvolvimento foi direto como pode ser visto abaixo, no Código~\ref{cps:infer-command}.
 
 \lstinputlisting[style=haskell, label=cps:infer-command, caption={Função principal de Inferência}]{Code/Type-Inferer/CPS_infer_command.hs}
 Muitas das funções necessárias para a inferência do CPS são iguais as do Damas-Milner.
@@ -28,7 +28,7 @@ Uma etapa que não está diretamente relacionada com a inferência, e sim com os
 Isto é, uma verificação se o tipo traduzido é um subtipo do tipo inferido, indicando diretamente se o algoritmo de inferência foi implementado corretamente.
 \lstinputlisting[style=haskell, label=cps:subtyping, caption={Verificação de Subtipagem}]{Code/Type-Inferer/CPS_subtyping.hs}
 O algoritmo de verificação de subtipos procura uma substituição $S$ tal que, ao aplicá-la em um dos tipos, ele se torne o outro.
-Por exemplo, ao analisar os tipos $\mathtt{\tau_1 = \alpha \to \alpha}$, e um outro tipo $\tau_2 = \neg\alpha \to \neg\alpha$, é possível encontrar uma substituição $S = \{\ \alpha \mapsto \neg\alpha \ \}$, tal que $S\tau_1$ resulte em $\tau_2$.
+Por exemplo, ao analisar os tipos $\mathtt{\tau_1 = \alpha \to \alpha}$ e $\tau_2 = \neg\alpha \to \neg\alpha$, é possível encontrar uma substituição $S = \{\ \alpha \mapsto \neg\alpha \ \}$, tal que $S\tau_1$ resulte em $\tau_2$.
 A partir disto, pode ser dito que o tipo $\tau_2$ é um subtipo de $\tau_1$, onde o algoritmo retornaria com sucesso a substituição $S$.
 Já olhando para outro exemplo, onde $\mathtt{\tau_1 = \alpha \to \neg\alpha}$ e $\mathtt{\tau_2 = \alpha \to \alpha}$, não é possível encontrar uma substituição $S$ tal que $S\tau_1$ seja $\tau_2$.
 Desta forma, o algoritmo não retornaria uma substituição, falhando assim a verificação de subtipos.

@@ -1,17 +1,48 @@
-\section{Conclusão}\label{sec:conclusao}
+\chapter{Conclusão}\label{ch:conclusao}
+Uma vez identificado ao menos um programa que não é capaz de inferir tipos para a tradução via `let' da expressão, o seguinte teorema pode ser definido.
+\begin{teorema}[A tradução para CBV não preserva tipos]\label{teo:cbv-does-not-preserve-types}
+  A tradução do cálculo-$\lambda$ para o cálculo de continuações em CBV não preserva tipos.
+\end{teorema}
+
+\begin{proof}[Prova do Teorema~\ref{teo:cbv-does-not-preserve-types}]
+  Podemos observar pelo contra exemplo: $\mathtt{let\ id\ =\ \lambda x.\ x\ in\ id\ id}$.
+  Este termo não é tipável no cálculo de CPS polimórfico proposto.
+  \qedhere
+\end{proof}
+\noindent Ainda, durante o desenvolvimento, ao se deparar com o erro de tipagem do `let' no CBV, o pensamento inicial foi de que alguma confusão quanto a implementação da tradução havia sido cometida.
+Somente depois de muita análise e raciocínio a respeito do ocorrido foi compreendido que não se tratava de um erro de implementação, e sim de uma prova de que a tradução para CBV não preserva a tipagem dos termos.
+
+Todos os testes realizados para CBN funcionaram, assim, é um forte indício que a tradução para este preserva a tipagem das expressões lambda.
+Desta forma, é definida a seguinte conjectura.
+\begin{conjectura}[A tradução para CBN preserva tipos]\label{conj:cbn-preserve-types}
+  A tradução do cálculo-$\lambda$ para o cálculo de continuações em CBN preserva tipos.
+\end{conjectura}
+
+Por mais que a implementação em si não tenha sido complicada de modo geral, algumas dificuldades mais teóricas se mantiveram latentes durante boa parte do desenvolvimento.
+O mais incômodo deles, refere-se a falta de materiais de referência mais didáticos.
+A maioria deles, se não todos, apresenta as continuações utilizando conceitos sem previamente contextualizá-los.
+É esperado que o leitor tenha amplo conhecimento a respeito de Teoria de Tipos e Teoria das Categorias, o que dificulta o entendimento daqueles que não o tem.
+
+Ao chegar no resultado de uma inferência, seja executando o algoritmo via código ou no papel, tem-se a prova do absurdo de uma continuação.
+Um dos pontos mais iniciais de dúvidas era referente ao tipo desta continuação.
+Seja a função identidade traduzida em CBV, ou seja, com tipo $\forall\alpha.\ \neg\neg(\neg\alpha,\ \alpha)$, a dificuldade que perdurava era como raciocinar sobre ele.
+O que contribui para essa barreira é o fato dos tipos deste sistema serem duais dos tipos no Sistema de Damas-Milner, precisando mudar a maneira de pensar para raciocinar sobre a tipagem.
+
+\section{Considerações finais}
+
 As IRs são muito importantes na compilação, elas permitem otimizar muitos processos para assim tornar mais eficiente o código.
 Os sistemas de tipos permitem provas de propriedades de um sistema, garantindo que programas tenham comportamento esperado.
-Por exemplo, uma função que opera sobre um conjunto numérico, utilizando um sistema de tipos, seria possível identificar um uso incorreto desta função ao passar um argumento de outro tipo, podendo assim impedir que a função compute para evitar um comportamento inesperado.
+Por exemplo, ao utilizar um sistema de tipos, é possível identificar um uso incorreto de uma função que opera sobre valores numéricos quando é passado um argumento de tipo incompatível, impedindo assim sua execução para evitar comportamentos inesperados.
 Sendo assim, pode-se dizer que o sistema de tipos adiciona uma camada de segurança ao programa.
 
-Uma das maiores motivações de adicionar essa camada de segurança na representação intermediária, ou seja de desenvolver um sistema de tipos para o CPS, é extender a prova de programas para as etapas seguintes em que o sistema já não tem mais ciência dos tipos, ou seja, o ligador (do inglês \textit{linker}).
-Considerando o cenário onde um programa possua milhares de arquivos fonte, com IRs não tipadas, as provas das propriedades de funções definidas em um arquivo somente são passadas para outra caso estes sejam compilados juntos -- o que se torna inviável em programas tão grandes.
-Já com uma IR tipada, se uma função $f$ definida em um arquivo espera receber um inteiro for utilizada em outro módulo onde na verdade está sendo passado como argumento uma cadeia de caracteres, o erro seria facilmente identificado no momento da ligação (do inglês \textit{linking}), não havendo a necessidade de recompilar o arquivo que contém a função ou ainda todos os que o utilizam.
+Uma das principais motivações para desenvolver um sistema de tipos para o CPS é adicionar uma camada de segurança na representação intermediária, estendendo a verificação de tipos para etapas posteriores do processo de compilação, como na fase de ligação de módulos (chamada de \textit{linking}).
+Considere um cenário onde um programa possua milhares de arquivos fonte com IRs não tipadas, as propriedades de tipos das funções definidas em um arquivo só podem ser verificadas contra outros módulos ou arquivos se estes forem compilados conjuntamente {---} o que se torna inviável em programas de grande porte.
+Com uma IR tipada, se uma função $f$ definida em um módulo espera receber um inteiro mas é invocada em outro módulo com um argumento do tipo \textit{string}, o sistema de tipos identificará esse erro durante o (\textit{linking}), sem necessidade de recompilar o módulo que contém $f$ ou os módulos que a utilizam.
 
 Mesmo que o sistema não funcione para o `let' no CBV, a tradução está correta, onde isso significa respeitar o teorema da simulação.
 Isto é, no caso de uma implementação não tipada da tradução, não haveria problemas em simular a expressão lambda no cálculo de continuações.
 Como a tradução para CBV não preserva tipos, um dos trabalhos futuros incluiria a correção deste.
-Para tal, seria necessário propor um outro sistema de tipos polimórfico para o cálculo de continuações onde, sejam distinguidos tipos e cotipos dentre os argumentos para que o algoritmo de inferência saiba quando utilizar um ou outro.
+Para tal, seria necessário propor um outro sistema de tipos polimórfico para o cálculo de continuações onde sejam distinguidos tipos e cotipos dentre os argumentos para que o algoritmo de inferência saiba quando utilizar um ou outro.
 
 Outro trabalho futuro são as provas de consistência e completude do sistema de tipos proposto em relação ao algoritmo de inferência.
 Neste trabalho foram executados alguns casos de testes que demostraram empiricamente que o algoritmo está correto.

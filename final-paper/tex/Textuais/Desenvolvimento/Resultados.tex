@@ -1,10 +1,10 @@
-\section{Resultados}\label{sec:resultados}
+\chapter{Resultados}\label{ch:resultados}
 Uma vez que todo o fluxo do programa foi exibido, seus resultados podem ser apresentados e compreendidos.
 Diversos testes foram executados onde, a partir da função de tradução de tipos, puderam ter seus tipos verificados para validar a implementação.
 Para tal, estão disponibilizados no repositório do projeto, arquivos de entrada com funções contendo diferentes características.
 Afim de observar o comportamento do programa abrangendo uma maior gama de opções, algumas das funções testadas são extensas e contam com combinações de regras do cálculo-$\lambda$ simplesmente tipado.
 
-\subsection{Combinador S}
+\section{Combinador S}
 Um desses é o combinador S ($\lambda x.\lambda y.\lambda z.\ x\ z\ (y\ z)$), que apesar de não ser um termo extenso, este utiliza de uma combinação dos três construtores (variáveis, abstrações e aplicações) para que o termo seja obtido.
 O tipo deste, é representado por $(\alpha \to \beta \to \gamma) \to (\alpha \to \beta) \to \alpha \to \gamma$ e suas traduções, tanto em CBN quanto em CBV são grandes demais para serem aqui colocadas, mas estas podem ser encontradas no código fonte do repositório mencionado.
 A tradução do seu tipo entretanto, para CBN, é apresentada a seguir.
@@ -28,7 +28,7 @@ Neste caso, a substituição $S$ que satisfaz a condição de subtipagem é tal 
   '$\forall\alpha,\beta,\gamma.\ \neg\neg(\neg(\alpha,\ \neg\neg(\beta,\ \gamma)),\ \neg\neg(\neg(\alpha,\ \neg\beta),\ \neg\neg(\alpha,\ \gamma)))$'
 \end{lstlisting}
 
-\subsection{Soma}
+\section{Soma}
 O próximo exemplo apresentado é a função de soma de 2 e 3 feita com os numerais de Church ($(\lambda n.\ \lambda m.\ \lambda f.\ \lambda x.\ n\ f\ (m\ f\ x))\ (\lambda a.\ \lambda b.\ a\ (a\ b))\ (\lambda c.\ \lambda d.\ c\ (c\ (c\ d)))$).
 Seu tipo, é representado por $((\alpha \to \alpha) \to \alpha \to \alpha)$.
 A tradução do tipo para CBN é dado por:
@@ -53,7 +53,7 @@ O inferido portanto, sendo que a substituição $S$ que satisfaz a subtipagem ne
 \end{lstlisting}
 Por fim, ao executar o código gerado, obtém-se o resultado $(5,\ 5)$, indicando uma correta tradução da expressão de entrada.
 
-\subsection{Multiplicação}
+\section{Multiplicação}
 Outro exemplo é o da multiplicação de 6 e 8, que o termo lambda por si é grande demais para ser exibido aqui.
 A função lambda responsável pela multiplicação de dois argumentos, ($\lambda m.\ \lambda n.\ \lambda f.\ \lambda x.\ m\ (n\ f)\ x$) é extenso o bastante para seu sucesso dar uma noção boa de que o código está correto e que o algoritmo é capaz de inferir o tipo corretamente das mais diversas expressões.
 Assim como o exemplo da função de soma, o tipo desta expressão é: $((\alpha \to \alpha) \to \alpha \to \alpha)$.
@@ -82,7 +82,7 @@ Isso se deve ao fato de que, por mais que a expressão seja diferente, as duas p
 Então, o algoritmo infere que as duas possuem o mesmo tipo.
 
 Por fim, ao executar o código gerado, obtém-se o resultado $(48,\ 48)$, indicando uma correta tradução da expressão de entrada.
-\subsection{Identidade com `Let'}
+\section{Identidade com `Let'}
 Ainda que a tradução do `let' tenha sido apresentada e discutida, esta possui um problema relacionada à tipagem quanto ao \textit{call-by-value}.
 Para melhor compreender esta questão, é necessário entender fundamentalmente a diferença entre as estratégias de avaliação por nome e por valor.
 A por nome, também conhecida como avaliação preguiçosa, só irá avaliar a expressão no momento em que esta for necessária, desta forma, caso tenha alguma expressão que não seja utilizada, esta nem mesmo será computada.
@@ -91,7 +91,7 @@ Enquanto que a por valor não, ao invés disso, ela avalia toda expressão no in
 A função em questão é a identidade utilizando o `let', ($\mathtt{let\ id\ =\ \lambda x.\ x\ in\ id\ id}$).
 Seu tipo é $\alpha \to \alpha$, enquanto que sua tradução em CBN é dada por:
 \lstinputlisting[style=haskell, label=cps:let-id-cps-cbn, caption={Tradução em CBN da identidade com `let'}]{Code/Type-Inferer/CPS/let-id-cbn.cps}
-A tradução do tipo para CBN é dado por:
+A tradução do tipo para CBN é dada por:
 \lstset{extendedchars=false, escapeinside=''}
 \begin{lstlisting}[style=output,caption={Tradução em CBN da identidade com `let'}]
   '$\forall\alpha.\ \neg\neg(\neg\neg\alpha,\ \neg\alpha)$'
@@ -102,7 +102,7 @@ E o inferido também para CBN, onde a substituição $S$ que satisfaz a subtipag
   '$\forall\alpha.\ \neg\neg(\neg\alpha,\ \alpha)$'
 \end{lstlisting}
 Já ao olhar para o resultado em CBV, temos um problema de tipagem.
-A tradução da expressão, é dada por, que num primeiro momento não há nenhum problema aparente:
+A tradução da expressão, que num primeiro momento não há nenhum problema aparente, é dada por:
 \lstinputlisting[style=haskell, label=cps:let-id-cps-cbv, caption={Tradução em CBV da identidade com `let'}]{Code/Type-Inferer/CPS/let-id-cbv.cps}
 Ao investigar mais a fundo porém, é possível ser notado na linha 1 que, como o $\mathtt{id}$ é passado por parâmetro para a continuação $\mathtt{k}$, durante o processo de inferência, esta será inserida no contexto como sendo um tipo polimórfico.
 Em momento posterior entretanto, na inferência da expressão $\mathtt{id\ id}$, a expressão $\mathtt{id}$ é assumida como sendo um tipo monomórfico.
@@ -115,32 +115,47 @@ Desta forma, o algoritmo falha, identificando um erro de \textit{OccursCheck}, q
 Este erro indica que, ao tentar encontrar uma unificação para as variáveis de tipo, foi encontrado que uma delas já estava presente na outra, neste caso, que o $\beta$ já ocorria em $\neg(\beta,\ \alpha)$.
 Como isto torna impossível que uma substituição seja suficiente, de modo a gerar um loop infinito caso seja tentado, um erro é retornado.
 
-\subsection{Considerações finais}
-Uma vez que identificado ao menos um programa que não é capaz de inferir tipos para a tradução via `let' da expressão, o seguinte teorema pode ser definido.
-\begin{teorema}[A tradução para CBV não preserva tipos]\label{teo:cbv-does-not-preserve-types}
-  A tradução do cálculo-$\lambda$ para o cálculo de continuações em CBV não preserva tipos.
-\end{teorema}
+\section{Autoaplicação Mal-Tipada}\label{sec:autoap-mal-tipada}
+Este exemplo demonstra um caso clássico de termo não tipável no cálculo lambda simplesmente tipado: a autoaplicação ($\lambda x.\ x\ x$).
+No sistema de tipos original, a expressão requer que o tipo de $x$ seja ao mesmo tempo uma função (para ser aplicada) e o argumento dessa função, levando a uma contradição.
+O erro de tipo gerado é:
 
-\begin{proof}[Prova do Teorema~\ref{teo:cbv-does-not-preserve-types}]
-  Podemos observar pelo contra exemplo: $\mathtt{let\ id\ =\ \lambda x.\ x\ in\ id\ id}$.
-  Este termo não é tipável no cálculo de CPS polimórfico proposto.
-  \qedhere
-\end{proof}
-\noindent Ainda, durante o desenvolvimento, ao se deparar com o erro de tipagem do `let' no CBV, o pensamento inicial foi de que alguma confusão quanto a implementação da tradução havia sido cometida.
-Somente depois de muita análise e raciocínio a respeito do ocorrido foi compreendido que não se tratava de um erro de implementação, e sim de uma prova de que a tradução para CBV não preserva a tipagem dos termos.
+\lstset{extendedchars=false, escapeinside=''}
+\begin{lstlisting}[style=output,caption={Erro de tipo no cálculo lambda original}]
+  Cannot unify { '$\alpha$' } with { '$\alpha \to \beta$' }
+\end{lstlisting}
+A tradução para CPS em \textit{call-by-name} é dada por:
+\lstinputlisting[style=haskell, caption={Tradução em CBN da autoaplicação}]{Code/Type-Inferer/CPS/ill-typed-cbn.cps}
+Durante a inferência de tipos no sistema CPS, o algoritmo falha com:
+\begin{lstlisting}[style=output,caption={Erro de inferência em CBN}]
+  OccursCheck: '$\epsilon$' in '$\neg\neg(\neg\epsilon,\ \gamma)$'
+\end{lstlisting}
+Já na estratégia \textit{call-by-value}, a tradução é:
+\lstinputlisting[style=haskell, caption={Tradução em CBV da autoaplicação}]{Code/Type-Inferer/CPS/ill-typed-cbv.cps}
+E o erro de inferência correspondente:
+\begin{lstlisting}[style=output,caption={Erro de inferência em CBV}]
+  OccursCheck: '$\beta$' in '$\neg(\beta,\ \gamma)$'
+\end{lstlisting}
+Em ambos os casos, o sistema CPS apresenta erro na tipagem, refletindo a não tipagem do termo original.
 
-Todos os testes realizados para CBN funcionaram, assim, é um forte indício que a tradução para este preserva a tipagem das expressões lambda.
-Desta forma, é definida a seguinte conjectura.
-\begin{conjectura}[A tradução para CBN preserva tipos]\label{conj:cbn-preserve-types}
-  A tradução do cálculo-$\lambda$ para o cálculo de continuações em CBN preserva tipos.
-\end{conjectura}
+\section{Combinador Y}\label{sec:y-combinator}
+O combinador Y ($\lambda f.\ (\lambda x.\ f\ (x\ x))\ (\lambda x.\ f\ (x\ x))$) é outro termo não tipável no cálculo lambda simplesmente tipado, essencial para expressar recursão em cálculos não tipados.
+O erro de unificação é semelhante ao caso anterior:
 
-Por mais que a implementação em si não tenha sido complicada de modo geral, algumas dificuldades mais teóricas se mantiveram latentes durante boa parte do desenvolvimento.
-O mais incômodo deles, refere-se a falta de materiais de referência mais didáticos.
-A maioria deles, se não todos, apresenta as continuações utilizando conceitos sem previamente contextualizá-los.
-É esperado que o leitor tenha amplo conhecimento a respeito de Teoria de Tipos e Teoria das Categorias, o que dificulta o entendimento daqueles que não o tem.
-
-Ao chegar no resultado de uma inferência, seja executando o algoritmo via código ou no papel, tem-se a prova do absurdo de uma continuação.
-Um dos pontos mais iniciais de dúvidas era referente ao tipo desta continuação.
-Seja a função identidade traduzida em CBV, ou seja, com tipo $\forall\alpha.\ \neg\neg(\neg\alpha,\ \alpha)$, a dificuldade que perdurava era como raciocinar sobre ele.
-Mudar a maneira de pensar para compreender os resultados, que são duais dos tipos no cálculo-$\lambda$, ou seja, a conclusão deste tipo é que ele é falso e não verdadeiro, foi uma das maiores barreiras para entendimento.
+\lstset{extendedchars=false, escapeinside=''}
+\begin{lstlisting}[style=output,caption={Erro de tipo no cálculo lambda original}]
+  Cannot unify { '$\beta$' } with { '$\beta \to \gamma$' }
+\end{lstlisting}
+A tradução em \textit{call-by-name} é:
+\lstinputlisting[style=haskell, caption={Tradução em CBN do combinador Y}]{Code/Type-Inferer/CPS/y-combinator-cbn.cps}
+A inferência de tipos no sistema CPS para CBN gera:
+\begin{lstlisting}[style=output,caption={Erro de inferência em CBN}]
+  OccursCheck: '$\lambda$' in '$\neg\neg(\neg\lambda,\ \iota)$'
+\end{lstlisting}
+Para \textit{call-by-value}, a tradução é a seguinte:
+\lstinputlisting[style=haskell, caption={Tradução em CBV do combinador Y}]{Code/Type-Inferer/CPS/y-combinator-cbv.cps}
+Com o seguinte erro de inferência:
+\begin{lstlisting}[style=output,caption={Erro de inferência em CBV}]
+  OccursCheck: '$\zeta$' in '$\neg(\zeta,\ \neg\iota)$'
+\end{lstlisting}
+Estes resultados demonstram que o sistema de tipos proposto é consistente com o cálculo lambda tradicional, identificando corretamente termos não tipáveis através de erros de ocorrência durante a unificação.

@@ -121,13 +121,13 @@ Enquanto o CPS é utilizado como uma IR em compiladores, o cálculo de continua�
 Os termos do cálculo de continuações, chamados de comandos, são descritos pelas seguintes regras:
 
 \begin{equation*}
-  M \Coloneqq x\langle \vec{x} \rangle \mid M\{x\langle \vec{x} \rangle = M\}
+  M \Coloneqq x\langle \vv{x} \rangle \mid M\ \{\ x\langle \vv{x} \rangle = M\ \}
 \end{equation*}
 
-Vale ressaltar que \citeonline{appel1997shrinking} possuem uma sintaxe diferente para o cálculo de continuações, onde os termos são respectivamente representados como $k(\vec{x})$ e $\texttt{let }k(\vec{x}) = c \texttt{ in } b$.
+Vale ressaltar que \citeonline{appel1997shrinking} possuem uma sintaxe diferente para o cálculo de continuações, onde os termos são respectivamente representados como $k(\vv{x})$ e $\texttt{let }k(\vv{x}) = c \texttt{ in } b$.
 Em razão da natureza prática e do público alvo deste trabalho, a notação adotada para o \textit{CPS-Calculus} será a do Appel.
-Aqui, $k(\vec{x})$ representa um salto (do inglês \textit{jump}), isto é, uma chamada direta para a continuação $k$ com os parâmetros $\vec{x}$, essencialmente passando o controle para essa $k$.
-Enquanto que $\texttt{let }k(\vec{y}) = c \texttt{ in } b$ representa um vínculo (do inglês \textit{binding}), onde a continuação $k$ com os parâmetros $\vec{y}$ é ligada dentro do comando $b$ com o corpo $c$.
+Aqui, $k(\vv{x})$ representa um salto (do inglês \textit{jump}), isto é, uma chamada direta para a continuação $k$ com os parâmetros $\vv{x}$, essencialmente passando o controle para essa $k$.
+Enquanto que $\texttt{let }k(\vv{y}) = c \texttt{ in } b$ representa um vínculo (do inglês \textit{binding}), onde a continuação $k$ com os parâmetros $\vv{y}$ é ligada dentro do comando $b$ com o corpo $c$.
 Isto modela uma construção intermediária em que se define uma nova continuação que poderá ser chamada dentro de $b$ para prosseguir com a computação.
 
 A tradução para CPS converte um código escrito em estilo direto (onde o controle de fluxo é implícito) para o estilo de passagem de continuações~\cite{flanagan1993essence}.
