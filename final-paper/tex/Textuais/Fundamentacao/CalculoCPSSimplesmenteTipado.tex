@@ -43,7 +43,43 @@ Isso garante que expressões bem tipadas não entram em estados inválidos ao se
 
 Um contraste interessante pode ser observado entre o sistema Damas-Milner e o cálculo CPS.
 No primeiro, as expressões são testemunhas da veracidade de seus tipos.
-Já no segundo, as expressões podem ser vistas como testemunhas de que o contexto de tipos leva a uma contradição {---} nas palavras de Thielecke, ``$M$ witnesses that $\Gamma$ entails a contradiction".
+Já no segundo, as expressões podem ser vistas como testemunhas de que o contexto de tipos leva a uma contradição {---} nas palavras de Thielecke, ``$M$ witnesses that $\Gamma$ entails a contradiction''.
+
+Enquanto o cálculo-$\lambda$ define sua semântica operacional por meio das regras de redução $\beta$ e $\eta$, o \textit{CPS-calculus} possui uma teoria equacional própria, formulada em \citeonline{thielecke1997categorical}.
+Esta teoria é composta por quatro axiomas fundamentais que permitem raciocinar sobre a equivalência de programas escritos nessa representação.
+Esses axiomas são:
+
+\phantom{NewLine}
+
+\begin{center}
+     \begin{tabular}{llllr}
+          (JMP) & $k\langle \vv{x} \rangle \, \{\ k\langle \vv{y} \rangle = c\ \}$ & = & $c[\vv{x} / \vv{y}]$ & $\mathtt{se}\ k \notin \vv{x}$ \\
+     \end{tabular}
+\end{center}
+O \textit{Jump (JMP)} realiza uma chamada direta à continuação $k$, substituindo os parâmetros formais $\vec{y}$ pelos argumentos reais $\vec{x}$ no corpo $c$.
+A necessidade da condição $k \notin \vec{x}$ é tal que esta evita capturas.
+
+\begin{center}
+     \begin{tabular}{llllr}
+          (GC)    & $k\langle \vv{x} \rangle \, \{\ j\langle \vv{y} \rangle = c\ \}$ & = & $k\langle \vv{x} \rangle$ & $\mathtt{se}\ j \notin \mathtt{FV}(k\langle \vv{x}\rangle)$ \\
+     \end{tabular}
+\end{center}
+O axioma \textit{Garbage Collection (GC)}, elimina os vínculos de continuações não referenciadas em $c$.
+
+\begin{center}
+     \begin{tabular}{llllr}
+          (ETA)   & $b\ \{ k\langle \vv{x} \rangle = j\langle \vv{x} \rangle\ \}$ & = & $b[j / k]$ & $\mathtt{se}\ j \notin \vv{x}$ \\
+     \end{tabular}
+\end{center}
+O axioma da extensionalidade (ETA) diz respeito as continuações redundantes, onde $k$ é definido apenas como uma chamada direta a $j$.
+
+\begin{center}
+     \begin{tabular}{llllr}
+          (DISTR) & \multicolumn{4}{l}{$b\ \{\ k\langle \vv{x} \rangle = c\ \} \{\ j\langle \vv{y} \rangle = d\ \}$ = $b\ \{\ j\langle \vv{y} \rangle = d\ \} \{\ k\langle \vv{x} \rangle = c\ \{\ j\langle \vv{y} \rangle = d\ \} \}$} \\
+                  & \multicolumn{4}{r}{$\mathtt{se}\ k \ne j,\ j \notin \vv{x},\ \{\ k,\ \vv{x} \ \} \notin \mathtt{FV}(d)$} \\
+     \end{tabular}
+\end{center}
+Por fim, a distribuição, com o axioma (DISTR) reordena os vínculos para expor saltos.
 
 \subsection{Tradução CPS}\label{subsec:cps-translation}
 O processo de tradução, no contexto de linguagens é a etapa em que um código feito em uma linguagem é transcrito para outra, onde idealmente, semântica alguma deve ser perdida.
