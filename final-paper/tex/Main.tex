@@ -28,6 +28,17 @@
     captionpos=b,                     				% sets the caption position
 }
 
+\lstdefinestyle{boxless-haskell}{
+    language=Haskell,
+    backgroundcolor=\color{white},   				% background color
+    basicstyle=\ttfamily\small,      				% font style
+    keywordstyle=\color{blue},       				% keyword color
+    commentstyle=\color{green!50!black}, 			% comment color
+    stringstyle=\color{red},          				% string color
+    tabsize=2,                        				% sets default tabsize
+    captionpos=b,                     				% sets the caption position
+}
+
 \lstdefinestyle{output}{
     backgroundcolor=\color{white},   				  % background color
     basicstyle=\ttfamily\small,      					% font style
@@ -35,6 +46,15 @@
     frame=single,                     				% adds a frame around the code
     tabsize=2,                        				% sets default tabsize
     captionpos=b,                     				% sets the caption position
+}
+
+\lstdefinestyle{boxless-output}{
+    backgroundcolor=\color{white},   				  % background color
+    basicstyle=\ttfamily\small,      					% font style
+    numbersep=5pt,                    				% distance of line numbers
+    tabsize=2,                        				% sets default tabsize
+    captionpos=b,                     				% sets the caption position
+    xleftmargin=.2\textwidth, xrightmargin=.2\textwidth
 }
 
 \counterwithin{figure}{chapter}

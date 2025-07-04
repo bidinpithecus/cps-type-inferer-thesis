@@ -9,48 +9,48 @@ Um desses é o combinador S ($\lambda x.\lambda y.\lambda z.\ x\ z\ (y\ z)$), qu
 O tipo deste, é representado por $(\alpha \to \beta \to \gamma) \to (\alpha \to \beta) \to \alpha \to \gamma$ e suas traduções, tanto em CBN quanto em CBV são grandes demais para serem aqui colocadas, mas estas podem ser encontradas no código fonte do repositório mencionado.
 A tradução do seu tipo entretanto, para CBN, é apresentada a seguir.
 \lstset{extendedchars=false, escapeinside=''}
-\begin{lstlisting}[style=output,caption={Tradução em CBN do tipo do combinador S}]
-  '$\forall\alpha,\beta,\gamma.\ \neg\neg(\neg\neg\neg(\neg\neg\alpha,\ \neg\neg(\neg\neg\beta,\ \neg\gamma)),\ \neg\neg(\neg\neg\neg(\neg\neg\alpha,\ \neg\beta),\ \neg\neg(\neg\neg\alpha,\ \neg\gamma)))$'
-\end{lstlisting}
+\begin{center}
+  $\forall\alpha,\beta,\gamma.\ \neg\neg(\neg\neg\neg(\neg\neg\alpha,\ \neg\neg(\neg\neg\beta,\ \neg\gamma)),\ \neg\neg(\neg\neg\neg(\neg\neg\alpha,\ \neg\beta),\ \neg\neg(\neg\neg\alpha,\ \neg\gamma)))$
+\end{center}
 Enquanto que, a partir do tipo inferido a seguir para a mesma estratégia de avaliação, uma substituição $S$ tal que ao aplicá-la no tipo traduzido torne-se o inferido, é $S = \{\ \alpha \mapsto \neg\alpha,\ \beta \mapsto \neg\beta,\ \gamma \mapsto \neg\gamma\ \}$, validando assim a inferência para este termo.
 \lstset{extendedchars=false, escapeinside=''}
-\begin{lstlisting}[style=output,caption={Inferência do tipo do combinador S traduzido em CBN}]
-  '$\forall\alpha,\beta,\gamma.\ \neg\neg(\neg\neg\neg(\neg\alpha,\ \neg\neg(\neg\beta,\ \gamma)),\ \neg\neg(\neg\neg\neg(\neg\alpha,\ \beta),\ \neg\neg(\neg\alpha,\ \gamma)))$'
-\end{lstlisting}
+\begin{center}
+  $\forall\alpha,\beta,\gamma.\ \neg\neg(\neg\neg\neg(\neg\alpha,\ \neg\neg(\neg\beta,\ \gamma)),\ \neg\neg(\neg\neg\neg(\neg\alpha,\ \beta),\ \neg\neg(\neg\alpha,\ \gamma)))$
+\end{center}
 Um comportamento semelhante pode ser percebido para a tradução por \textit{call-by-value}, onde respectivamente é apresentado a seguir a tradução e o resultado da inferência.
 \lstset{extendedchars=false, escapeinside=''}
-\begin{lstlisting}[style=output,caption={Tradução em CBV do tipo do combinador S}]
-  '$\forall\alpha,\beta,\gamma.\ \neg\neg(\neg(\alpha,\ \neg\neg(\beta,\ \neg\gamma)),\ \neg\neg(\neg(\alpha,\ \neg\beta),\ \neg\neg(\alpha,\ \neg\gamma)))$'
-\end{lstlisting}
+\begin{center}
+  $\forall\alpha,\beta,\gamma.\ \neg\neg(\neg(\alpha,\ \neg\neg(\beta,\ \neg\gamma)),\ \neg\neg(\neg(\alpha,\ \neg\beta),\ \neg\neg(\alpha,\ \neg\gamma)))$
+\end{center}
 Neste caso, a substituição $S$ que satisfaz a condição de subtipagem é tal que $S = \{\ \gamma \mapsto \neg\gamma\ \}$, tornando válida assim a inferência para este termo.
 \lstset{extendedchars=false, escapeinside=''}
-\begin{lstlisting}[style=output,caption={Inferência do tipo do combinador S traduzido em CBV}]
-  '$\forall\alpha,\beta,\gamma.\ \neg\neg(\neg(\alpha,\ \neg\neg(\beta,\ \gamma)),\ \neg\neg(\neg(\alpha,\ \neg\beta),\ \neg\neg(\alpha,\ \gamma)))$'
-\end{lstlisting}
+\begin{center}
+  $\forall\alpha,\beta,\gamma.\ \neg\neg(\neg(\alpha,\ \neg\neg(\beta,\ \gamma)),\ \neg\neg(\neg(\alpha,\ \neg\beta),\ \neg\neg(\alpha,\ \gamma)))$
+\end{center}
 
 \section{Soma}
 O próximo exemplo apresentado é a função de soma de 2 e 3 feita com os numerais de Church ($(\lambda n.\ \lambda m.\ \lambda f.\ \lambda x.\ n\ f\ (m\ f\ x))\ (\lambda a.\ \lambda b.\ a\ (a\ b))\ (\lambda c.\ \lambda d.\ c\ (c\ (c\ d)))$).
 Seu tipo, é representado por $((\alpha \to \alpha) \to \alpha \to \alpha)$.
 A tradução do tipo para CBN é dado por:
 \lstset{extendedchars=false, escapeinside=''}
-\begin{lstlisting}[style=output,caption={Tradução em CBN do tipo da função de soma}]
-  '$\forall\alpha.\ \neg\neg(\neg\neg\neg(\neg\neg\alpha,\ \neg\alpha),\ \neg\neg(\neg\neg\alpha,\ \neg\alpha))$'
-\end{lstlisting}
+\begin{center}
+  $\forall\alpha.\ \neg\neg(\neg\neg\neg(\neg\neg\alpha,\ \neg\alpha),\ \neg\neg(\neg\neg\alpha,\ \neg\alpha))$
+\end{center}
 E o inferido também para CBN, onde a substituição $S$ que satisfaz a subtipagem é tal que $S = \{\ \alpha \mapsto \neg\alpha\ \}$:
 \lstset{extendedchars=false, escapeinside=''}
-\begin{lstlisting}[style=output,caption={Inferência do tipo da função de soma traduzido em CBN}]
-  '$\forall\alpha.\ \neg\neg(\neg\neg\neg(\neg\alpha,\ \alpha),\ \neg\neg(\neg\alpha,\ \alpha))$'
-\end{lstlisting}
+\begin{center}
+  $\forall\alpha.\ \neg\neg(\neg\neg\neg(\neg\alpha,\ \alpha),\ \neg\neg(\neg\alpha,\ \alpha))$
+\end{center}
 Enquanto que para CBV, o tipo traduzido é:
 \lstset{extendedchars=false, escapeinside=''}
-\begin{lstlisting}[style=output,caption={Tradução em CBV do tipo da função de soma}]
-  '$\forall\alpha.\ \neg\neg(\neg(\alpha,\ \neg\alpha),\ \neg\neg(\alpha,\ \neg\alpha))$'
-\end{lstlisting}
+\begin{center}
+  $\forall\alpha.\ \neg\neg(\neg(\alpha,\ \neg\alpha),\ \neg\neg(\alpha,\ \neg\alpha))$
+\end{center}
 O inferido portanto, sendo que a substituição $S$ que satisfaz a subtipagem neste caso é a substituição trivial $S = \{\ \alpha \mapsto \alpha\ \}$:
 \lstset{extendedchars=false, escapeinside=''}
-\begin{lstlisting}[style=output,caption={Inferência do tipo da função de soma traduzido em CBV}]
-  '$\forall\alpha.\ \neg\neg(\neg(\alpha,\ \neg\alpha),\ \neg\neg(\alpha,\ \neg\alpha))$'
-\end{lstlisting}
+\begin{center}
+  $\forall\alpha.\ \neg\neg(\neg(\alpha,\ \neg\alpha),\ \neg\neg(\alpha,\ \neg\alpha))$
+\end{center}
 Por fim, ao executar o código gerado, obtém-se o resultado $(5,\ 5)$, indicando uma correta tradução da expressão de entrada.
 
 \section{Multiplicação}
@@ -59,24 +59,24 @@ A função lambda responsável pela multiplicação de dois argumentos, ($\lambd
 Assim como o exemplo da função de soma, o tipo desta expressão é: $((\alpha \to \alpha) \to \alpha \to \alpha)$.
 A tradução do tipo para CBN é dado por:
 \lstset{extendedchars=false, escapeinside=''}
-\begin{lstlisting}[style=output,caption={Tradução em CBN do tipo da função de soma}]
-  '$\forall\alpha.\ \neg\neg(\neg\neg\neg(\neg\neg\alpha,\ \neg\alpha),\ \neg\neg(\neg\neg\alpha,\ \neg\alpha))$'
-\end{lstlisting}
+\begin{center}
+  $\forall\alpha.\ \neg\neg(\neg\neg\neg(\neg\neg\alpha,\ \neg\alpha),\ \neg\neg(\neg\neg\alpha,\ \neg\alpha))$
+\end{center}
 E o inferido também para CBN, onde a substituição $S$ que satisfaz a subtipagem é tal que $S = \{\ \alpha \mapsto \neg\alpha\ \}$:
 \lstset{extendedchars=false, escapeinside=''}
-\begin{lstlisting}[style=output,caption={Inferência do tipo da função de soma traduzido em CBN}]
-  '$\forall\alpha.\ \neg\neg(\neg\neg\neg(\neg\alpha,\ \alpha),\ \neg\neg(\neg\alpha,\ \alpha))$'
-\end{lstlisting}
+\begin{center}
+  $\forall\alpha.\ \neg\neg(\neg\neg\neg(\neg\alpha,\ \alpha),\ \neg\neg(\neg\alpha,\ \alpha))$
+\end{center}
 Enquanto que para CBV, o tipo traduzido é:
 \lstset{extendedchars=false, escapeinside=''}
-\begin{lstlisting}[style=output,caption={Tradução em CBV do tipo da função de soma}]
-  '$\forall\alpha.\ \neg\neg(\neg(\alpha,\ \neg\alpha),\ \neg\neg(\alpha,\ \neg\alpha))$'
-\end{lstlisting}
+\begin{center}
+  $\forall\alpha.\ \neg\neg(\neg(\alpha,\ \neg\alpha),\ \neg\neg(\alpha,\ \neg\alpha))$
+\end{center}
 O inferido portanto, sendo que a substituição $S$ que satisfaz a subtipagem neste caso é a substituição trivial $S = \{\ \alpha \mapsto \alpha\ \}$:
 \lstset{extendedchars=false, escapeinside=''}
-\begin{lstlisting}[style=output,caption={Inferência do tipo da função de soma traduzido em CBV}]
-  '$\forall\alpha.\ \neg\neg(\neg(\alpha,\ \neg\alpha),\ \neg\neg(\alpha,\ \neg\alpha))$'
-\end{lstlisting}
+\begin{center}
+  $\forall\alpha.\ \neg\neg(\neg(\alpha,\ \neg\alpha),\ \neg\neg(\alpha,\ \neg\alpha))$
+\end{center}
 É possível perceber que, os resultados obtidos são os mesmos da função de soma.
 Isso se deve ao fato de que, por mais que a expressão seja diferente, as duas possuem o mesmo tipo.
 Então, o algoritmo infere que as duas possuem o mesmo tipo.
@@ -89,73 +89,68 @@ A por nome, também conhecida como avaliação preguiçosa, só irá avaliar a e
 Enquanto que a por valor não, ao invés disso, ela avalia toda expressão no início, sem se importar se será utilizada ou não, desta forma, ainda que uma expressão não seja utilizada, ela será calculada.
 
 A função em questão é a identidade utilizando o `let', ($\mathtt{let\ id\ =\ \lambda x.\ x\ in\ id\ id}$).
-Seu tipo é $\alpha \to \alpha$, enquanto que sua tradução em CBN é dada por:
+Seu tipo é $\alpha \to \alpha$, enquanto que sua tradução em CBN é dada pelo Código~\ref{cps:let-id-cps-cbn}.
 \lstinputlisting[style=haskell, label=cps:let-id-cps-cbn, caption={Tradução em CBN da identidade com `let'}]{Code/Type-Inferer/CPS/let-id-cbn.cps}
 A tradução do tipo para CBN é dada por:
-\lstset{extendedchars=false, escapeinside=''}
-\begin{lstlisting}[style=output,caption={Tradução em CBN da identidade com `let'}]
-  '$\forall\alpha.\ \neg\neg(\neg\neg\alpha,\ \neg\alpha)$'
-\end{lstlisting}
+\begin{center}
+  $\forall\alpha.\ \neg\neg(\neg\neg\alpha,\ \neg\alpha)$
+\end{center}
 E o inferido também para CBN, onde a substituição $S$ que satisfaz a subtipagem é tal que $S = \{\ \alpha \mapsto \neg\alpha \ \}$:
-\lstset{extendedchars=false, escapeinside=''}
-\begin{lstlisting}[style=output,caption={Inferência da identidade com `let' traduzido em CBN}]
-  '$\forall\alpha.\ \neg\neg(\neg\alpha,\ \alpha)$'
-\end{lstlisting}
+\begin{center}
+  $\forall\alpha.\ \neg\neg(\neg\alpha,\ \alpha)$
+\end{center}
 Já ao olhar para o resultado em CBV, temos um problema de tipagem.
-A tradução da expressão, que num primeiro momento não há nenhum problema aparente, é dada por:
+A tradução da expressão, que num primeiro momento não há nenhum problema aparente, é dada pelo Código~\ref{cps:let-id-cps-cbv}.
 \lstinputlisting[style=haskell, label=cps:let-id-cps-cbv, caption={Tradução em CBV da identidade com `let'}]{Code/Type-Inferer/CPS/let-id-cbv.cps}
 Ao investigar mais a fundo porém, é possível ser notado na linha 1 que, como o $\mathtt{id}$ é passado por parâmetro para a continuação $\mathtt{k}$, durante o processo de inferência, esta será inserida no contexto como sendo um tipo polimórfico.
 Em momento posterior entretanto, na inferência da expressão $\mathtt{id\ id}$, a expressão $\mathtt{id}$ é assumida como sendo um tipo monomórfico.
 É neste instante então que é feita a verificação do \textit{occurs check} para garantir que tipos cíclicos (ou seja, um tipo estar contido em outro, tornando assim impossível a unificação destes) não sejam permitidos, onde esta falha, retornando assim o erro.
 Desta forma, o algoritmo falha, identificando um erro de \textit{OccursCheck}, que será apresentado a seguir:
-\lstset{extendedchars=false, escapeinside=''}
-\begin{lstlisting}[style=output,caption={Erro de Inferência da identidade com `let' traduzido em CBV}]
-  '$OccursCheck{:}\ \beta\ in\ \neg(\beta,\ \alpha)$'
-\end{lstlisting}
+\begin{center}
+  $OccursCheck{:}\ \beta\ in\ \neg(\beta,\ \alpha)$
+\end{center}
 Este erro indica que, ao tentar encontrar uma unificação para as variáveis de tipo, foi encontrado que uma delas já estava presente na outra, neste caso, que o $\beta$ já ocorria em $\neg(\beta,\ \alpha)$.
 Como isto torna impossível que uma substituição seja suficiente, de modo a gerar um loop infinito caso seja tentado, um erro é retornado.
 
 \section{Autoaplicação Mal-Tipada}\label{sec:autoap-mal-tipada}
 Este exemplo demonstra um caso clássico de termo não tipável no cálculo lambda simplesmente tipado: a autoaplicação ($\lambda x.\ x\ x$).
 No sistema de tipos original, a expressão requer que o tipo de $x$ seja ao mesmo tempo uma função (para ser aplicada) e o argumento dessa função, levando a uma contradição.
-O erro de tipo gerado é:
+O erro de tipo obtido é:
 
-\lstset{extendedchars=false, escapeinside=''}
-\begin{lstlisting}[style=output,caption={Erro de tipo no cálculo lambda original}]
-  Cannot unify { '$\alpha$' } with { '$\alpha \to \beta$' }
-\end{lstlisting}
-A tradução para CPS em \textit{call-by-name} é dada por:
-\lstinputlisting[style=haskell, caption={Tradução em CBN da autoaplicação}]{Code/Type-Inferer/CPS/ill-typed-cbn.cps}
+\begin{center}
+  $\mathtt{Cannot\ unify}\ \{\ \alpha\ \}\ \mathtt{with}\ \{\ \alpha \to \beta\ \}$
+\end{center}
+A tradução para CPS em \textit{call-by-name} é ilustrada pelo Código~\ref{cps:cbn-autoapplication}.
+\lstinputlisting[style=haskell, label=cps:cbn-autoapplication, caption={Tradução em CBN da autoaplicação}]{Code/Type-Inferer/CPS/ill-typed-cbn.cps}
 Durante a inferência de tipos no sistema CPS, o algoritmo falha com:
-\begin{lstlisting}[style=output,caption={Erro de inferência em CBN}]
-  OccursCheck: '$\epsilon$' in '$\neg\neg(\neg\epsilon,\ \gamma)$'
-\end{lstlisting}
-Já na estratégia \textit{call-by-value}, a tradução é:
-\lstinputlisting[style=haskell, caption={Tradução em CBV da autoaplicação}]{Code/Type-Inferer/CPS/ill-typed-cbv.cps}
+\begin{center}
+  $\mathtt{OccursCheck}:\ \epsilon\ \mathtt{in}\ \neg\neg(\neg\epsilon,\ \gamma)$
+\end{center}
+Já na estratégia \textit{call-by-value}, a tradução é apresentada no Código~\ref{cps:cbv-autoapplication}.
+\lstinputlisting[style=haskell, label=cps:cbv-autoapplication, caption={Tradução em CBV da autoaplicação}]{Code/Type-Inferer/CPS/ill-typed-cbv.cps}
 E o erro de inferência correspondente:
-\begin{lstlisting}[style=output,caption={Erro de inferência em CBV}]
-  OccursCheck: '$\beta$' in '$\neg(\beta,\ \gamma)$'
-\end{lstlisting}
+\begin{center}
+  $\mathtt{OccursCheck}:\ \beta\ \mathtt{in}\ \neg(\beta,\ \gamma)$
+\end{center}
 Em ambos os casos, o sistema CPS apresenta erro na tipagem, refletindo a não tipagem do termo original.
 
 \section{Combinador Y}\label{sec:y-combinator}
 O combinador Y ($\lambda f.\ (\lambda x.\ f\ (x\ x))\ (\lambda x.\ f\ (x\ x))$) é outro termo não tipável no cálculo lambda simplesmente tipado, essencial para expressar recursão em cálculos não tipados.
 O erro de unificação é semelhante ao caso anterior:
 
-\lstset{extendedchars=false, escapeinside=''}
-\begin{lstlisting}[style=output,caption={Erro de tipo no cálculo lambda original}]
-  Cannot unify { '$\beta$' } with { '$\beta \to \gamma$' }
-\end{lstlisting}
+\begin{center}
+  $\mathtt{Cannot\ unify}\ \{\ \beta\ \}\ \mathtt{with}\ \{\ \beta \to \gamma\ \}$
+\end{center}
 A tradução em \textit{call-by-name} é:
 \lstinputlisting[style=haskell, caption={Tradução em CBN do combinador Y}]{Code/Type-Inferer/CPS/y-combinator-cbn.cps}
 A inferência de tipos no sistema CPS para CBN gera:
-\begin{lstlisting}[style=output,caption={Erro de inferência em CBN}]
-  OccursCheck: '$\lambda$' in '$\neg\neg(\neg\lambda,\ \iota)$'
-\end{lstlisting}
+\begin{center}
+  $\mathtt{OccursCheck}:\ \lambda\ \mathtt{in}\ \neg\neg(\neg\lambda,\ \iota)$
+\end{center}
 Para \textit{call-by-value}, a tradução é a seguinte:
 \lstinputlisting[style=haskell, caption={Tradução em CBV do combinador Y}]{Code/Type-Inferer/CPS/y-combinator-cbv.cps}
 Com o seguinte erro de inferência:
-\begin{lstlisting}[style=output,caption={Erro de inferência em CBV}]
-  OccursCheck: '$\zeta$' in '$\neg(\zeta,\ \neg\iota)$'
-\end{lstlisting}
+\begin{center}
+  $\mathtt{OccursCheck}:\ \zeta\ \mathtt{in}\ \neg(\zeta,\ \neg\iota)$
+\end{center}
 Estes resultados demonstram que o sistema de tipos proposto é consistente com o cálculo lambda tradicional, identificando corretamente termos não tipáveis através de erros de ocorrência durante a unificação.

@@ -4,30 +4,30 @@ Para facilitar os testes efetuados e ainda tornar o fluxo de execução mais dir
 \lstinputlisting[style=haskell, label=cps:cbn-initial-cont, caption={Continuação inicial}]{Code/Type-Inferer/CPS_initial_cont.hs}
 Para todas as computações, um contexto inicial precisa conter a continuação inicial.
 Este será o objeto a ter seu tipo inferido.
-Afim de praticidade, esta continuação será sempre a mesma, dada por `k'.
+Afim de praticidade, esta continuação será sempre a mesma, dada por `k', como mostrado no Código~\ref{cps:cbn-initial-cont}.
 
 \lstinputlisting[style=haskell, label=cps:cbn-expr-translation, caption={Tradução das expressões para CBN}]{Code/Type-Inferer/CPS_CBN_expr_translation.hs}
-Neste código, são apresentadas as funções responsáveis para traduzir as expressões para CBN.
+No Código~\ref{cps:cbn-expr-translation}, são apresentadas as funções responsáveis para traduzir as expressões para CBN.
 O ponto de partida desta computação será a função $\mathtt{cbnExprTrans \dblcolon Expr \to Command}$, onde ela irá receber a expressão em cálculo-$\lambda$ e retornará o comando traduzido.
 Sua responsabilidade é criar as mônadas de estado que farão o controle do índice das variáveis frescas necessárias e chamar as funções de tradução passando a continuação inicial.
 
 Tomando como exemplo a função identidade em cálculo-$\lambda$ ($\lambda x.\ x$), é possível perceber como os termos crescem em CPS.
 Isto torna o desenvolvimento diretamente neste cálculo não apropriado, mas ainda, nota-se que a implementação da função de tradução é bastante direta em relação a sua definição formal.
 Os únicos pontos de atenção são em relação à geração das variáveis frescas, mas que como foi dito anteriormente, não eram completamente necessários, visto que eles são ligados imediatamente.
-Ao traduzir então a função, tem-se que o equivalente em CPS é:
+Ao traduzir então a função, tem-se que o equivalente em CPS é o mostrado no Código~\ref{cps:id-cps-cbn}.
 \lstinputlisting[style=haskell, label=cps:id-cps-cbn, caption={Tradução da função identidade em CBN}]{Code/Type-Inferer/CPS/id-cbn.cps}
 Este comportamento fica ainda mais visível quando uma função um pouco maior é traduzida, por exemplo o numeral de Church dois ($\lambda f.\ \lambda x.\ f\ (f\ x)$).
-Sua tradução portanto é dada a seguir:
+Sua tradução portanto é mostrada no Código~\ref{cps:church-two-cps-cbn}.
 \lstinputlisting[style=haskell, label=cps:church-two-cps-cbn, caption={Tradução do numeral de Church ``2'' em CBN}]{Code/Type-Inferer/CPS/church-two-cbn.cps}
 De maneira semelhante, foram feitas as mesmas funções utilizadas no \textit{call-by-name}, porém adaptadas para o CBV, respeitando as diferenças presentes na definicão formal da função.
 \lstinputlisting[style=haskell, label=cps:cbv-expr-translation, caption={Tradução das expressões para CBV}]{Code/Type-Inferer/CPS_CBV_expr_translation.hs}
-A partir dessas diferenças nas definições, nota-se também particularidades nas traduções destas, por exemplo ao traduzir a mesma função identidade, em CBV, é obtido o seguinte resultado:
+A partir dessas diferenças nas definições, nota-se também particularidades nas traduções destas, por exemplo ao traduzir a mesma função identidade, em CBV, é obtido o resultado apresentado no Código~\ref{cps:id-cps-cbv}.
 \lstinputlisting[style=haskell, label=cps:id-cps-cbv, caption={Tradução da função identidade em CBV}]{Code/Type-Inferer/CPS/id-cbv.cps}
 Neste exemplo da função identidade, pouca diferença entre as duas estratégias de avaliação pode ser notada.
 Isso se deve não ao tamanho da expressão, e sim dos elementos desta.
 Neste caso, há somente uma abstração lambda com uma variável.
 A seguir, é exibido novamente o numeral de Church dois, porém para o CBV, onde mais diferenças podem ser observadas.
-O motivo disto é os elementos da função, que diferentemente da identidade, conta com mais construtores para representá-la:
+O motivo disto é os elementos da função, que diferentemente da identidade, conta com mais construtores para representá-la, exibido no Código~\ref{cps:church-two-cps-cbv}.
 \lstinputlisting[style=haskell, label=cps:church-two-cps-cbv, caption={Tradução do numeral de Church ``2'' em CBV}]{Code/Type-Inferer/CPS/church-two-cbv.cps}
 
 Mostrado anteriormente no Código~\ref{cps:id-cps-cbn}, a expressão CPS resultante da tradução da função identidade em CBN difere da mesma traduzida em CBV, presente no Código~\ref{cps:id-cps-cbv}.
@@ -39,7 +39,7 @@ Para raciocinar sobre os tipos do sistema, tem que ser levado em consideração 
 Ao tomar como exemplo o tipo resultante da função identidade em CPS a partir da tradução por valor (CBV), isto é, $(\alpha,\ \neg\alpha)$\footnote{Apesar de estar sendo traduzido o tipo da função identidade, como esta tradução é feita para os tipos simples, note que aqui, está sendo representado monomorficamente pois não há a generalização do $\alpha$.}, deve-se pensar que este representa o absurdo de ter $\alpha$ como argumento e $\neg\alpha$ como continuação, ao mesmo tempo.
 
 \lstinputlisting[style=haskell, label=cps:cbn-type-translation, caption={Tradução dos tipos para CBN}]{Code/Type-Inferer/CPS_CBN_type_translation.hs}
-Aqui, a função responsável por traduzir um tipo utilizando a estratégia \textit{call-by-name}, a função $\mathtt{cbvTypeTranslation \dblcolon LambdaMonoType \to CPSPolyType}$ irá receber um tipo simples no cálculo-$\lambda$ simplesmente tipado, e retornar um tipo polimórfico em CPS.
+Aqui no Código~\ref{cps:cbn-type-translation}, a função responsável por traduzir um tipo utilizando a estratégia \textit{call-by-name}, a função $\mathtt{cbvTypeTranslation \dblcolon LambdaMonoType \to CPSPolyType}$ irá receber um tipo simples no cálculo-$\lambda$ simplesmente tipado, e retornar um tipo polimórfico em CPS.
 Perceba que na definição, o retorno era um tipo simples em CPS. 
 Essa diferença é justificada ao se observar o corpo desta função, onde há a definição da função $\mathtt{cbvTrans}$.
 Esta é quem efetivamente faz a computação, pois é nela que acontece o casamento de padrões para determinar o tipo sendo traduzido.

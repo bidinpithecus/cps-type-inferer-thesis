@@ -27,7 +27,7 @@ Por exemplo, no caso onde o tipo polimórfico final seja $\forall\delta.\delta$,
 Uma etapa que não está diretamente relacionada com a inferência, e sim com os tipos em si, é a verificação da subtipagem do tipo traduzido e do tipo inferido.
 Isto é, uma verificação se o tipo traduzido é um subtipo do tipo inferido, indicando diretamente se o algoritmo de inferência foi implementado corretamente.
 \lstinputlisting[style=haskell, label=cps:subtyping, caption={Verificação de Subtipagem}]{Code/Type-Inferer/CPS_subtyping.hs}
-O algoritmo de verificação de subtipos procura uma substituição $S$ tal que, ao aplicá-la em um dos tipos, ele se torne o outro.
+O algoritmo de verificação de subtipos do Código~\ref{cps:subtyping} procura uma substituição $S$ tal que, ao aplicá-la em um dos tipos, ele se torne o outro.
 Por exemplo, ao analisar os tipos $\mathtt{\tau_1 = \alpha \to \alpha}$ e $\tau_2 = \neg\alpha \to \neg\alpha$, é possível encontrar uma substituição $S = \{\ \alpha \mapsto \neg\alpha \ \}$, tal que $S\tau_1$ resulte em $\tau_2$.
 A partir disto, pode ser dito que o tipo $\tau_2$ é um subtipo de $\tau_1$, onde o algoritmo retornaria com sucesso a substituição $S$.
 Já olhando para outro exemplo, onde $\mathtt{\tau_1 = \alpha \to \neg\alpha}$ e $\mathtt{\tau_2 = \alpha \to \alpha}$, não é possível encontrar uma substituição $S$ tal que $S\tau_1$ seja $\tau_2$.

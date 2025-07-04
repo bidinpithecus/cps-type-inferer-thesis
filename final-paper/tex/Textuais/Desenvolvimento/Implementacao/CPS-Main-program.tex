@@ -12,7 +12,7 @@ Os passos finais envolvem a inferência de ambas as traduções, juntamente da v
 
 \lstset{extendedchars=false, escapeinside=''}
 \lstinputlisting[style=output, label=cps:main-execution, caption={Execução do programa principal}]{Code/Type-Inferer/CPS_main_execution.cps}
-Ao executar o programa com o comando \texttt{cabal run}, passando também o arquivo de entrada \texttt{input/church-zero.in}, é processado e exibida todas as informações que foram citadas anteriormente, inclusive a geração do código Haskell em \texttt{output/church-zero.hs}.
+Ao executar o programa do Código~\ref{cps:main-execution} com o comando \texttt{cabal run}, passando também o arquivo de entrada \texttt{input/church-zero.in}, é processado e exibida todas as informações que foram citadas anteriormente, inclusive a geração do código Haskell em \texttt{output/church-zero.hs}.
 É possível perceber que na saída do programa, é mostrado o tipo traduzido (na sequência da mensagem ``\textit{Expected Continuation Type:}'') e o tipo inferido (que sucede a mensagem ``\textit{Inferred Continuation Type:}'').
 Logo em seguida, o questionamento ``\textit{Do the types match?}'' é o trecho da saída que compete à subtipagem, retornando ``\textit{Yes}'' caso esse seja um subtipo deste, o que indica uma inferência compatível com a tradução ou ``\textit{No}'' caso a verificação falhe, indicando uma inferência incorreta.
 
