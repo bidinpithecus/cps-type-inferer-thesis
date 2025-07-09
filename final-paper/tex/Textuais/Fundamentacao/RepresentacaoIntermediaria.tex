@@ -43,9 +43,9 @@ O cálculo lambda, definido por~\citeonline{church1932set}, é um sistema formal
 Ele é capaz de representar qualquer computação utilizando abstrações e aplicações através de reduções.
 Sua sintaxe consiste em três regras simples que definem os elementos principais do sistema: variável, abstração e aplicação, conforme apresentados a seguir:
 
-\begin{equation}\label{eq:lambda-calculus}
-  e \Coloneqq x \mid \lambda x. e \mid e e
-\end{equation}
+\begin{tabular}{lccl}
+  Termo & $e$ & $\Coloneqq$ & $x \mid \lambda x.\ e \mid e\ e$
+\end{tabular}
 
 A partir dessa sintaxe, um termo $e$ pode possuir apenas uma das três formas.
 A primeira forma refere-se às variáveis, que representam identificadores no sistema.
@@ -62,14 +62,14 @@ Para avaliar expressões no cálculo lambda, usamos três tipos de redução: $\
 
 \begin{description}
   \item[$\alpha$-redução:] Renomeação de variáveis ligadas.
-        \begin{align}
-          \lambda x . e & \rightarrow \lambda y . e[y/x]\label{eq:alpha-reduction}
+        \begin{align}\nonumber
+          \lambda x . e & \rightarrow \lambda y . e[y/x]
         \end{align}
         Note que, $e[y/x]$ indica a substituição de todas as ocorrências ligadas de $x$ por $y$ em $e$, desde que $y$ não ocorra livre em $e$. Por exemplo, $\lambda x. x + z \rightarrow_\alpha \lambda y. y + z$.
 
   \item[$\beta$-redução:] Aplicação de função.
-        \begin{align}
-          (\lambda x . e_1) e_2 & \rightarrow e_1 [e_2 / x]\label{eq:beta-reduction}
+        \begin{align}\nonumber
+          (\lambda x . e_1) e_2 & \rightarrow e_1 [e_2 / x]
         \end{align}
         Aqui, $e_1[e_2/x]$ denota a substituição de todas as ocorrências ligadas de $x$ em $e_1$ por $e_2$. Para evitar conflitos com variáveis livres em $e_2$, aplica-se $\alpha$-redução prévia. Por exemplo, em $(\lambda x. \lambda y. x + y)(y + 1)$, renomeia-se $y$ para $z$ na abstração interna:
         \[
@@ -77,8 +77,8 @@ Para avaliar expressões no cálculo lambda, usamos três tipos de redução: $\
         \]
 
   \item[$\eta$-redução:] Expansão de função.
-        \begin{align}
-          \lambda x . (e \, x) & \rightarrow_\eta e \quad \text{se } x \notin \text{FV}(e)\label{eq:eta-reduction}
+        \begin{align}\nonumber
+          \lambda x . (e \, x) & \rightarrow_\eta e \quad \text{se } x \notin \text{FV}(e)
         \end{align}
         Tal que $\text{FV}(e)$ denota as variáveis livres em $e$. Por exemplo, $\lambda x. (\lambda y. y + 1) \, x \rightarrow_\eta \lambda y. y + 1$.
 \end{description}
@@ -115,22 +115,7 @@ Por fim, como todo o fluxo de execução é expresso por chamadas encadeadas, o 
 O compilador pode, por exemplo, detectar com mais facilidade padrões de execução, dependências entre expressões e oportunidades de reordenação ou eliminação de código redundante.
 
 Dessa forma, a conversão para CPS não apenas preserva a semântica da computação original, mas também fornece ao compilador uma estrutura rica e detalhada para aplicar otimizações de maneira eficaz.
-
-O cálculo de continuações (do inglês, \textit{CPS-calculus}), conforme definido por~\citeonline{thielecke1997categorical}, é um sistema formal que leva o CPS além de seu uso tradicional como uma técnica de transformação de código, tratando-o como um modelo computacional por si só.
-Enquanto o CPS é utilizado como uma IR em compiladores, o cálculo de continuações oferece uma estrutura para raciocinar formalmente sobre computações onde o fluxo de controle é explicitamente representado.
-Os termos do cálculo de continuações, chamados de comandos, são descritos pelas seguintes regras:
-
-\begin{equation*}
-  M \Coloneqq x\langle \vv{x} \rangle \mid M\ \{\ x\langle \vv{x} \rangle = M\ \}
-\end{equation*}
-
-Vale ressaltar que \citeonline{appel1997shrinking} possuem uma sintaxe diferente para o cálculo de continuações, onde os termos são respectivamente representados como $k(\vv{x})$ e $\texttt{let }k(\vv{x}) = c \texttt{ in } b$.
-Em razão da natureza prática e do público alvo deste trabalho, a notação adotada para o \textit{CPS-Calculus} será a do Appel.
-Aqui, $k(\vv{x})$ representa um salto (do inglês \textit{jump}), isto é, uma chamada direta para a continuação $k$ com os parâmetros $\vv{x}$, essencialmente passando o controle para essa $k$.
-Enquanto que $\texttt{let }k(\vv{y}) = c \texttt{ in } b$ representa um vínculo (do inglês \textit{binding}), onde a continuação $k$ com os parâmetros $\vv{y}$ é ligada dentro do comando $b$ com o corpo $c$.
-Isto modela uma construção intermediária em que se define uma nova continuação que poderá ser chamada dentro de $b$ para prosseguir com a computação.
-
-A tradução para CPS converte um código escrito em estilo direto (onde o controle de fluxo é implícito) para o estilo de passagem de continuações~\cite{flanagan1993essence}.
+A tradução para CPS então, converte um código escrito em estilo direto (onde o controle de fluxo é implícito) para o estilo de passagem de continuações~\cite{flanagan1993essence}.
 A principal ideia por trás dessa transformação é modificar as funções para que elas não retornem um valor diretamente, mas, em vez disso, passem o resultado para uma continuação.
 
 \lstinputlisting[style=haskell, label=code:add, caption={Função soma em Haskell em Estilo Direto}]{Code/add.hs}

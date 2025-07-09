@@ -31,17 +31,17 @@ Como resultado, a linguagem ML e suas derivadas se tornaram notórias por fornec
 A sintaxe do sistema Damas-Milner define as expressões e os tipos usados no processo de inferência.
 Abaixo, segue a gramática das expressões e tipos:
 
-\begin{equation}\label{eq:dm-syntax}\nonumber
-  \begin{array}{ll}
-    \text{Variáveis}         & x                                                                                 \\
-    \text{Expressões}        & e \Coloneqq x \mid e \ e' \mid \lambda x.e \mid \texttt{let} \ x = e \ \texttt{in} \ e' \\
-    \\
-    \text{Variáveis de tipo} & \alpha                                                                            \\
-    \text{Tipos primitivos}  & \iota                                                                             \\
-    \text{Tipos}             & \tau \Coloneqq \alpha \mid \iota \mid \tau \rightarrow \tau'                       \\
-    \text{Esquemas de tipo}           & \sigma \Coloneqq \forall \alpha. \sigma \mid \tau                        \\
-  \end{array}
-\end{equation}
+\begin{tabular}{lccl}
+    Variáveis         &          &             & $x$                                                                             \\
+    Expressões        & $e$      & $\Coloneqq$ & $x \mid e \ e' \mid \lambda x.\ e \mid \mathtt{let} \ x = e \ \mathtt{in} \ e'$ \\
+                                                                                                                                 \\
+    Variáveis de tipo &          &             & $\alpha$                                                                        \\
+    Tipos primitivos  &          &             & $\iota$                                                                         \\
+    Tipos             & $\tau$   & $\Coloneqq$ & $\alpha \mid \iota \mid \tau \rightarrow \tau'$                                 \\
+    Esquemas de tipo  & $\sigma$ & $\Coloneqq$ & $\forall \alpha.\ \sigma \mid \tau$                                             \\
+\end{tabular}
+
+\phantom{NewLine}
 
 Na sintaxe, $x$ representa variáveis que podem ser nomes de qualquer identificador, e $e$ descreve expressões que podem ser variáveis, aplicações de função, funções anônimas ou declarações \texttt{let}, que introduzem polimorfismo através de generalização de tipos.
 $\alpha$ é usado para representar variáveis de tipos.

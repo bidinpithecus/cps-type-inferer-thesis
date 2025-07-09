@@ -8,12 +8,15 @@ Dessa forma, ele não apenas facilita a criação de software mais robusto, mas 
 
 A sintaxe básica do Cálculo Lambda Simplesmente Tipado inclui:
 
-\begin{itemize}
-  \item Variáveis: $x, y, z, \ldots$
-  \item Tipos: $\tau \Coloneqq \mathbf{Int} \mid \mathbf{Bool} \mid \tau \to \tau$
-  \item Termos: $e \Coloneqq \lambda x{:}\ \tau.\ e \mid e_1\ e_2 \mid x$
-\end{itemize}
+\begin{tabular}{lccl}
+    Variáveis: &        &             & $x,\ y,\ z,\ \ldots$                                    \\
+    Tipos:     & $\tau$ & $\Coloneqq$ & $\mathtt{int} \mid \mathtt{bool} \mid \tau \to \tau$ \\
+    Termos:    & $e$    & $\Coloneqq$ & $\lambda x{:}\ \tau.\ e \mid e_1\ e_2 \mid x$        \\
+\end{tabular}
 
+\phantom{NewLine}
+
+\noindent
 No Cálculo Lambda Simplesmente Tipado, cada variável possui um tipo atribuído, e os termos são construídos com base nesses tipos.
 Por exemplo, a abstração de função $\lambda x{:}\ \tau.\ e$ define uma função onde a variável $x$ é de tipo $\tau$ e o corpo da função é a expressão $e$.
 A aplicação de função $e_1\ e_2$ indica que a expressão $e_1$ é uma função aplicada ao argumento $e_2$, o qual deve ter um tipo compatível com o esperado por $e_1$.

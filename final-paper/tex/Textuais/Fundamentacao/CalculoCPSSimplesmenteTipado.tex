@@ -1,7 +1,24 @@
-\section{Cálculo CPS Simplesmente Tipado}\label{sec:cps-calculus-thielecke}
-\citeonline{thielecke1997categorical} em sua tese, a partir de uma perspectiva profundamente categórica, tanto em suas definições quanto nas formalizações.
-Esse tratamento, no entanto, ultrapassa o escopo deste trabalho.
-Ainda que a compreensão de sua abordagem seja útil para o entendimento do sistema de tipos aqui apresentado, não será abordado aqui os aspectos de Teoria das Categorias em detalhe.
+\section{Cálculo de CPS Simplesmente Tipado}\label{sec:cps-calculus-thielecke}
+O Cálculo de CPS se origina como a IR do compilador descrita no livro do~\citeonline{appel1992compiling}.
+Sua versão simplesmente tipada foi estudada na tese do~\citeonline{thielecke1997categorical}, tendo sido descrita de maneira categórica.
+Neste trabalho entretanto, é adotada uma versão baseada em Teoria de Tipos, como apresentada em~\citeonline{torrens2024operational}.
+
+O cálculo de continuações (do inglês, \textit{CPS-calculus}), é um sistema formal que leva o CPS além de seu uso tradicional como uma técnica de transformação de código, tratando-o como um modelo computacional por si só.
+Enquanto o CPS é utilizado como uma IR em compiladores, o cálculo de continuações oferece uma estrutura para raciocinar formalmente sobre computações onde o fluxo de controle é explicitamente representado.
+A sintaxe deste cálculo é descrita a seguir:
+
+\begin{tabular}{lccl}
+     Comandos & b & $\Coloneqq$ & $x(\vv{x}) \mid \mathtt{let}\ x(\vv{x}) = b\ \mathtt{in}\ b$ \\
+\end{tabular}\label{cps-calculus}
+
+\phantom{Newline}
+
+\noindent
+Vale ressaltar que \citeonline{thielecke1997categorical} possui uma sintaxe diferente para o cálculo de continuações, onde os termos são respectivamente representados como $k\langle\vv{x}\rangle$ e $b\ \{\ x\langle \vv{x} \rangle = b\ \}$.
+Em razão da natureza prática e do público alvo deste trabalho, a notação adotada para o \textit{CPS-Calculus} será a do Appel.
+Aqui, $k(\vv{x})$ representa um salto (do inglês \textit{jump}), isto é, uma chamada direta para a continuação $k$ com os parâmetros $\vv{x}$, essencialmente passando o controle para essa $k$.
+Enquanto que $\texttt{let }k(\vv{y}) = c \texttt{ in } b$ representa um vínculo (do inglês \textit{binding}), onde a continuação $k$ com os parâmetros $\vv{y}$ é ligada dentro do comando $b$ com o corpo $c$.
+Isto modela uma construção intermediária em que se define uma nova continuação que poderá ser chamada dentro de $b$ para prosseguir com a computação.
 
 Neste sistema, há apenas um construtor de tipos: a negação poliádica (do inglês \textit{polyadic negation type}), usada para representar continuações~\cite{torrens2024operational}.
 Além disso, $X$ varia sobre os tipos base.
@@ -15,9 +32,7 @@ Além disso, $X$ varia sobre os tipos base.
 
 \phantom{Newline}
 
-\noindent O sistema apresenta duas regras de tipagem principais, uma para o \textit{jump} $\mathtt{[J]}$ e outra para o \textit{bind} $\mathtt{[B]}$.
-
-\phantom{Newline}
+\noindent O sistema apresenta somente duas regras de tipagem principais, uma para o \textit{jump} e outra para o \textit{bind}.
 
 \fbox{$\Gamma\vdash b$}
 
@@ -31,21 +46,22 @@ Além disso, $X$ varia sobre os tipos base.
     \RightLabel{$\mathtt{[B]}$}
     \AxiomC{$\Gamma,\ k{:}\ \neg\vv{\tau} \vdash b$}
     \AxiomC{$\Gamma,\ \vv{x}{:}\ \vv{\tau} \vdash c$}
-    \BinaryInfC{$\mathtt{let}\ k(\vv{x}) = c\ \mathtt{in}\ b$}
+    \BinaryInfC{$\Gamma\vdash \mathtt{let}\ k(\vv{x}) = c\ \mathtt{in}\ b$}
 \end{prooftree}
-Os julgamentos de tipo nesse cálculo são unilaterais.
-Diferentemente do cálculo de tipos tradicional como o de Damas-Milner, onde um julgamento do tipo $\Gamma \vdash e{:}\ \tau$ atribui um tipo $\tau$ à expressão $e$ sob o contexto $\Gamma$, no cálculo CPS é escrito apenas $\Gamma \vdash b$.
+Os julgamentos de tipo nesse cálculo são unilaterais, no sentido de que tipos aparecem apenas em um dos lados do \textit{turnstile} ($\vdash$).
+Diferentemente do cálculo de tipos tradicional como o de Damas-Milner, onde um julgamento do tipo $\Gamma \vdash e{:}\ \tau$ atribui um tipo $\tau$ à expressão $e$ sob o contexto $\Gamma$, no cálculo de CPS é escrito apenas $\Gamma \vdash b$.
 Isso significa que, sob o contexto $\Gamma$, o termo $b$ é consistente, ou seja, não vai falhar durante a execução~\cite{thielecke1997categorical}.
 Por exemplo, a derivação ${x{:}\ \tau,\ k{:}\ \neg\tau} \vdash k(x)$ indica que, assumindo $x$ com tipo $\tau$ e $k$ com tipo $\neg\tau$, passar $x$ como argumento para $k$ é seguro.
 
 \citeonline{torrens2024operational} demonstram a segurança de tipos (do inglês \textit{type safety}) deste sistema, provando as propriedades de preservação e progresso.
 Isso garante que expressões bem tipadas não entram em estados inválidos ao serem avaliadas.
 
-Um contraste interessante pode ser observado entre o sistema Damas-Milner e o cálculo CPS.
+Um contraste interessante pode ser observado entre o sistema Damas-Milner e o cálculo de CPS.
 No primeiro, as expressões são testemunhas da veracidade de seus tipos.
-Já no segundo, as expressões podem ser vistas como testemunhas de que o contexto de tipos leva a uma contradição {---} nas palavras de Thielecke, ``$M$ witnesses that $\Gamma$ entails a contradiction''.
+Já no segundo, as expressões podem ser vistas como testemunhas de que o contexto de tipos leva a uma contradição {---} nas palavras de Thielecke, ``$b$ witnesses that $\Gamma$ entails a contradiction''.
+Como no exemplo do ${x{:}\ \tau,\ k{:}\ \neg\tau} \vdash k(x)$, observa-se que $k(x)$ representa uma contradição, ao termos tanto $\tau$ (em $x$) como $\neg\tau$ (em $k$).
 
-Enquanto o cálculo-$\lambda$ define sua semântica operacional por meio das regras de redução $\beta$ e $\eta$, o \textit{CPS-calculus} possui uma teoria equacional própria, formulada em \citeonline{thielecke1997categorical}.
+Enquanto o cálculo-$\lambda$ define sua semântica por meio das regras $\beta$ e $\eta$, o \textit{CPS-calculus} possui uma teoria equacional própria, formulada em \citeonline{thielecke1997categorical}.
 Esta teoria é composta por quatro axiomas fundamentais que permitem raciocinar sobre a equivalência de programas escritos nessa representação.
 Esses axiomas são:
 
@@ -95,7 +111,7 @@ Apesar de que estas traduções não sejam as mais eficientes, por sua simplicid
   ${\llbracket\ x\ \rrbracket}_N$ & $=$ & $x(k)$ \\
   ${\llbracket\ \lambda x.\ e\ \rrbracket}_N$ & $=$ & $\mathtt{let}\ v(k,\ x) = {\llbracket e \rrbracket}_N\ \mathtt{in}\ k(v)$ \\
   ${\llbracket\ f\ e\ \rrbracket}_N$ & $=$ & $\mathtt{let}\ k(f) = \mathtt{let}\ v(k) = {\llbracket\ e\ \rrbracket}_N\ \mathtt{in}\ c\ \mathtt{in}\ {\llbracket\ f\ \rrbracket}_N$ \\
-  ${\llbracket\ \mathtt{let}\ x = f\ \mathtt{in}\ e \rrbracket}_N$ & $=$ & $\mathtt{let}\ x(k) = {\llbracket\ b\ \rrbracket}_N\ \mathtt{in}\ {\llbracket\ a\ \rrbracket}_N$
+  ${\llbracket\ \mathtt{let}\ x = f\ \mathtt{in}\ e \rrbracket}_N$ & $=$ & $\mathtt{let}\ x(k) = {\llbracket\ f\ \rrbracket}_N\ \mathtt{in}\ {\llbracket\ e\ \rrbracket}_N$
 \end{tabular}
 
 \phantom{Newline}
@@ -106,7 +122,7 @@ Apesar de que estas traduções não sejam as mais eficientes, por sua simplicid
   ${\llbracket\ x\ \rrbracket}_V$ & $=$ & $k(x)$ \\
   ${\llbracket\ \lambda x.\ e\ \rrbracket}_V$ & $=$ & $\mathtt{let}\ v(k,\ x) = {\llbracket e \rrbracket}_V\ \mathtt{in}\ k(v)$ \\
   ${\llbracket\ f\ e\ \rrbracket}_V$ & $=$ & $\mathtt{let}\ k(f) = \mathtt{let}\ v(k) = c\ \mathtt{in}\ {\llbracket\ e\ \rrbracket}_V\ \mathtt{in}\ {\llbracket\ f\ \rrbracket}_V$ \\
-  ${\llbracket\ \mathtt{let}\ x = f\ \mathtt{in}\ e \rrbracket}_V$ & $=$ & $\mathtt{let}\ k(x) = {\llbracket\ a\ \rrbracket}_V\ \mathtt{in}\ {\llbracket\ b\ \rrbracket}_V$
+  ${\llbracket\ \mathtt{let}\ x = f\ \mathtt{in}\ e \rrbracket}_V$ & $=$ & $\mathtt{let}\ k(x) = {\llbracket\ e\ \rrbracket}_V\ \mathtt{in}\ {\llbracket\ f\ \rrbracket}_V$
 \end{tabular}
 
 \phantom{Newline}
@@ -115,7 +131,7 @@ Apesar de que estas traduções não sejam as mais eficientes, por sua simplicid
 
 Ainda, a tradução do `let' não está presente no artigo.
 Esta foi feita para que o trabalho em questão pudesse ser mais completo e mais próximo de algo utilizável em um caso real de implementação de compilador com uso desta IR.
-A maneira de se obtê-la foi a partir de uma beta-redex, simplificando a tradução de $((\lambda x.\ b)\ a)$.
+A maneira de se obtê-la foi a partir de uma beta-redex, simplificando a tradução de $((\lambda x.\ b)\ a)$ por meio dos axiomas.
 
 Além da tradução de expressões, uma vez que o ambiente sendo trabalhado é tipado, é necessário que a tradução preserve a tipagem dos programas,~\citeonline{torrens2024operational} apresentam a tradução tipada do CPS, onde, para o tipo funcional $\mathtt{A \Coloneqq A \to A\ |\ X}$, as seguintes traduções são definidas.
 Note que aqui também as funções são definidas diferentemente de acordo com estratégia de avaliação adotada:
