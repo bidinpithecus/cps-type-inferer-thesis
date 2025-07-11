@@ -69,19 +69,15 @@ A aplicação de uma substituição $S$ em um tipo $\tau$, denotada por $S\tau$,
 Esse conceito de substituição é fundamental para o processo de instanciação de tipos, que será discutido a seguir.
 A definição formal da aplicação de substituições é dada por:
 
-\begin{figure}[ht!]
-  \centering
-  \[
-    \begin{array}{rcl}
-      S\alpha_i                    & \equiv & \tau_i,                                                                          \\[8pt]
-      S\alpha                      & \equiv & \alpha, \quad \text{se } \alpha \notin \{\alpha_1, \alpha_2, \ldots, \alpha_n\}, \\[8pt]
-      S(\tau_1 \rightarrow \tau_2) & \equiv & S\tau_1 \rightarrow S\tau_2,                                                     \\[8pt]
-      S(\forall \alpha.\sigma)     & \equiv & S' \sigma, \quad \text{onde } S' = S \setminus [\alpha \mapsto \_].
-    \end{array}
-    \]\label{fig:substituicao-tipos}
-    \caption{Regras de aplicação da substituição de tipos}
-    \small{Fonte:~\cite{castro2019certificacao}}
-\end{figure}
+\begin{center}
+  \begin{tabular}{rcl}
+    $S\alpha_i$                    & $\equiv$ & $\tau_i$                                                                           \\
+    $S\alpha$                      & $\equiv$ & $\alpha, \quad \text{se } \alpha \notin \{\alpha_1, \alpha_2, \ldots, \alpha_n\}$  \\
+    $S(\tau_1 \rightarrow \tau_2)$ & $\equiv$ & $S\tau_1 \rightarrow S\tau_2$                                                      \\
+    $S(\forall \alpha.\sigma)$     & $\equiv$ & $S' \sigma, \quad \text{onde } S' = S \setminus [\alpha \mapsto \_]$
+  \end{tabular}
+\end{center}
+
 \noindent onde o símbolo de subtração de conjuntos ($\setminus$) indica que a substituição $S'$ é a substituição $S$ restrita ao conjunto de mapeamentos que não envolvem a variável $\alpha$.
 
 A instanciação de tipos é um processo em que um esquema de tipo $\sigma = \forall \alpha_1 \ldots \alpha_m. \tau$ é transformado em um tipo específico substituindo suas variáveis quantificadas por tipos concretos.

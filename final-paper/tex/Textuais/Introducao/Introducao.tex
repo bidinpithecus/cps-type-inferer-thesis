@@ -33,16 +33,16 @@ A escolha da linguagem de programação para a solução proposta será Haskell.
 Por ser uma linguagem funcional pura fortemente tipada, possui características desejáveis como transparência referencial~\cite{sondergaard1990transparency} e um sistema de tipos robusto para explorar as vantagens do CPS e aplicar o sistema de tipos de maneira rigorosa.
 Dessa forma, a escolha de Haskell não apenas facilita o desenvolvimento de uma implementação segura e eficiente do CPS, como também conta com garantias de seguranças que são fundamentais para o sucesso deste trabalho.
 
-\section{Objetivo Geral}\label{sec:objetivo-geral}
+\section{Contribuições}\label{sec:contribuicoes}
 
-Este trabalho tem como objetivo formalizar uma extensão para o sistema de tipos para CPS proposto por~\citeonline{thielecke1997categorical}, adicionando polimorfismo com suporte a inferência para esta representação intermediária.
+Este trabalho teve como contribuições a formalização através de uma implementação em Haskell e testes unitários de uma extensão para o sistema de tipos para CPS proposto por~\citeonline{thielecke1997categorical}, adicionando polimorfismo com suporte a inferência para esta representação intermediária.
 
-\section{Objetivos específicos}\label{sec:objetivos-especificos}
-
+Ou então, especificamente:
 \begin{itemize}
-  \item Formalizar um sistema de tipos para CPS com suporte a polimorfismo;\@
-  \item Propor e implementar em Haskell um algoritmo de inferência de tipos para CPS;\@
-  \item Validar a implementação do algoritmo por meio do teste de inferência para expressões. Se possível, realizar a geração de programas para verificação de que o algoritmo infere corretamente os tipos a eles.
+  \item Formalização de um sistema de tipos para CPS com suporte a polimorfismo, bem como um algoritmo de inferência para tal;\@
+  \item Implementação em Haskell de um algoritmo de inferência de tipos para CPS;\@
+  \item Validar a implementação do algoritmo por meio do teste de inferência para expressões, através de funções de tradução do cálculo-$\lambda$ para o de CPS.\@
+  \item Conclusão de que o sistema não preserva tipos para CBV.
 \end{itemize}
 
 \section{Trabalhos Relacionados}
